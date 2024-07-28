@@ -1,0 +1,89 @@
+[gd_scene load_steps=3 format=3 uid="uid://106bjfe7jhy2"]
+
+[ext_resource type="Script" path="res://scenes/user_settings.gd" id="1_fr42r"]
+[ext_resource type="Texture2D" uid="uid://m3vbiomqc2pe" path="res://assets/Images/Snakes/blue_preview.png" id="2_vihr5"]
+
+[node name="UserSettings" type="Panel"]
+offset_right = 333.0
+offset_bottom = 257.0
+script = ExtResource("1_fr42r")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="PlayerName_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Playername"
+horizontal_alignment = 1
+
+[node name="PlayerName" type="LineEdit" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+max_length = 20
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Snake_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Snake"
+horizontal_alignment = 1
+
+[node name="SnakeOpt" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+icon_alignment = 1
+expand_icon = true
+item_count = 1
+selected = 0
+popup/item_0/text = " "
+popup/item_0/icon = ExtResource("2_vihr5")
+popup/item_0/id = 0
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Input_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Input"
+horizontal_alignment = 1
+
+[node name="InputOpt" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+item_count = 2
+selected = 0
+popup/item_0/text = "relativ"
+popup/item_0/id = 0
+popup/item_1/text = "absolute"
+popup/item_1/id = 1
+
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SmoothCam_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Smooth camera: true"
+horizontal_alignment = 1
+
+[node name="SmoothCam" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "disable"
+
+[connection signal="focus_exited" from="ScrollContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
+[connection signal="text_submitted" from="ScrollContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/SnakeOpt" to="." method="_on_snake_opt_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/InputOpt" to="." method="_on_input_opt_item_selected"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/SmoothCam" to="." method="_on_smooth_cam_toggled"]

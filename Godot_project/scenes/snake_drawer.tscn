@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bs45lflxfyy3i"]
+
+[ext_resource type="TileSet" uid="uid://b7bxx38l7rwbh" path="res://assets/Images/Snakes/snake_tileset.tres" id="1_bba26"]
+[ext_resource type="Script" path="res://scenes/snake_drawer.gd" id="1_ns51r"]
+
+[node name="SnakeDrawer" type="TileMap"]
+scale = Vector2(0.3, 0.3)
+tile_set = ExtResource("1_bba26")
+format = 2
+script = ExtResource("1_ns51r")

@@ -1,0 +1,83 @@
+[gd_scene load_steps=2 format=3 uid="uid://bractynrlw3vs"]
+
+[ext_resource type="Script" path="res://scenes/connection_popup.gd" id="1_ofjbj"]
+
+[node name="ConnectionPopup" type="Panel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -162.0
+offset_top = -90.0
+offset_right = 163.0
+offset_bottom = 118.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ofjbj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 170.0
+grow_horizontal = 2
+
+[node name="HostJoin" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+text = "Hosting"
+alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="IP_Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "IP-Address"
+horizontal_alignment = 1
+
+[node name="IP" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+text = "127.0.0.1"
+placeholder_text = "IP-Address"
+alignment = 1
+max_length = 15
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Port_Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Port
+"
+horizontal_alignment = 1
+
+[node name="Port" type="SpinBox" parent="VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 65535.0
+value = 8080.0
+alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Confirm" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Ok"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel
+"
+
+[connection signal="toggled" from="VBoxContainer/HostJoin" to="." method="_on_host_join_toggled"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Confirm" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_cancel_pressed"]

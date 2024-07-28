@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://7nuth5vfdruo"]
+
+[ext_resource type="AudioStream" uid="uid://bmmkevr72tkkp" path="res://assets/Sounds/Ben_Niediek_TN_main_theme.mp3" id="1_q8igd"]
+
+[node name="MainThemePlayer" type="AudioStreamPlayer"]
+stream = ExtResource("1_q8igd")
+autoplay = true

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfq3iutpqoaav"]
+
+[ext_resource type="Script" path="res://scenes/labeled_button.gd" id="1_u7kw7"]
+
+[node name="LabeledButton" type="CheckButton"]
+offset_right = 44.0
+offset_bottom = 24.0
+script = ExtResource("1_u7kw7")

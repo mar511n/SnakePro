@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=3 uid="uid://cop3iatxem278"]
+
+[ext_resource type="Script" path="res://scenes/game_settings.gd" id="1_2yv24"]
+[ext_resource type="PackedScene" uid="uid://bdcc0njvy50mt" path="res://scenes/labeled_h_slider.tscn" id="2_36e5j"]
+
+[node name="GameSettings" type="Panel"]
+offset_right = 301.0
+offset_bottom = 364.0
+script = ExtResource("1_2yv24")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VFlowContainer" type="VFlowContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(281, 344)
+layout_mode = 2
+
+[node name="startSnakeLength_L" type="Label" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Snake start length"
+horizontal_alignment = 1
+
+[node name="startSnakeLength" parent="ScrollContainer/VFlowContainer" instance=ExtResource("2_36e5j")]
+layout_mode = 2
+min_value = 3.0
+max_value = 50.0
+value = 3.0
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="snakeSpeed_L" type="Label" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Snake speed (tiles/second)"
+horizontal_alignment = 1
+
+[node name="snakeSpeed" parent="ScrollContainer/VFlowContainer" instance=ExtResource("2_36e5j")]
+layout_mode = 2
+min_value = 0.4
+max_value = 10.0
+step = 0.2
+value = 4.0
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="mapPath_L" type="Label" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Map"
+horizontal_alignment = 1
+
+[node name="mapPaths_b" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Load mod"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(491, 400)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true
+
+[connection signal="resized" from="ScrollContainer" to="." method="_on_scroll_container_resized"]
+[connection signal="drag_ended" from="ScrollContainer/VFlowContainer/startSnakeLength" to="." method="_on_start_snake_length_drag_ended"]
+[connection signal="drag_ended" from="ScrollContainer/VFlowContainer/snakeSpeed" to="." method="_on_snake_speed_drag_ended"]
+[connection signal="item_selected" from="ScrollContainer/VFlowContainer/mapPaths_b" to="." method="_on_map_paths_b_item_selected"]
+[connection signal="pressed" from="ScrollContainer/VFlowContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

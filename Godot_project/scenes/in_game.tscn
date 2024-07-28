@@ -1,0 +1,105 @@
+[gd_scene load_steps=8 format=3 uid="uid://duckcaf065hqg"]
+
+[ext_resource type="Script" path="res://scenes/in_game.gd" id="1_dbxlh"]
+[ext_resource type="PackedScene" uid="uid://dffji00mprodh" path="res://scenes/player.tscn" id="2_qpixn"]
+[ext_resource type="PackedScene" uid="uid://d3n4088c2wis1" path="res://scenes/Maps/basic_map1.tscn" id="3_8ed4a"]
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="4_ru1c1"]
+[ext_resource type="PackedScene" uid="uid://bs45lflxfyy3i" path="res://scenes/snake_drawer.tscn" id="4_s1yiu"]
+
+[sub_resource type="Environment" id="Environment_22db8"]
+background_mode = 1
+background_color = Color(0.317647, 0.2, 0.133333, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_52sk8"]
+properties/0/path = NodePath("GUI/Panel2/RichTextLabel:text")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:module_vars")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="InGame" type="Node2D" groups=["gameobj"]]
+script = ExtResource("1_dbxlh")
+PlayerScene = ExtResource("2_qpixn")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_22db8")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
+spawn_path = NodePath(".")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 1.0
+delta_interval = 0.1
+replication_config = SubResource("SceneReplicationConfig_52sk8")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Panel" type="Panel" parent="GUI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -166.0
+offset_top = -84.0
+offset_right = 166.0
+offset_bottom = 84.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_ru1c1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="GUI/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Game paused"
+horizontal_alignment = 1
+
+[node name="Continue" type="Button" parent="GUI/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Continue"
+
+[node name="Return" type="Button" parent="GUI/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Return to main menu"
+
+[node name="Panel2" type="Panel" parent="GUI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 410.0
+offset_bottom = 1070.0
+theme = ExtResource("4_ru1c1")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+autowrap_mode = 1
+
+[node name="SnakeDrawer" parent="." instance=ExtResource("4_s1yiu")]
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="BasicMap1" parent="Map" instance=ExtResource("3_8ed4a")]
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
+[connection signal="pressed" from="GUI/Panel/VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="GUI/Panel/VBoxContainer/Return" to="." method="_on_return_pressed"]

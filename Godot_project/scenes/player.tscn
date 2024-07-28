@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://dffji00mprodh"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_gv0ea"]
+[ext_resource type="Texture2D" uid="uid://bj1hqxypsq80v" path="res://assets/MatIcons/add_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="2_ure4r"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqkbk"]
+properties/0/path = NodePath(".:tiles")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="Curve2D" id="Curve2D_3f3bv"]
+
+[sub_resource type="Gradient" id="Gradient_3x5wc"]
+
+[node name="Player" type="Node2D" groups=["gameobj"]]
+script = ExtResource("1_gv0ea")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_speed = 10.0
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="FPS_L" type="Label" parent="GUI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -34.0
+offset_bottom = 19.0
+grow_horizontal = 0
+text = "60"
+horizontal_alignment = 2
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_aqkbk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ure4r")
+
+[node name="Path2D" type="Path2D" parent="."]
+top_level = true
+curve = SubResource("Curve2D_3f3bv")
+
+[node name="Line2D" type="Line2D" parent="."]
+top_level = true
+width = 5.0
+gradient = SubResource("Gradient_3x5wc")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
