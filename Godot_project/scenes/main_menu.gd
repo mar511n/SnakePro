@@ -16,6 +16,8 @@ extends Control
 @onready var TabCont = $TabContainer
 @onready var ConnStat = $ConnectionStatus
 
+var call_next_process_frame = []
+
 # reset completely at the first time, but keep network otherwise
 func _ready():
 	if !Global.first_game_reset:
@@ -33,7 +35,7 @@ func initialize():
 	Lobby.player_disconnected.connect(self.player_disconnected)
 	Lobby.player_info_updated.connect(self.player_info_updated)
 	load_con_settings()
-	load_usersettings()
+	load_playerinfo()
 	ConPopup.visible = false
 	TabCont.current_tab = 0
 	#UserSetPopup.visible = false
@@ -43,8 +45,12 @@ func reset():
 	Global.Print("loading config from %s" % Global.config_path, 5)
 	if Global.config.load(Global.config_path) != OK:
 		Global.Print("ERROR while loading config from %s" % Global.config_path, 7)
-	if Global.config.has_section(Global.config_inputmap_sec):
-		Global.set_inputmap_dict(Global.config_get_section_dict(Global.config_inputmap_sec))
+	Global.Print("loading inputconfig from %s" % Global.inputconfig_path, 5)
+	if Global.inputconfig.load(Global.inputconfig_path) != OK:
+		Global.Print("ERROR while loading inputconfig from %s" % Global.inputconfig_path, 7)
+	if Global.inputconfig.has_section(Global.config_inputmap_sec):
+		Global.set_inputmap_dict(Global.get_section_dict(Global.inputconfig,Global.config_inputmap_sec))
+	set_splitscreen_mode(Global.config.get_value(Global.config_user_settings_sec,"splitscreenMode",0))
 	randomize()
 	initialize()
 	network_reset()
@@ -153,14 +159,14 @@ func _on_connection_settings_pressed():
 	else:
 		ConPopup.visible = false
 
-func save_usersettings():
-	Global.config_set_section_dict("UserSettings", Lobby.player_info)
+func save_playerinfo():
+	Global.config_set_section_dict(Global.config_player_info_sec, Lobby.player_info)
 	Global.config.save(Global.config_path)
-	Global.Print("saving UserSettings %s to config" % Lobby.player_info,6)
+	Global.Print("saving PlayerInfo %s to config" % Lobby.player_info,6)
 	Global.Print("saving config to %s" % Global.config_path)
-func load_usersettings():
-	if Global.config.has_section("UserSettings"):
-		Lobby.player_info = Global.config_get_section_dict("UserSettings")
+func load_playerinfo():
+	if Global.config.has_section(Global.config_player_info_sec):
+		Lobby.player_info = Global.config_get_section_dict(Global.config_player_info_sec)
 func save_con_settings():
 	Global.config.set_value("conn", "ip", ConPopup.ip_addr)
 	Global.config.set_value("conn", "port", ConPopup.port)
@@ -172,13 +178,63 @@ func load_con_settings():
 		ConPopup.ip_addr = Global.config.get_value("conn","ip")
 	if Global.config.has_section_key("conn", "port"):
 		ConPopup.port = Global.config.get_value("conn","port")
+func save_usersettings(us:Dictionary):
+	Global.config_set_section_dict(Global.config_user_settings_sec, us)
+	Global.config.save(Global.config_path)
+	Global.Print("saving UserSettings %s to config" % us,6)
+	Global.Print("saving config to %s" % Global.config_path)
 
-
-func _on_user_settings_on_settings_changed(settings):
-	Lobby.player_info = settings
+func _on_user_settings_on_settings_changed(plinfo, usetts):
+	Lobby.player_info = plinfo
 	if ConnStat.network_connected():
-		Lobby.player_info_update.rpc(multiplayer.get_unique_id(),settings)
-	save_usersettings()
+		Lobby.player_info_update.rpc(multiplayer.get_unique_id(),plinfo)
+	if usetts.has("splitscreenMode") and usetts["splitscreenMode"] != Global.config.get_value(Global.config_user_settings_sec, "splitscreenMode", 0):
+		set_splitscreen_mode(usetts["splitscreenMode"])
+	if usetts.has("vsyncMode"):
+		DisplayServer.window_set_vsync_mode(Global.vsync_modes_map[usetts.get("vsyncMode")])
+	save_playerinfo()
+	save_usersettings(usetts)
+
+func set_splitscreen_mode(spm:int):
+	var window = get_tree().root
+	if spm == 0:
+		call_next_process_frame.append([window_set_mode,[Window.MODE_FULLSCREEN]])
+		call_next_process_frame.append([window_set_borderless_ontop,[false]])
+	elif spm == 5:
+		call_next_process_frame.append([window_set_mode,[Window.MODE_WINDOWED]])
+		call_next_process_frame.append([window_set_borderless_ontop,[false]])
+		
+		call_next_process_frame.append([window_set_size,[DisplayServer.screen_get_size(window.current_screen)/2]])
+		call_next_process_frame.append([window_set_position,[DisplayServer.screen_get_position(window.current_screen)]])
+	else:
+		call_next_process_frame.append([window_set_mode,[Window.MODE_WINDOWED]])
+		call_next_process_frame.append([window_set_borderless_ontop,[true]])
+		
+		var wrect : Rect2 = Global.splitscreen_modes[spm]
+		var screen_size = DisplayServer.screen_get_size(window.current_screen)
+		
+		#get_tree().root.set_size(Vector2i(wrect.size*Vector2(screen_size)))
+		#get_tree().root.set_position(Vector2i(wrect.position*Vector2(screen_size)))
+		call_next_process_frame.append([window_set_size,[Vector2i(wrect.size*Vector2(screen_size))]])
+		call_next_process_frame.append([window_set_position,[Vector2i(wrect.position*Vector2(screen_size))+DisplayServer.screen_get_position(window.current_screen)]])
+
+
+func window_set_borderless_ontop(bt:bool):
+	Global.Print("window_set_borderless_ontop: %s" % bt)
+	get_tree().root.borderless = bt
+	get_tree().root.always_on_top = bt
+
+func window_set_mode(mode:Window.Mode):
+	Global.Print("window_set_mode: %s" % mode)
+	get_tree().root.mode = mode
+
+func window_set_position(pos:Vector2i):
+	Global.Print("window_set_position: %s" % pos)
+	get_tree().root.set_position(pos)
+
+func window_set_size(s:Vector2i):
+	Global.Print("window_set_size: %s" % s)
+	get_tree().root.set_size(s)
 
 func _on_user_settings_pressed():
 	TabCont.current_tab = 1
@@ -209,7 +265,12 @@ func _on_control_settings_pressed():
 	InputSettings.button_update()
 
 func _on_action_remapper_remap_done():
-	Global.config_set_section_dict(Global.config_inputmap_sec, Global.get_inputmap_dict())
-	Global.config.save(Global.config_path)
-	Global.Print("saving InputMap to config",6)
-	Global.Print("saving config to %s" % Global.config_path)
+	Global.set_section_dict(Global.inputconfig,Global.config_inputmap_sec, Global.get_inputmap_dict())
+	Global.inputconfig.save(Global.inputconfig_path)
+	Global.Print("saving InputMap to inputconfig",6)
+	Global.Print("saving inputconfig to %s" % Global.inputconfig_path)
+
+func _process(_delta):
+	if len(call_next_process_frame) > 0:
+		call_next_process_frame[0][0].callv(call_next_process_frame[0][1])
+		call_next_process_frame.remove_at(0)

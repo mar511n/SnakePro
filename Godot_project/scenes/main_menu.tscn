@@ -56,7 +56,7 @@ anchor_bottom = 1.0
 offset_right = -137.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 3
+current_tab = 1
 tabs_visible = false
 
 [node name="Main" type="Control" parent="TabContainer"]
@@ -88,7 +88,6 @@ scroll_active = false
 autowrap_mode = 2
 
 [node name="User Settings" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="UserSettings" parent="TabContainer/User Settings" instance=ExtResource("18_2jx18")]
@@ -96,13 +95,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 635.0
+offset_left = 358.0
 offset_top = 77.0
-offset_right = -648.0
+offset_right = -387.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
-min_width = 480
 
 [node name="Label" type="Label" parent="TabContainer/User Settings"]
 layout_mode = 1
@@ -145,6 +143,7 @@ grow_horizontal = 2
 text = "Game settings"
 
 [node name="Control Settings" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="ActionRemapper" parent="TabContainer/Control Settings" instance=ExtResource("6_dxjc5")]

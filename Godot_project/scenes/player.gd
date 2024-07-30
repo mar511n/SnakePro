@@ -52,7 +52,7 @@ func _process(delta):
 		redraw_snake()
 	
 	if is_owner:
-		if !Lobby.players[peer_id].get("smoothCam", true):
+		if !Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true):
 			global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
 		else:
 			#var pos_frac = sn_drawer.map_to_local(tiles[-2]).lerp(sn_drawer.map_to_local(tiles[-1]), time_since_last_movement_update/movement_update_period)
@@ -96,12 +96,12 @@ func hit(cause:Array):
 # -> handle movement input
 func process_input():
 	var new_dir = input_dir.NONE
-	if Lobby.players[peer_id].get("inputmethod", "abs") == "rel":
+	if Global.config.get_value(Global.config_user_settings_sec,"inputmethod", "abs") == "rel":
 		if Input.is_action_just_pressed("rel_left"):
 			new_dir = input_dir.LEFT
 		elif Input.is_action_just_pressed("rel_right"):
 			new_dir = input_dir.RIGHT
-	elif Lobby.players[peer_id].get("inputmethod", "abs") == "abs":
+	elif Global.config.get_value(Global.config_user_settings_sec,"inputmethod", "abs") == "abs":
 		var pdir = Vector2i.ZERO
 		if Input.is_action_just_pressed("abs_left"):
 			pdir = Vector2i.LEFT
@@ -198,7 +198,7 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 		startDir = Vector2i.UP
 	
 	modules = []
-	for mod_path in enabled_mods:#Lobby.players[peer_id].get("modules", ["res://scenes/PlayerMods/basic_hit_handler.gd"]):
+	for mod_path in enabled_mods:
 		var mod = load(Global.player_modules_dir+mod_path)
 		if mod != null:
 			modules.append(mod.new())
@@ -226,14 +226,14 @@ func _ready():
 	cam_node.limit_top = camLT_lim.y
 	cam_node.limit_right = camRB_lim.x
 	cam_node.limit_bottom = camRB_lim.y
-	cam_node.position_smoothing_speed = 6
-	cam_node.position_smoothing_enabled = Lobby.players[peer_id].get("smoothCam", true)
 	for mod in modules:
 		module_node.add_child(mod)
 	for mod in module_node.get_children():
 		mod.on_player_ready()
 	reset_snake_tiles()
 	if cam_node.enabled:
+		cam_node.position_smoothing_speed = 6
+		cam_node.position_smoothing_enabled = Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true)
 		Lobby.player_loaded.rpc_id(1)
 
 func remove_tiles_from_tail(n:int)->bool:

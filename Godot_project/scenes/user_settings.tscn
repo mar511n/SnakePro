@@ -20,28 +20,30 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VFlowContainer" type="VFlowContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(313, 322)
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="PlayerName_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="PlayerName_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Playername"
 horizontal_alignment = 1
 
-[node name="PlayerName" type="LineEdit" parent="ScrollContainer/VBoxContainer"]
+[node name="PlayerName" type="LineEdit" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 alignment = 1
 max_length = 20
 
-[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
-[node name="Snake_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="Snake_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Snake"
 horizontal_alignment = 1
 
-[node name="SnakeOpt" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+[node name="SnakeOpt" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 icon_alignment = 1
 expand_icon = true
@@ -51,15 +53,15 @@ popup/item_0/text = " "
 popup/item_0/icon = ExtResource("2_vihr5")
 popup/item_0/id = 0
 
-[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
-[node name="Input_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="Input_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Input"
 horizontal_alignment = 1
 
-[node name="InputOpt" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+[node name="InputOpt" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 alignment = 1
 item_count = 2
@@ -69,28 +71,28 @@ popup/item_0/id = 0
 popup/item_1/text = "absolute"
 popup/item_1/id = 1
 
-[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
-[node name="SmoothCam_L" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="SmoothCam_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Smooth camera: true"
 horizontal_alignment = 1
 
-[node name="SmoothCam" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="SmoothCam" type="Button" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 toggle_mode = true
 text = "disable"
 
-[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
-[node name="VSyncL" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="VSyncL" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "V-Sync mode"
 horizontal_alignment = 1
 
-[node name="VSyncB" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+[node name="VSyncB" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 item_count = 4
 selected = 1
@@ -103,9 +105,34 @@ popup/item_2/id = 2
 popup/item_3/text = "mailbox"
 popup/item_3/id = 3
 
-[connection signal="focus_exited" from="ScrollContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
-[connection signal="text_submitted" from="ScrollContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
-[connection signal="item_selected" from="ScrollContainer/VBoxContainer/SnakeOpt" to="." method="_on_snake_opt_item_selected"]
-[connection signal="item_selected" from="ScrollContainer/VBoxContainer/InputOpt" to="." method="_on_input_opt_item_selected"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/SmoothCam" to="." method="_on_smooth_cam_toggled"]
-[connection signal="item_selected" from="ScrollContainer/VBoxContainer/VSyncB" to="." method="_on_v_sync_b_item_selected"]
+[node name="HSeparator5" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="SplitScreenL" type="Label" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Splitscreen"
+
+[node name="SplitScreenOpt" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+item_count = 6
+selected = 0
+popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
+popup/item_1/text = "Left top"
+popup/item_1/id = 1
+popup/item_2/text = "Right top"
+popup/item_2/id = 2
+popup/item_3/text = "Left bottom"
+popup/item_3/id = 3
+popup/item_4/text = "Right bottom"
+popup/item_4/id = 4
+popup/item_5/text = "Windowed"
+popup/item_5/id = 5
+
+[connection signal="focus_exited" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
+[connection signal="text_submitted" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
+[connection signal="item_selected" from="ScrollContainer/VFlowContainer/SnakeOpt" to="." method="_on_snake_opt_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/VFlowContainer/InputOpt" to="." method="_on_input_opt_item_selected"]
+[connection signal="toggled" from="ScrollContainer/VFlowContainer/SmoothCam" to="." method="_on_smooth_cam_toggled"]
+[connection signal="item_selected" from="ScrollContainer/VFlowContainer/VSyncB" to="." method="_on_v_sync_b_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/VFlowContainer/SplitScreenOpt" to="." method="_on_split_screen_opt_item_selected"]

@@ -17,9 +17,6 @@ const MAX_CONNECTIONS = 20
 # contains info of local player
 # name
 # snake_tile_idx
-# inputmethod
-# smoothCam
-# modules
 var player_info = {}
 
 # set by server contains infos about the game (rules, mods, ...)
