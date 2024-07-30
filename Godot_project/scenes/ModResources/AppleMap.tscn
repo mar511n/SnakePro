@@ -1,0 +1,27 @@
+[gd_scene load_steps=7 format=3 uid="uid://dm1r81ssa71pj"]
+
+[ext_resource type="Texture2D" uid="uid://bx5qqmb1eeg2y" path="res://assets/Images/Food/Apple.png" id="1_d6hgl"]
+[ext_resource type="Texture2D" uid="uid://c2pfxn5d0834p" path="res://assets/Images/Food/Apple_G.png" id="2_sto8y"]
+[ext_resource type="Script" path="res://scenes/ModResources/AppleMap.gd" id="3_m6hsi"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v1yrh"]
+texture = ExtResource("1_d6hgl")
+texture_region_size = Vector2i(120, 120)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nty8d"]
+texture = ExtResource("2_sto8y")
+texture_region_size = Vector2i(120, 120)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_d25at"]
+tile_size = Vector2i(60, 60)
+sources/0 = SubResource("TileSetAtlasSource_v1yrh")
+sources/1 = SubResource("TileSetAtlasSource_nty8d")
+
+[node name="AppleMap" type="TileMap" groups=["VariableGraphical"]]
+tile_set = SubResource("TileSet_d25at")
+format = 2
+layer_0/name = "Apples"
+layer_0/z_index = -1
+script = ExtResource("3_m6hsi")

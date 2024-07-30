@@ -6,15 +6,15 @@ class_name InGame
 @onready var pl_spawner = $PlayerSpawner
 @onready var sn_drawer = $SnakeDrawer
 @onready var module_list = $GUI/Panel2/RichTextLabel
+@onready var module_node = $Modules
 
-# contains information about the gamestate
-#@export var game_params = {}
+var tile_size_px = 96.0
 
 var coll_map : CollisionMap
 var playerlist = {} # peer_id -> player node
 var tmap : TileMap
 
-var modules : Array[GameModBase]
+#var modules : Array[GameModBase]
 @export var module_vars = {}
 
 # helper variables
@@ -32,11 +32,16 @@ func _physics_process(delta):
 			waitframes -= 1
 		else:
 			post_ready()
-	if check_collisions:
-		check_snake_collisions()
-		check_collisions = false
-	for mod in modules:
-		mod.on_game_physics_process(delta)
+	if ready_phase == 3:
+		if check_collisions:
+			if multiplayer.is_server():
+				check_snake_collisions()
+			#else:
+			#	for mod in module_node.get_children():
+			#		mod.on_game_checked_collisions({})
+			check_collisions = false
+		for mod in module_node.get_children():
+			mod.on_game_physics_process(delta)
 
 # on server:
 # -> note movement of player (to check collision on next physics frame)
@@ -51,7 +56,7 @@ func check_snake_collisions():
 	for peer_id in playerlist:
 		colls[peer_id] = head_collides_with_smth(peer_id,playerlist[peer_id].tiles[-1])
 	
-	for mod in modules:
+	for mod in module_node.get_children():
 		var handled_colls = mod.on_game_checked_collisions(colls)
 		for hc in handled_colls:
 			colls.erase(hc)
@@ -104,6 +109,27 @@ func tile_check_collisions(pos:Vector2i,CollLayer,max_colls=1)->Array:
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		pause_game.rpc(!$GUI.visible)
+	elif event is InputEventKey:
+		if event.keycode == KEY_0 and event.pressed:
+			print("capturing gamestate")
+			var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
+			var sns = get_tree().get_nodes_in_group("VariableGraphical")
+			if len(sns) == 0:
+				print("error: no objects")
+				return
+			var node : Node = sns[0]
+			if node.scene_file_path.is_empty():
+				print("error: no scene")
+				return
+			save_file.store_var(node,true)
+		elif event.keycode == KEY_9 and event.pressed:
+			print("loading gamestate")
+			var save_file = FileAccess.open("user://savegame.save", FileAccess.READ)
+			var node = save_file.get_var(true)
+			print(node)
+			add_child(node)
+
+
 
 # on server/client:
 # reset the game, load TileMap, spawn players
@@ -111,11 +137,12 @@ func _ready():
 	format_module_list()
 	
 	var mod_paths = Global.get_enabled_mod_paths(Global.config_game_mods_sec)
-	modules = []
+	#modules = []
 	for mod_path in mod_paths:
 		var mod = load(Global.game_modules_dir+mod_path)
 		if mod != null:
-			modules.append(mod.new())
+			#modules.append(mod.new())
+			module_node.add_child(mod.new())
 			Global.Print("loading game module %s: success" % mod_path)
 		else:
 			Global.Print("loading game module %s: ERROR" % mod_path, 7)
@@ -132,6 +159,7 @@ func _ready():
 	var pl_list = Lobby.players.keys()
 	pl_list.sort()
 	sn_drawer.reset(len(pl_list))
+	tile_size_px = (sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(1,0)))-sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(0,0)))).x
 	if multiplayer.is_server():
 		var game_params = Lobby.game_settings.get(Global.config_game_params_sec,Global.default_game_params.duplicate())
 		load_map.rpc(game_params.get("mapPath", ""))
@@ -144,13 +172,13 @@ func _ready():
 		if !finished_loading_players:
 			pause_game.rpc(true, false) # set game to pause and wait for all players to load
 	
-	for mod in modules:
+	for mod in module_node.get_children():
 		mod.on_game_ready(self, multiplayer.is_server())
 	ready_phase = 2
 
 func post_ready():
 	coll_map.load_from_Tilemap(tmap, sn_drawer)
-	for mod in modules:
+	for mod in module_node.get_children():
 		mod.on_game_post_ready()
 	ready_phase = 3
 
@@ -216,9 +244,7 @@ func spawn_player(data) -> Node:
 	pl.IG = self
 	Global.Print("spawning player %s with id %s" % [index, peer_id])
 
-	# only connecte if server, because only here the collision will be checked
-	if multiplayer.is_server():
-		pl.on_movement.connect(self._on_player_movement)
+	pl.on_movement.connect(self._on_player_movement)
 	
 	# call pre_read() with spawnpoint
 	var spawn_found = false
@@ -238,7 +264,7 @@ func spawn_player(data) -> Node:
 		elif node.name == "RB":
 			pl.camRB_lim = node.global_position
 	
-	for mod in modules:
+	for mod in module_node.get_children():
 		pl = mod.on_game_spawns_player(pl)
 	
 	# add to playerlist

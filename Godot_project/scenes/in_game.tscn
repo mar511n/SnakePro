@@ -16,7 +16,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 2
 properties/1/path = NodePath(".:module_vars")
 properties/1/spawn = true
-properties/1/replication_mode = 1
+properties/1/replication_mode = 2
 
 [node name="InGame" type="Node2D" groups=["gameobj"]]
 script = ExtResource("1_dbxlh")
@@ -99,6 +99,8 @@ autowrap_mode = 1
 [node name="Map" type="Node2D" parent="."]
 
 [node name="BasicMap1" parent="Map" instance=ExtResource("3_8ed4a")]
+
+[node name="Modules" type="Node" parent="."]
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
 [connection signal="pressed" from="GUI/Panel/VBoxContainer/Continue" to="." method="_on_continue_pressed"]

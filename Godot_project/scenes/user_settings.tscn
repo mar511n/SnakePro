@@ -5,7 +5,7 @@
 
 [node name="UserSettings" type="Panel"]
 offset_right = 333.0
-offset_bottom = 257.0
+offset_bottom = 342.0
 script = ExtResource("1_fr42r")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -82,8 +82,30 @@ layout_mode = 2
 toggle_mode = true
 text = "disable"
 
+[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VSyncL" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "V-Sync mode"
+horizontal_alignment = 1
+
+[node name="VSyncB" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 4
+selected = 1
+popup/item_0/text = "enabled"
+popup/item_0/id = 0
+popup/item_1/text = "disabled"
+popup/item_1/id = 1
+popup/item_2/text = "adaptive"
+popup/item_2/id = 2
+popup/item_3/text = "mailbox"
+popup/item_3/id = 3
+
 [connection signal="focus_exited" from="ScrollContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
 [connection signal="text_submitted" from="ScrollContainer/VBoxContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/SnakeOpt" to="." method="_on_snake_opt_item_selected"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/InputOpt" to="." method="_on_input_opt_item_selected"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/SmoothCam" to="." method="_on_smooth_cam_toggled"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/VSyncB" to="." method="_on_v_sync_b_item_selected"]

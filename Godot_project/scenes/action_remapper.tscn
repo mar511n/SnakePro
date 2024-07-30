@@ -1,0 +1,61 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxobh2gxukmej"]
+
+[ext_resource type="Script" path="res://scenes/action_remapper.gd" id="1_3sdyi"]
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_usp0t"]
+[ext_resource type="Texture2D" uid="uid://bcrt03jay8sfy" path="res://assets/MatIcons/reset_settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="3_y1cd1"]
+[ext_resource type="Texture2D" uid="uid://dlymyrec58avp" path="res://assets/MatIcons/reset_settings_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="4_5wdu3"]
+
+[node name="ActionRemapper" type="Panel"]
+offset_left = 86.0
+offset_top = 31.0
+offset_right = 592.0
+offset_bottom = 517.0
+theme = ExtResource("1_usp0t")
+script = ExtResource("1_3sdyi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 112.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Choose an action to remap"
+horizontal_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(37, 0)
+layout_mode = 2
+texture_normal = ExtResource("3_y1cd1")
+texture_pressed = ExtResource("4_5wdu3")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+layout_mode = 2
+expand_icon = true
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "waiting for input..."
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+scroll_following = true
+autowrap_mode = 1
+
+[connection signal="resized" from="VBoxContainer" to="." method="_on_v_box_container_resized"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]
+[connection signal="item_selected" from="VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="button_down" from="VBoxContainer/Button" to="." method="_on_button_button_down"]
+[connection signal="toggled" from="VBoxContainer/Button" to="." method="_on_button_toggled"]

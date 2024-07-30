@@ -12,6 +12,7 @@ extends Control
 @onready var Disconn_b = $Buttons/VBoxContainer/Disconnect
 @onready var UserSettings = $"TabContainer/User Settings/UserSettings"
 @onready var GameSettings = $"TabContainer/Game Settings/GameSettings"
+@onready var InputSettings = $"TabContainer/Control Settings/ActionRemapper"
 @onready var TabCont = $TabContainer
 @onready var ConnStat = $ConnectionStatus
 
@@ -42,6 +43,8 @@ func reset():
 	Global.Print("loading config from %s" % Global.config_path, 5)
 	if Global.config.load(Global.config_path) != OK:
 		Global.Print("ERROR while loading config from %s" % Global.config_path, 7)
+	if Global.config.has_section(Global.config_inputmap_sec):
+		Global.set_inputmap_dict(Global.config_get_section_dict(Global.config_inputmap_sec))
 	randomize()
 	initialize()
 	network_reset()
@@ -200,3 +203,13 @@ func _on_game_settings_pressed():
 func _on_home_pressed():
 	TabCont.current_tab = 0
 	update_playernames_list()
+
+func _on_control_settings_pressed():
+	TabCont.current_tab = 3
+	InputSettings.button_update()
+
+func _on_action_remapper_remap_done():
+	Global.config_set_section_dict(Global.config_inputmap_sec, Global.get_inputmap_dict())
+	Global.config.save(Global.config_path)
+	Global.Print("saving InputMap to config",6)
+	Global.Print("saving config to %s" % Global.config_path)

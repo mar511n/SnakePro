@@ -10,6 +10,7 @@ const input_options = {0:["rel","relative"],1:["abs","absolute"]}
 @onready var PlayerName = $ScrollContainer/VBoxContainer/PlayerName
 @onready var SmoothCam = $ScrollContainer/VBoxContainer/SmoothCam
 @onready var SmoothCam_L = $ScrollContainer/VBoxContainer/SmoothCam_L
+@onready var VSyncOpt = $ScrollContainer/VBoxContainer/VSyncB
 
 @export var min_width:int = -1
 
@@ -40,14 +41,17 @@ func show_popup():
 			id = ioi
 	InputOpt.select(InputOpt.get_item_index(id))
 	set_smoothcam(!Lobby.player_info.get("smoothCam", true))
+	VSyncOpt.select(Lobby.player_info.get("vsyncMode", 0))
 	visible = true
 
 func make_settings_dict() -> Dictionary:
 	var us = {}
 	us["name"] = PlayerName.text
 	us["snake_tile_idx"] = SnakeOpt.get_selected_id()
+	# TODO: actually change vsync and make these settings not synced but only local(maybe look at netwroking and make some improvement to not use to much bandwidth)
 	us["inputmethod"] = InputOpt.get_selected_metadata()
 	us["smoothCam"] = !SmoothCam.button_pressed
+	us["vsyncMode"] = VSyncOpt.selected
 	return us
 
 func set_smoothcam(off):
@@ -76,4 +80,7 @@ func _on_input_opt_item_selected(_index):
 
 func _on_smooth_cam_toggled(toggled_on):
 	set_smoothcam(toggled_on)
+	_on_settings_changed()
+
+func _on_v_sync_b_item_selected(_index):
 	_on_settings_changed()

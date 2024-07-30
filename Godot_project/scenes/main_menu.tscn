@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://6mp7bp17ft6w"]
+[gd_scene load_steps=31 format=3 uid="uid://6mp7bp17ft6w"]
 
 [ext_resource type="Texture2D" uid="uid://cvdwlujqq8r81" path="res://assets/Images/UI/WinBack.png" id="1_biflu"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_i16v8"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://y5w8tqjrse7n" path="res://assets/MatIcons/login_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="5_qybkx"]
 [ext_resource type="Texture2D" uid="uid://dhismigy7jjcv" path="res://assets/MatIcons/home_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_8cisp"]
 [ext_resource type="Texture2D" uid="uid://c2ouspheqlxsp" path="res://assets/MatIcons/play_circle_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="6_c3u34"]
+[ext_resource type="PackedScene" uid="uid://dxobh2gxukmej" path="res://scenes/action_remapper.tscn" id="6_dxjc5"]
 [ext_resource type="Texture2D" uid="uid://c0rgficet05i6" path="res://assets/MatIcons/settings_applications_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_sfhnf"]
 [ext_resource type="Texture2D" uid="uid://c7k8nkeora5ht" path="res://assets/MatIcons/logout_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_yvnxy"]
 [ext_resource type="Texture2D" uid="uid://cb4ypsmhduaep" path="res://assets/MatIcons/home_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_fl2qb"]
@@ -19,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://bractynrlw3vs" path="res://scenes/connection_popup.tscn" id="8_q25uu"]
 [ext_resource type="Texture2D" uid="uid://bjw61wbk3q8q2" path="res://assets/MatIcons/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="10_usqbb"]
 [ext_resource type="Texture2D" uid="uid://b3qnt0kpp8nhl" path="res://assets/MatIcons/close_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="11_sscp0"]
+[ext_resource type="Texture2D" uid="uid://bgt8255042n3q" path="res://assets/MatIcons/sports_esports_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="13_b5lhp"]
+[ext_resource type="Texture2D" uid="uid://c4snw0jedeqam" path="res://assets/MatIcons/sports_esports_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="14_rd4jv"]
 [ext_resource type="PackedScene" uid="uid://106bjfe7jhy2" path="res://scenes/user_settings.tscn" id="18_2jx18"]
 [ext_resource type="PackedScene" uid="uid://cop3iatxem278" path="res://scenes/game_settings.tscn" id="19_qw0xi"]
 
@@ -53,7 +56,7 @@ anchor_bottom = 1.0
 offset_right = -137.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 2
+current_tab = 3
 tabs_visible = false
 
 [node name="Main" type="Control" parent="TabContainer"]
@@ -114,6 +117,7 @@ grow_horizontal = 2
 text = "User settings"
 
 [node name="Game Settings" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="GameSettings" parent="TabContainer/Game Settings" instance=ExtResource("19_qw0xi")]
@@ -139,6 +143,20 @@ offset_right = 94.0
 offset_bottom = 57.0
 grow_horizontal = 2
 text = "Game settings"
+
+[node name="Control Settings" type="Control" parent="TabContainer"]
+layout_mode = 2
+
+[node name="ActionRemapper" parent="TabContainer/Control Settings" instance=ExtResource("6_dxjc5")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -253.0
+offset_top = 245.0
+offset_right = 253.0
+offset_bottom = 731.0
+grow_horizontal = 2
 
 [node name="Buttons" type="Panel" parent="."]
 layout_mode = 1
@@ -181,6 +199,14 @@ layout_mode = 2
 tooltip_text = "game settings"
 texture_normal = ExtResource("6_sfhnf")
 texture_pressed = ExtResource("7_sbrbm")
+texture_disabled = SubResource("ImageTexture_lpa1i")
+stretch_mode = 3
+
+[node name="ControlSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "control settings"
+texture_normal = ExtResource("13_b5lhp")
+texture_pressed = ExtResource("14_rd4jv")
 texture_disabled = SubResource("ImageTexture_lpa1i")
 stretch_mode = 3
 
@@ -239,9 +265,11 @@ grow_vertical = 1
 
 [connection signal="on_settings_changed" from="TabContainer/User Settings/UserSettings" to="." method="_on_user_settings_on_settings_changed"]
 [connection signal="on_settings_changed" from="TabContainer/Game Settings/GameSettings" to="." method="_on_game_settings_on_settings_changed"]
+[connection signal="remap_done" from="TabContainer/Control Settings/ActionRemapper" to="." method="_on_action_remapper_remap_done"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Home" to="." method="_on_home_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/UserSettings" to="." method="_on_user_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/GameSettings" to="." method="_on_game_settings_pressed"]
+[connection signal="pressed" from="Buttons/VBoxContainer/ControlSettings" to="." method="_on_control_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/ConnectionSettings" to="." method="_on_connection_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Disconnect" to="." method="_on_disconnect_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]

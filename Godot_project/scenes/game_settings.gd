@@ -21,8 +21,8 @@ var gameModuleProps = {}
 
 func show_popup():
 	var gs = Global.config_get_section_dict(Global.config_game_params_sec)
-	startSnakeLength.value = gs.get("startSnakeLength", 3)
-	snakeSpeed.value = gs.get("snakeSpeed", 4)
+	startSnakeLength.set_prop_value(gs.get("startSnakeLength", 3))
+	snakeSpeed.set_prop_value(gs.get("snakeSpeed", 4))
 	
 	update_map_list(gs)
 	make_game_module_settings()

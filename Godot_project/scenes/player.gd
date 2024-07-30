@@ -14,11 +14,12 @@ enum input_dir {
 var pl_idx = 0
 var peer_id = 0
 @onready var cam_node = $Camera2D
+@onready var module_node = $Modules
 var sn_drawer_path : NodePath
 var sn_drawer : TileMap
 var startPos : Vector2
 var startDir : Vector2i
-var tile_size_px = 96.0
+
 var camLT_lim : Vector2
 var camRB_lim : Vector2
 var IG : InGame
@@ -62,14 +63,14 @@ func _process(delta):
 			#global_position += dir*cam_speed*delta
 			#global_position = global_position.lerp(head_pos,0.005)
 			var spl = snake_path.get_baked_length()
-			var cam_speed = get_speed()*tile_size_px
-			delta_speed = lerpf(delta_speed, (spl-tile_size_px/2.0-path_pos), 0.01)
+			var cam_speed = get_speed()*IG.tile_size_px
+			delta_speed = lerpf(delta_speed, (spl-IG.tile_size_px/2.0-path_pos), 0.01)
 			#if abs(delta_speed)/cam_speed > 0.01:
 			#	print(delta_speed)
 			path_pos = clampf(path_pos+(cam_speed+delta_speed)*delta,0,spl)
 			global_position = snake_path.sample_baked(path_pos)
 			#global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
-	for mod in modules:
+	for mod in module_node.get_children():
 		mod.on_player_process(delta)
 
 # on server/client:
@@ -80,15 +81,15 @@ func _physics_process(delta):
 		process_input()
 		update_snake(delta)
 		$GUI/FPS_L.text = str(int(Engine.get_frames_per_second()))
-	for mod in modules:
+	for mod in module_node.get_children():
 		mod.on_player_physics_process(delta)
 
 # on server&client:
 # cause is array[2] with first entry of hit_causes and second entry additional infos 
-@rpc("authority","call_local","reliable")
+@rpc("any_peer","call_local","reliable")
 func hit(cause:Array):
 	Global.Print("player %s is hit by cause %s" % [peer_id, cause])
-	for mod in modules:
+	for mod in module_node.get_children():
 		mod.on_player_hit(cause)
 
 # on server/client:
@@ -172,7 +173,7 @@ func move_in_dir(dir:Vector2i):
 		while snake_path.point_count > Global.max_snake_path_length:
 			pass
 			snake_path.remove_point(0)
-			path_pos -= tile_size_px
+			path_pos -= IG.tile_size_px
 		if Global.debugging_on:
 			$Line2D.points = snake_path.get_baked_points()
 
@@ -205,7 +206,7 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 		else:
 			Global.Print("loading player module %s: ERROR" % mod_path, 7)
 	for mod in modules:
-		mod.pre_ready(self,enabled_mods)
+		mod.on_player_pre_ready(self,enabled_mods)
 	Global.Print("%s with idx %s at %s starting in direction %s" % [peer_id, pl_idx, startPos, startDir])
 
 
@@ -219,7 +220,6 @@ func _ready():
 		remove_child($Sprite2D)
 		remove_child($Line2D)
 	sn_drawer = get_node(sn_drawer_path)
-	tile_size_px = (sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(1,0)))-sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(0,0)))).x
 	cam_node.enabled = is_owner
 	$GUI.visible = cam_node.enabled
 	cam_node.limit_left = camLT_lim.x
@@ -229,10 +229,24 @@ func _ready():
 	cam_node.position_smoothing_speed = 6
 	cam_node.position_smoothing_enabled = Lobby.players[peer_id].get("smoothCam", true)
 	for mod in modules:
-		mod.ready()
+		module_node.add_child(mod)
+	for mod in module_node.get_children():
+		mod.on_player_ready()
 	reset_snake_tiles()
 	if cam_node.enabled:
 		Lobby.player_loaded.rpc_id(1)
+
+func remove_tiles_from_tail(n:int)->bool:
+	var has_enough = n+2 <= len(tiles)
+	if has_enough:
+		tiles = tiles.slice(n)
+	else:
+		tiles = tiles.slice(-2)
+	return has_enough
+
+# returns the head of the snake
+func get_head_tile()->Vector2i:
+	return tiles[-1]
 
 # on server/client:
 # -> set snake to startpos
@@ -244,9 +258,9 @@ func reset_snake_tiles():
 	for i in range(1):
 		move_in_dir(startDir)
 	redraw_snake()
-	path_pos = snake_path.get_baked_length()-tile_size_px/2.0
+	path_pos = snake_path.get_baked_length()-IG.tile_size_px/2.0
 	global_position = startPos
-	for mod in modules:
+	for mod in module_node.get_children():
 		mod.on_player_reset_snake_tiles()
 
 # on server/client:

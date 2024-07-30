@@ -11,6 +11,7 @@ const config_player_mods_sec = "PlayerModules"
 const config_player_mod_props_sec = "PlayerModuleProperties"
 const config_game_mods_sec = "GameModules"
 const config_game_mod_props_sec = "GameModuleProperties"
+const config_inputmap_sec = "InputMap"
 
 const main_menu_path = "res://scenes/main_menu.tscn"
 const maps_dir = "res://scenes/Maps/"
@@ -18,8 +19,8 @@ const player_modules_dir = "res://scenes/PlayerMods/"
 const game_modules_dir = "res://scenes/GameMods/"
 const config_path = "user://config.txt"
 const default_game_params = {
-	"startSnakeLength"=3.0,
-	"snakeSpeed"=4.0,
+	"startSnakeLength"=7.0,
+	"snakeSpeed"=8.5,
 	"mapPath"=maps_dir+"basic_map1.tscn"
 }
 
@@ -29,7 +30,8 @@ var first_game_reset = false
 var config = ConfigFile.new()
 
 enum hit_causes {
-	COLLISION
+	COLLISION,
+	APPLE_DMG
 }
 
 enum collision {
@@ -84,6 +86,20 @@ func get_enabled_mods(sec:String)->Array:
 		if mods[mod] is Array and len(mods[mod]) > 0 and mods[mod][1]:
 			en_ms.append(mod)
 	return en_ms
+
+func set_inputmap_dict(dic:Dictionary):
+	for action in InputMap.get_actions():
+		InputMap.erase_action(action)
+	for action in dic:
+		InputMap.add_action(action)
+		for event in dic[action]:
+			InputMap.action_add_event(action,event)
+
+func get_inputmap_dict()->Dictionary:
+	var dic = {}
+	for action in InputMap.get_actions():
+		dic[action] = InputMap.action_get_events(action)
+	return dic
 
 func Print(v, prio=4):
 	if prio >= min_prio_debug_print:
