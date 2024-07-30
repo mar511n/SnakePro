@@ -35,6 +35,7 @@ func _ready():
 			id += 1
 	optBtn.select(0)
 	button_update()
+	
 
 func button_update(wfo=false):
 	if wfo:

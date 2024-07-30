@@ -201,7 +201,8 @@ func set_splitscreen_mode(spm:int):
 		call_next_process_frame.append([window_set_mode,[Window.MODE_FULLSCREEN]])
 		call_next_process_frame.append([window_set_borderless_ontop,[false]])
 	elif spm == 5:
-		call_next_process_frame.append([window_set_mode,[Window.MODE_WINDOWED]])
+		if not window.mode == Window.MODE_WINDOWED:
+			call_next_process_frame.append([window_set_mode,[Window.MODE_WINDOWED]])
 		call_next_process_frame.append([window_set_borderless_ontop,[false]])
 		
 		call_next_process_frame.append([window_set_size,[DisplayServer.screen_get_size(window.current_screen)/2]])
