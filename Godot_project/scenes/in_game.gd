@@ -183,7 +183,7 @@ func post_ready():
 	ready_phase = 3
 
 func format_module_list():
-	print(str(Lobby.game_settings))
+	#print(str(Lobby.game_settings))
 	
 	module_list.clear()
 	module_list.append_text("[b]"+Global.config_game_params_sec+"[/b]\n")

@@ -15,6 +15,7 @@ var pl_idx = 0
 var peer_id = 0
 @onready var cam_node = $Camera2D
 @onready var module_node = $Modules
+@onready var gui_node = $GUI
 var sn_drawer_path : NodePath
 var sn_drawer : TileMap
 var startPos : Vector2
@@ -185,7 +186,7 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 	if gparams.has("startSnakeLength"):
 		fett = gparams["startSnakeLength"]-1
 	if gparams.has("snakeSpeed"):
-		movement_update_period = 1/float(gparams["snakeSpeed"])
+		set_speed(float(gparams["snakeSpeed"]))
 		
 	startPos = marker.global_position
 	startDir = Vector2i.RIGHT
@@ -201,8 +202,12 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 	for mod_path in enabled_mods:
 		var mod = load(Global.player_modules_dir+mod_path)
 		if mod != null:
-			modules.append(mod.new())
-			Global.Print("loading player module %s: success" % mod_path)
+			var mi = mod.new()
+			if mi.autoload:
+				modules.append(mi)
+				Global.Print("loading player module %s: success" % mod_path)
+			else:
+				Global.Print("Autoload disabled for player module %s" % mod_path)
 		else:
 			Global.Print("loading player module %s: ERROR" % mod_path, 7)
 	for mod in modules:
@@ -221,7 +226,7 @@ func _ready():
 		remove_child($Line2D)
 	sn_drawer = get_node(sn_drawer_path)
 	cam_node.enabled = is_owner
-	$GUI.visible = cam_node.enabled
+	gui_node.visible = cam_node.enabled
 	cam_node.limit_left = camLT_lim.x
 	cam_node.limit_top = camLT_lim.y
 	cam_node.limit_right = camRB_lim.x
@@ -272,6 +277,9 @@ func get_direction_facing() -> Vector2i:
 # -> returns the current speed
 func get_speed() -> float:
 	return 1/movement_update_period
+
+func set_speed(speed:float):
+	movement_update_period = 1/speed
 
 func _on_tree_entered():
 	$MultiplayerSynchronizer.set_multiplayer_authority(peer_id)

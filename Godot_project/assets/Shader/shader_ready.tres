@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b7ng4wgkih2kj"]
+
+[ext_resource type="Shader" path="res://assets/Shader/SpinningOutline.gdshader" id="1_8ldo5"]
+
+[resource]
+shader = ExtResource("1_8ldo5")
+shader_parameter/line_color = Vector4(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.02
+shader_parameter/frequency = 10.0
+shader_parameter/phase_speed = 1.0

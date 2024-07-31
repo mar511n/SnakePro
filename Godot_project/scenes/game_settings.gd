@@ -48,19 +48,18 @@ func make_game_module_settings():
 	var dir = DirAccess.open(Global.game_modules_dir)
 	for g_mod_f in dir.get_files():
 		g_mod_f = g_mod_f.trim_suffix(".remap")
-		if not g_mod_f in ["GameModBase.gd"]:
-			var g_mod_s = load(Global.game_modules_dir+g_mod_f)
-			if g_mod_s != null:
-				var g_mod : Object = g_mod_s.new()
-				var g_mod_name = ""
-				var props = {}
-				for prop in g_mod.get_meta_list():
-					if prop == "name":
-						g_mod_name = g_mod.get_meta(prop)
-					else:
-						props[prop] = g_mod.get_meta(prop)
-				if g_mod_name != "":
-					add_game_module(g_mod_f, g_mod_name, props)
+		var g_mod_s = load(Global.game_modules_dir+g_mod_f)
+		if g_mod_s != null:
+			var g_mod : Object = g_mod_s.new()
+			var g_mod_name = ""
+			var props = {}
+			for prop in g_mod.get_meta_list():
+				if prop == "name":
+					g_mod_name = g_mod.get_meta(prop)
+				else:
+					props[prop] = g_mod.get_meta(prop)
+			if g_mod_name != "":
+				add_game_module(g_mod_f, g_mod_name, props)
 	gm_label.text = "Gamemodules ("+str(gameModuleProps.size())+")"
 	
 	var applyBtn = Button.new()
@@ -160,19 +159,18 @@ func make_player_module_settings():
 	var dir = DirAccess.open(Global.player_modules_dir)
 	for pl_mod_f in dir.get_files():
 		pl_mod_f = pl_mod_f.trim_suffix(".remap")
-		if not pl_mod_f in ["PlModBase.gd"]:
-			var pl_mod_s = load(Global.player_modules_dir+pl_mod_f)
-			if pl_mod_s != null:
-				var pl_mod : Object = pl_mod_s.new()
-				var pl_mod_name = ""
-				var props = {}
-				for prop in pl_mod.get_meta_list():
-					if prop == "name":
-						pl_mod_name = pl_mod.get_meta(prop)
-					else:
-						props[prop] = pl_mod.get_meta(prop)
-				if pl_mod_name != "":
-					add_player_module(pl_mod_f, pl_mod_name, props)
+		var pl_mod_s = load(Global.player_modules_dir+pl_mod_f)
+		if pl_mod_s != null:
+			var pl_mod : Object = pl_mod_s.new()
+			var pl_mod_name = ""
+			var props = {}
+			for prop in pl_mod.get_meta_list():
+				if prop == "name":
+					pl_mod_name = pl_mod.get_meta(prop)
+				else:
+					props[prop] = pl_mod.get_meta(prop)
+			if pl_mod_name != "":
+				add_player_module(pl_mod_f, pl_mod_name, props)
 	pm_label.text = "Playermodules ("+str(playerModuleProps.size())+")"
 	
 	var applyBtn = Button.new()

@@ -19,7 +19,7 @@ const MAX_CONNECTIONS = 20
 # snake_tile_idx
 var player_info = {}
 
-# set by server contains infos about the game (rules, mods, ...)
+# set by server contains infos about the game
 var game_settings = {}
 # contains player_info of all players; key is peer_id
 var players = {}

@@ -2,6 +2,7 @@ extends Node
 class_name PlModBase
 
 var pl : SnakePlayer
+var autoload = false
 
 func on_player_pre_ready(player:SnakePlayer, _enabled_mods=[]):
 	pl = player

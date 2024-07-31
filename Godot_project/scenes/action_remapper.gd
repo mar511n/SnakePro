@@ -14,7 +14,8 @@ var waiting_for_input = false
 	"abs_left":["Left", "res://assets/MatIcons/arrow_back_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg"],
 	"abs_right":["Right", "res://assets/MatIcons/arrow_forward_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg"],
 	"abs_up":["Up", "res://assets/MatIcons/arrow_upward_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg"],
-	"abs_down":["Down", "res://assets/MatIcons/arrow_downward_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg"]
+	"abs_down":["Down", "res://assets/MatIcons/arrow_downward_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg"],
+	"use_item":["Use item"]
 }
 var id_to_action = {}
 
@@ -24,18 +25,19 @@ func _ready():
 	for action in actions:
 		if remappables.has(action):
 			#var img = Image.load_from_file(remappables[action][1])
-			
-			var tex = load(remappables[action][1])
-			var img = tex.get_image()
-			img.resize(46,46,Image.INTERPOLATE_CUBIC)
-			tex = ImageTexture.create_from_image(img)
-			
-			optBtn.add_icon_item(tex, remappables[action][0], id)
+			if len(remappables[action])>1:
+				var tex = load(remappables[action][1])
+				var img = tex.get_image()
+				img.resize(46,46,Image.INTERPOLATE_CUBIC)
+				tex = ImageTexture.create_from_image(img)
+				
+				optBtn.add_icon_item(tex, remappables[action][0], id)
+			else:
+				optBtn.add_item(remappables[action][0], id)
 			id_to_action[id] = action
 			id += 1
 	optBtn.select(0)
 	button_update()
-	
 
 func button_update(wfo=false):
 	if wfo:

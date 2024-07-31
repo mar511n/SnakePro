@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bpnfgl1v1a4wf"]
+
+[ext_resource type="Shader" path="res://assets/Shader/SpinningCircle.gdshader" id="1_wx35b"]
+
+[resource]
+shader = ExtResource("1_wx35b")
+shader_parameter/color = Vector4(1, 1, 1, 1)
+shader_parameter/frequency = 10.0
+shader_parameter/phase_speed = 1.0

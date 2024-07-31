@@ -6,6 +6,8 @@ const coll_map_size_standard = 40
 const max_snake_path_length = 200
 const debugging_on = true
 
+const group_name_player_item = "PlayerItem"
+
 # Dict with  "name":string, "snake_tile_idx":int
 const config_player_info_sec = "PlayerInfo"
 # Dict with  "startSnakeLength":int, "snakeSpeed":float, "mapPath":string

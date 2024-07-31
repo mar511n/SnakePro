@@ -19,19 +19,17 @@ func _init():
 
 func on_game_ready(g:InGame, g_is_server:bool):
 	super(g,g_is_server)
-	print(get_tree())
 	AppleNutrition = int(Global.get_property(Global.config_game_mod_props_sec, "AppleNutrition", 3))
 	AppleRottTime = float(Global.get_property(Global.config_game_mod_props_sec, "AppleRottTime", 10.0))
 	GhostAppleDamage = int(Global.get_property(Global.config_game_mod_props_sec, "GhostAppleDamage", 3))
 	
-	var apple_drawer_r = load("res://scenes/ModResources/AppleMap.tscn")
+	var apple_drawer_r = preload("res://scenes/ModResources/AppleMap.tscn")
 	if apple_drawer_r != null:
 		apple_drawer = apple_drawer_r.instantiate()
 		game.add_child(apple_drawer)
 		apple_drawer.scale_to_tile_size(Vector2.ONE*g.tile_size_px)
 	AppleRedrawCounter = 0
 	if is_server:
-		Global.Print("spawning apples")
 		game.module_vars["AppleCount"] = int(Global.get_property(Global.config_game_mod_props_sec, "AppleCount", 10))
 		game.module_vars["ApplePositions"] = []
 		game.module_vars["GhostApplePositions"] = []
@@ -40,6 +38,7 @@ func on_game_ready(g:InGame, g_is_server:bool):
 # spawn apples here
 func on_game_post_ready():
 	if is_server:
+		Global.Print("spawning apples")
 		for ai in range(game.module_vars["AppleCount"]):
 			spawn_apple()
 
@@ -48,7 +47,7 @@ func spawn_apple():
 	var pos = Vector2i.ZERO
 	for i in range(AppleSpawnTries):
 		pos = Vector2i(randi_range(0,game.coll_map.size_x),randi_range(0,game.coll_map.size_y))
-		if not pos in game.module_vars["ApplePositions"] and not pos in game.module_vars["GhostApplePositions"]:
+		if not pos in game.module_vars["ApplePositions"] and not pos in game.module_vars["GhostApplePositions"] and not pos in game.module_vars["IngameItems"].keys():
 			if len(game.tile_check_collisions(pos, [Global.scl.alive,Global.scl.dead,Global.scl.wall],1))==0:
 				break
 	game.module_vars["ApplePositions"].append(pos)
