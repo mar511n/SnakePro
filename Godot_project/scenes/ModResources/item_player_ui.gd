@@ -22,7 +22,7 @@ func add_item(item_code:String, is_ready=true, use_shader=true)->int:
 	item_counter += 1
 	var txr = TextureRect.new()
 	txr.expand_mode = TextureRect.EXPAND_FIT_WIDTH
-	txr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+	txr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	txr.texture = item_code_to_texture[item_code.trim_suffix("_g")]
 	if use_shader:
 		if is_ready:

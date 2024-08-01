@@ -1,7 +1,7 @@
 shader_type canvas_item;
 uniform vec4 color = vec4(1.0);
 uniform float frequency = 10.0;
-uniform float phase_speed = 1.0;
+uniform float phase_speed = 17.0;
 
 void fragment() {
   vec2 pos = UV - vec2(0.5);

@@ -20,6 +20,10 @@ func _init(ghost=false):
 	autoload = false
 	is_ghost = ghost
 
+# called when a player (dead/alive) collects the item, should return, if the item is collected
+func on_collected_by_player(player:SnakePlayer)->bool:
+	return player.module_vars["PlayerIsAlive"]
+
 func mark_for_removal():
 	is_marked_for_removal = true
 
@@ -33,16 +37,13 @@ func remove_item():
 		pl.modules.remove_at(idx)
 	queue_free()
 
-func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
-	super(player,enabled_mods)
-	Global.Print("%s on_player_pre_ready for player %s" % [item_name, player.peer_id])
-
 func on_player_physics_process(_delta:float):
 	if is_marked_for_removal:
 		remove_item()
 
 func on_player_ready():
 	super()
+	Global.Print("Player %s collected item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 6)
 	
 	local_player_gui = pl.gui_node.get_node("ItemGUI")
 	if local_player_gui != null:

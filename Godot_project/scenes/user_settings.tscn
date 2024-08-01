@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://106bjfe7jhy2"]
+[gd_scene load_steps=4 format=3 uid="uid://106bjfe7jhy2"]
 
 [ext_resource type="Script" path="res://scenes/user_settings.gd" id="1_fr42r"]
 [ext_resource type="Texture2D" uid="uid://m3vbiomqc2pe" path="res://assets/Images/Snakes/blue_preview.png" id="2_vihr5"]
+[ext_resource type="PackedScene" uid="uid://bdcc0njvy50mt" path="res://scenes/labeled_h_slider.tscn" id="3_d0h0d"]
 
 [node name="UserSettings" type="Panel"]
 offset_right = 333.0
@@ -111,6 +112,7 @@ layout_mode = 2
 [node name="SplitScreenL" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Splitscreen"
+horizontal_alignment = 1
 
 [node name="SplitScreenOpt" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
@@ -129,6 +131,18 @@ popup/item_4/id = 4
 popup/item_5/text = "Windowed"
 popup/item_5/id = 5
 
+[node name="HSeparator6" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="MusicL" type="Label" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Music volume"
+horizontal_alignment = 1
+
+[node name="MusicVolume" parent="ScrollContainer/VFlowContainer" instance=ExtResource("3_d0h0d")]
+layout_mode = 2
+value = 100.0
+
 [connection signal="focus_exited" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
 [connection signal="text_submitted" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/SnakeOpt" to="." method="_on_snake_opt_item_selected"]
@@ -136,3 +150,4 @@ popup/item_5/id = 5
 [connection signal="toggled" from="ScrollContainer/VFlowContainer/SmoothCam" to="." method="_on_smooth_cam_toggled"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/VSyncB" to="." method="_on_v_sync_b_item_selected"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/SplitScreenOpt" to="." method="_on_split_screen_opt_item_selected"]
+[connection signal="drag_ended" from="ScrollContainer/VFlowContainer/MusicVolume" to="." method="_on_music_volume_drag_ended"]

@@ -1,7 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://dffji00mprodh"]
+[gd_scene load_steps=31 format=3 uid="uid://dffji00mprodh"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_gv0ea"]
 [ext_resource type="Texture2D" uid="uid://bj1hqxypsq80v" path="res://assets/MatIcons/add_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="2_ure4r"]
+[ext_resource type="AudioStream" uid="uid://bysbynt26cjtw" path="res://assets/Sounds/Dead/1.wav" id="3_ppts7"]
+[ext_resource type="AudioStream" uid="uid://blsjdaagn1ehg" path="res://assets/Sounds/Dead/2.wav" id="4_loqkv"]
+[ext_resource type="AudioStream" uid="uid://c0gwtyy555gcl" path="res://assets/Sounds/Dead/3.wav" id="5_jr288"]
+[ext_resource type="AudioStream" uid="uid://dc83yfye3dian" path="res://assets/Sounds/Eating/1.wav" id="6_udqfy"]
+[ext_resource type="AudioStream" uid="uid://ctdn4uyrapk8c" path="res://assets/Sounds/Eating/2.wav" id="7_se8ye"]
+[ext_resource type="AudioStream" uid="uid://bbp8wu82ocg1q" path="res://assets/Sounds/Eating/3.wav" id="8_p53rb"]
+[ext_resource type="AudioStream" uid="uid://damhtbe3x7jba" path="res://assets/Sounds/Eating/4.wav" id="9_po5q8"]
+[ext_resource type="AudioStream" uid="uid://cv7e56c3vra3a" path="res://assets/Sounds/Eating/5.wav" id="10_arxja"]
+[ext_resource type="AudioStream" uid="uid://5p1lw7e1v3uf" path="res://assets/Sounds/Eating_Rotten/1.wav" id="11_ydxhw"]
+[ext_resource type="AudioStream" uid="uid://1h8t1hqldtyr" path="res://assets/Sounds/Eating_Rotten/2.wav" id="12_vckau"]
+[ext_resource type="AudioStream" uid="uid://dpw4ppp5a6vsr" path="res://assets/Sounds/Eating_Rotten/3.wav" id="13_7aur7"]
+[ext_resource type="AudioStream" uid="uid://d1h4qqfbfon8o" path="res://assets/Sounds/Eating_Rotten/4.wav" id="14_ni4s4"]
+[ext_resource type="AudioStream" uid="uid://djp0p6uk3owjm" path="res://assets/Sounds/Item/1.wav" id="15_iixr8"]
+[ext_resource type="AudioStream" uid="uid://63ra1rcp3c6j" path="res://assets/Sounds/Item/2.wav" id="16_xvyrr"]
+[ext_resource type="AudioStream" uid="uid://oxsxrnoagpx3" path="res://assets/Sounds/Item/3.wav" id="17_i5iwu"]
+[ext_resource type="AudioStream" uid="uid://bxwx3gyjx4ui" path="res://assets/Sounds/Revive/1.wav" id="18_ddpsx"]
+[ext_resource type="AudioStream" uid="uid://l3wd6trxhltc" path="res://assets/Sounds/Revive/2.wav" id="19_n7ugp"]
+[ext_resource type="AudioStream" uid="uid://bywj3smcyqhn2" path="res://assets/Sounds/Speed/1.wav" id="20_6eemm"]
+[ext_resource type="AudioStream" uid="uid://dasmqa1hcbd36" path="res://assets/Sounds/Speed/2.wav" id="21_3uw3j"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqkbk"]
 properties/0/path = NodePath(".:tiles")
@@ -10,10 +29,81 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("EatingSound:playing")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("EatingRottenSound:playing")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("CollectItemSound:playing")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath("ReviveSound:playing")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath("SpeedSound:playing")
+properties/6/spawn = true
+properties/6/replication_mode = 2
 
 [sub_resource type="Curve2D" id="Curve2D_3f3bv"]
 
 [sub_resource type="Gradient" id="Gradient_3x5wc"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_v2hyg"]
+streams_count = 3
+stream_0/stream = ExtResource("3_ppts7")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("4_loqkv")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("5_jr288")
+stream_2/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ey8q2"]
+streams_count = 5
+stream_0/stream = ExtResource("6_udqfy")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("7_se8ye")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("8_p53rb")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("9_po5q8")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("10_arxja")
+stream_4/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_621yt"]
+streams_count = 4
+stream_0/stream = ExtResource("11_ydxhw")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("12_vckau")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("13_7aur7")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("14_ni4s4")
+stream_3/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_eyowu"]
+streams_count = 3
+stream_0/stream = ExtResource("15_iixr8")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("16_xvyrr")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("17_i5iwu")
+stream_2/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_e1fr1"]
+streams_count = 2
+stream_0/stream = ExtResource("18_ddpsx")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("19_n7ugp")
+stream_1/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_oumsq"]
+streams_count = 2
+stream_0/stream = ExtResource("20_6eemm")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("21_3uw3j")
+stream_1/weight = 1.0
 
 [node name="Player" type="Node2D" groups=["gameobj"]]
 script = ExtResource("1_gv0ea")
@@ -24,14 +114,18 @@ position_smoothing_speed = 10.0
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="FPS_L" type="Label" parent="GUI"]
-anchors_preset = 1
+z_index = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -34.0
-offset_bottom = 19.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -19.0
 grow_horizontal = 0
+grow_vertical = 0
 text = "60"
-horizontal_alignment = 2
+horizontal_alignment = 1
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_aqkbk")
@@ -52,5 +146,29 @@ begin_cap_mode = 2
 end_cap_mode = 2
 
 [node name="Modules" type="Node" parent="."]
+
+[node name="DeadSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_v2hyg")
+attenuation = 4.5
+
+[node name="EatingSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_ey8q2")
+attenuation = 4.5
+
+[node name="EatingRottenSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_621yt")
+attenuation = 4.5
+
+[node name="CollectItemSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_eyowu")
+attenuation = 4.5
+
+[node name="ReviveSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_e1fr1")
+attenuation = 4.5
+
+[node name="SpeedSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_oumsq")
+attenuation = 4.5
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]

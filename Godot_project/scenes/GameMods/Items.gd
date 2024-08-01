@@ -35,16 +35,17 @@ func on_game_ready(g:InGame, g_is_server:bool):
 		game.add_child(item_drawer)
 		item_drawer.scale_to_tile_size(Vector2.ONE*g.tile_size_px)
 	
-	var local_pl:SnakePlayer = g.playerlist.get(multiplayer.get_unique_id(), null)
-	var lp_ui = local_player_ui.instantiate()
-	lp_ui.name = "ItemGUI"
-	local_pl.gui_node.add_child(lp_ui)
-	
 	if is_server:
 		game.module_vars["IngameItems"] = {}
 		game.module_vars["ItemRedrawCounter"] = 0
 
 func on_game_post_ready():
+	var local_pl:SnakePlayer = game.playerlist.get(multiplayer.get_unique_id(), null)
+	Global.Print("Loading ItemGUI for player %s" % local_pl.peer_id)
+	var lp_ui = local_player_ui.instantiate()
+	lp_ui.name = "ItemGUI"
+	local_pl.gui_node.add_child(lp_ui)
+	
 	if is_server:
 		Global.Print("spawning items")
 		for i in range(ItemCount):
@@ -107,26 +108,24 @@ func on_game_checked_collisions(_colls)->Array:
 
 @rpc("any_peer", "call_local","reliable")
 func check_item_collision_for_local_player():
-	var player = game.playerlist.get(multiplayer.get_unique_id(), null)
-	if player != null:
+	var player : SnakePlayer = game.playerlist.get(multiplayer.get_unique_id(), null)
+	if is_instance_valid(player):
 		var head = player.get_head_tile()
 		if head in game.module_vars["IngameItems"].keys():
-			var item_code = game.module_vars["IngameItems"][head]
-			if player.module_vars["PlayerIsAlive"]:
-				#Global.Print("fett += %s" % AppleNutrition, 7)
-				#player.fett += AppleNutrition
-				if local_player_item != null:
+			var item_code : String = game.module_vars["IngameItems"][head]
+			var mod : ItemModBase = spawnable_items[item_code.trim_suffix("_g")][2].new(item_code_is_ghost(item_code))
+			if mod.on_collected_by_player(player):
+				player.CollectItemSound.play()
+				if is_instance_valid(local_player_item):
 					local_player_item.mark_for_removal()
-				var mod = spawnable_items[item_code.trim_suffix("_g")][2].new(item_code_is_ghost(item_code))
 				local_player_item = mod
 				player.modules.append(mod)
 				mod.on_player_pre_ready(player,[])
 				player.module_node.add_child(mod)
 				mod.on_player_ready()
 				remove_item.rpc_id(1,head)
-			else:
-				if !item_code_is_ghost(item_code):
-					ghostify_item.rpc_id(1,head)
+			elif !item_code_is_ghost(item_code):
+				ghostify_item.rpc_id(1,head)
 
 func on_game_physics_process(_delta):
 	if game.module_vars.get("ItemRedrawCounter",0) != ItemRedrawCounter:

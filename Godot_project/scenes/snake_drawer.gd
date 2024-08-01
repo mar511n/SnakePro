@@ -1,26 +1,21 @@
 extends TileMap
+class_name SnakeDrawerTileMap
 
-const base_snake_path = "res://assets/Images/Snakes/"
-const snake_paths = ["test.png","blue.png","red.png","yellow.png","pink.png","bot_black.png"]
-const source_idx = [1, 2, 3, 4, 5, 6]
+const base_snake_path:String = "res://assets/Images/Snakes/"
+const snake_paths:Array = ["test.png","blue.png","red.png","yellow.png","pink.png","bot_black.png"]
+const source_idx:Array = [1, 2, 3, 4, 5, 6]
 enum tile_type {
 	HEAD,
 	TAIL,
 	BODY
 }
-const tile_atlas_coords = [Vector2(12,8),Vector2i(0,0),Vector2i(6,0),Vector2i(12,0)]
-
-func _ready():
-	pass
-	#reset(1)
-	#draw_snake(0,0,[Vector2i(0,0),Vector2i(1,0),Vector2i(2,0),Vector2i(2,1),Vector2i(2,2)])
-	#make_tileset()
+const tile_atlas_coords:Array = [Vector2(12,8),Vector2i(0,0),Vector2i(6,0),Vector2i(12,0)]
 
 # draws a snake, pos has tail at idx=0 and head at last idx
-func draw_snake(snake_idx:int, layer:int, pos):
-	var lpi = -1
-	var npi = 1
-	for cpi in range(len(pos)):
+func draw_snake(snake_idx:int, layer:int, pos:Array)->void:
+	var lpi:int = -1
+	var npi:int = 1
+	for cpi:int in range(len(pos)):
 		lpi = cpi - 1
 		npi = cpi + 1
 		if lpi == -1:
@@ -30,12 +25,12 @@ func draw_snake(snake_idx:int, layer:int, pos):
 		else:
 			place_tile(tile_type.BODY, pos[cpi], pos[lpi], pos[npi],snake_idx,layer)
 
-func place_tile(tile:tile_type, pos:Vector2i, lpos:Vector2i, npos:Vector2i, sn_idx:int, layer:int):
-	var sid = source_idx[sn_idx]
-	var tac = 0
-	var tacai = 0
-	var diri = pos-lpos
-	var diro = npos-pos
+func place_tile(tile:tile_type, pos:Vector2i, lpos:Vector2i, npos:Vector2i, sn_idx:int, layer:int)->void:
+	var sid:int = source_idx[sn_idx]
+	var tac:int = 0
+	var tacai:int = 0
+	var diri:Vector2i = pos-lpos
+	var diro:Vector2i = npos-pos
 	if tile == tile_type.HEAD:
 		tac = 0
 		if diri.x > 0:
@@ -79,10 +74,10 @@ func place_tile(tile:tile_type, pos:Vector2i, lpos:Vector2i, npos:Vector2i, sn_i
 				tacai = 7
 	set_cell(layer,pos,sid,tile_atlas_coords[tac],tacai)
 
-func reset(layers=1,layer_prop=[]):
-	for li in range(get_layers_count()):
+func reset(layers:int=1,layer_prop:Array=[])->void:
+	for li:int in range(get_layers_count()):
 		remove_layer(0)
-	for layer_idx in range(layers):
+	for layer_idx:int in range(layers):
 		add_layer(-1)
 		#set_layer_y_sort_enabled(layer_idx, true)
 		if len(layer_prop) > layer_idx:
@@ -95,11 +90,11 @@ func reset(layers=1,layer_prop=[]):
 			if layer_prop[layer_idx].has("enabled"):
 				set_layer_enabled(layer_idx,layer_prop[layer_idx]["enabled"])
 
-const expected_image_width = 800
-const expected_image_height = 640
+const expected_image_width:int = 800
+const expected_image_height:int = 640
 # creates snake_tileset.tres from snake_paths
-func make_tileset():
-	var s_ids = []
+func make_tileset()->void:
+	var s_ids:Array = []
 	tile_set = load(base_snake_path+"snake_tileset_base.tres")
 	for snakep in snake_paths:
 		var tss = tile_set.get_source(0).duplicate()

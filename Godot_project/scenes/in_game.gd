@@ -3,35 +3,37 @@ class_name InGame
 
 @export var PlayerScene : PackedScene
 
-@onready var pl_spawner = $PlayerSpawner
-@onready var sn_drawer = $SnakeDrawer
-@onready var module_list = $GUI/Panel2/RichTextLabel
-@onready var module_node = $Modules
+@onready var pl_spawner:MultiplayerSpawner = $PlayerSpawner
+@onready var sn_drawer:TileMap = $SnakeDrawer
+@onready var module_list:RichTextLabel = $GUI/Panel2/RichTextLabel
+@onready var module_node:Node = $Modules
 
-var tile_size_px = 96.0
+var tile_size_px:float = 96.0
 
 var coll_map : CollisionMap
-var playerlist = {} # peer_id -> player node
+var playerlist:Dictionary = {} # peer_id -> player node
 var tmap : TileMap
 
 #var modules : Array[GameModBase]
-@export var module_vars = {}
+@export var module_vars:Dictionary = {}
 
 # helper variables
-var check_collisions = false
-var ready_phase = 0
-var waitframes = 0
-var finished_loading_players = false
+var check_collisions:bool = false
+var ready_phase:int = 0
+var waitframes:int = 0
+var finished_loading_players:bool = false
 
 # on server:
 # -> start post_ready()
 # -> check for collisions
-func _physics_process(delta):
-	if ready_phase == 2:
-		if waitframes > 0:
-			waitframes -= 1
-		else:
-			post_ready()
+func _physics_process(delta:float)->void:
+	if finished_loading_players and waitframes > 0:
+		waitframes -= 1
+		if waitframes == 0:
+			Global.Print("starting game")
+			pause_game(false,false)
+	if ready_phase == 2 and finished_loading_players and waitframes <= 0:
+		post_ready()
 	if ready_phase == 3:
 		if check_collisions:
 			if multiplayer.is_server():
@@ -40,28 +42,28 @@ func _physics_process(delta):
 			#	for mod in module_node.get_children():
 			#		mod.on_game_checked_collisions({})
 			check_collisions = false
-		for mod in module_node.get_children():
+		for mod:Node in module_node.get_children():
 			mod.on_game_physics_process(delta)
 
 # on server:
 # -> note movement of player (to check collision on next physics frame)
-func _on_player_movement(_peer_id, _pl_idx):
+func _on_player_movement(_peer_id:int, _pl_idx:int)->void:
 	check_collisions = true
 
 # on server:
 # -> check collisions of snakes
 # -> call player.hit for affected players
-func check_snake_collisions():
-	var colls = {}
-	for peer_id in playerlist:
+func check_snake_collisions()->void:
+	var colls:Dictionary = {}
+	for peer_id:int in playerlist:
 		colls[peer_id] = head_collides_with_smth(peer_id,playerlist[peer_id].tiles[-1])
 	
-	for mod in module_node.get_children():
-		var handled_colls = mod.on_game_checked_collisions(colls)
-		for hc in handled_colls:
+	for mod:Node in module_node.get_children():
+		var handled_colls:Array = mod.on_game_checked_collisions(colls)
+		for hc:int in handled_colls:
 			colls.erase(hc)
-	for peer_id in colls:
-		var colld = colls[peer_id]
+	for peer_id:int in colls:
+		var colld:Array = colls[peer_id]
 		if colld[0] != Global.collision.NO:
 			if colld[0] == Global.collision.PLAYERHEAD:
 				#playerlist[colld[1]].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERHEAD,"peer_id":peer_id}])
@@ -75,28 +77,28 @@ func check_snake_collisions():
 # -> check collisions of tile with:
 # --> Map
 # --> Self/other players
-func head_collides_with_smth(peer_id, pos) -> Array:
-	var colls = tile_check_collisions(pos,playerlist[peer_id].CollMasks,2)
-	for coll in colls:
+func head_collides_with_smth(peer_id:int, pos:Vector2i) -> Array:
+	var colls:Array = tile_check_collisions(pos,playerlist[peer_id].CollMasks,2)
+	for coll:Array in colls:
 		if not (coll[0] == Global.collision.PLAYERHEAD and coll[1] == peer_id):
 			return coll
 	return [Global.collision.NO, null]
 
-func tile_check_collisions(pos:Vector2i,CollLayer,max_colls=1)->Array:
-	var colls = []
-	var wc = coll_map.collides_at(pos.x,pos.y)
+func tile_check_collisions(pos:Vector2i,CollLayer:Array,max_colls:int=1)->Array:
+	var colls:Array = []
+	var wc:int = coll_map.collides_at(pos.x,pos.y)
 	if wc != 0 and Global.scl.wall in CollLayer:
 		colls.append([Global.collision.WALL, wc])
 		if len(colls) >= max_colls:
 			return colls
 	
-	for peer2_id in playerlist:
-		if CollLayer.any(func(cl): return cl in playerlist[peer2_id].CollLayers):
+	for peer2_id:int in playerlist:
+		if CollLayer.any(func(cl:int)->bool: return cl in playerlist[peer2_id].CollLayers):
 			#print("%s cmasks %s" % [peer_id, playerlist[peer_id].CollMasks])
 			#print("%s clayers %s" % [peer2_id, playerlist[peer2_id].CollLayers])
-			for tile_i in len(playerlist[peer2_id].tiles):
+			for tile_i:int in range(len(playerlist[peer2_id].tiles)):
 				if playerlist[peer2_id].tiles[tile_i] == pos:
-					var ct = Global.collision.PLAYERBODY
+					var ct:Global.collision = Global.collision.PLAYERBODY
 					if tile_i == len(playerlist[peer2_id].tiles)-1:
 						ct = Global.collision.PLAYERHEAD
 					colls.append([ct, peer2_id])
@@ -106,14 +108,14 @@ func tile_check_collisions(pos:Vector2i,CollLayer,max_colls=1)->Array:
 
 # on server/client:
 # -> process input
-func _input(event):
+func _input(event:InputEvent)->void:
 	if event.is_action_pressed("ui_cancel"):
 		pause_game.rpc(!$GUI.visible)
 	elif event is InputEventKey:
 		if event.keycode == KEY_0 and event.pressed:
 			print("capturing gamestate")
-			var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
-			var sns = get_tree().get_nodes_in_group("VariableGraphical")
+			var save_file:FileAccess = FileAccess.open("user://savegame.save", FileAccess.WRITE)
+			var sns:Array = get_tree().get_nodes_in_group("VariableGraphical")
 			if len(sns) == 0:
 				print("error: no objects")
 				return
@@ -124,8 +126,8 @@ func _input(event):
 			save_file.store_var(node,true)
 		elif event.keycode == KEY_9 and event.pressed:
 			print("loading gamestate")
-			var save_file = FileAccess.open("user://savegame.save", FileAccess.READ)
-			var node = save_file.get_var(true)
+			var save_file:FileAccess = FileAccess.open("user://savegame.save", FileAccess.READ)
+			var node:Node = save_file.get_var(true)
 			print(node)
 			add_child(node)
 
@@ -133,13 +135,13 @@ func _input(event):
 
 # on server/client:
 # reset the game, load TileMap, spawn players
-func _ready():
+func _ready()->void:
 	format_module_list()
 	
-	var mod_paths = Global.get_enabled_mod_paths(Global.config_game_mods_sec)
+	var mod_paths:Array = Global.get_enabled_mod_paths(Global.config_game_mods_sec)
 	#modules = []
-	for mod_path in mod_paths:
-		var mod = load(Global.game_modules_dir+mod_path)
+	for mod_path:String in mod_paths:
+		var mod:Resource = load(Global.game_modules_dir+mod_path)
 		if mod != null:
 			#modules.append(mod.new())
 			module_node.add_child(mod.new())
@@ -155,50 +157,50 @@ func _ready():
 	Lobby.all_players_loaded.connect(self.all_players_loaded)
 	$GUI/Panel/VBoxContainer/Return.disabled = !multiplayer.is_server()
 	
+	pause_game(true, false)
+	
 	playerlist = {}
-	var pl_list = Lobby.players.keys()
+	var pl_list:Array = Lobby.players.keys()
 	pl_list.sort()
 	sn_drawer.reset(len(pl_list))
 	tile_size_px = (sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(1,0)))-sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(0,0)))).x
 	if multiplayer.is_server():
-		var game_params = Lobby.game_settings.get(Global.config_game_params_sec,Global.default_game_params.duplicate())
+		var game_params:Dictionary = Lobby.game_settings.get(Global.config_game_params_sec,Global.default_game_params.duplicate())
 		load_map.rpc(game_params.get("mapPath", ""))
 		
-		var index = 0
-		for peer_id in pl_list:
+		var index:int = 0
+		for peer_id:int in pl_list:
 			pl_spawner.spawn([index, peer_id])
 			index += 1
-		
-		if !finished_loading_players:
-			pause_game.rpc(true, false) # set game to pause and wait for all players to load
 	
-	for mod in module_node.get_children():
+	for mod:Node in module_node.get_children():
 		mod.on_game_ready(self, multiplayer.is_server())
 	ready_phase = 2
 
-func post_ready():
+func post_ready()->void:
+	Global.Print("post_ready")
 	coll_map.load_from_Tilemap(tmap, sn_drawer)
-	for mod in module_node.get_children():
+	for mod:Node in module_node.get_children():
 		mod.on_game_post_ready()
 	ready_phase = 3
 
-func format_module_list():
+func format_module_list()->void:
 	#print(str(Lobby.game_settings))
 	
 	module_list.clear()
 	module_list.append_text("[b]"+Global.config_game_params_sec+"[/b]\n")
-	var gparams = Lobby.game_settings.get(Global.config_game_params_sec,{})
-	for gparam in gparams:
+	var gparams:Dictionary = Lobby.game_settings.get(Global.config_game_params_sec,{})
+	for gparam:String in gparams:
 		module_list.append_text(gparam + " : " + str(gparams[gparam]) +"\n")
 	
-	for sec in [[Global.config_player_mods_sec, Global.config_player_mod_props_sec], [Global.config_game_mods_sec,Global.config_game_mod_props_sec]]:
+	for sec:Array in [[Global.config_player_mods_sec, Global.config_player_mod_props_sec], [Global.config_game_mods_sec,Global.config_game_mod_props_sec]]:
 		module_list.append_text("[b]"+ sec[0]+"[/b]\n")
-		var en_ms = Global.get_enabled_mods(sec[0])
-		for mod in en_ms:
+		var en_ms:Array = Global.get_enabled_mods(sec[0])
+		for mod:String in en_ms:
 			module_list.append_text(mod+"\n")
 		module_list.append_text("[b]"+ sec[1]+"[/b]\n")
-		var setts = Lobby.game_settings.get(sec[1], {})
-		for sett in setts:
+		var setts:Dictionary = Lobby.game_settings.get(sec[1], {})
+		for sett:String in setts:
 			module_list.append_text(sett+" : "+str(setts[sett]) +"\n")
 
 # on server&client:
@@ -224,10 +226,12 @@ func all_players_loaded():
 	Global.Print("all players loaded")
 	if ready_phase >= 2:
 		Global.Print("starting game")
-		pause_game.rpc(false, false) # set game to play since all players loaded
 		waitframes = 0
+		pause_game(false, false) # set game to play since all players loaded
 	else:
-		waitframes = 3
+		waitframes = 2
+		call_deferred("set_physics_process", true)
+		call_deferred("set_process", true)
 	finished_loading_players = true
 
 # on server/client:

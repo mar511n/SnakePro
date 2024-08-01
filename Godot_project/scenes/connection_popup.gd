@@ -1,21 +1,22 @@
 extends Panel
+class_name ConnectionPopupPanel
 
-signal host(port)
-signal join(ip,port)
+signal host(port:int)
+signal join(ip:String,port:int)
 
-@onready var ip_l = $VBoxContainer/IP_Label
-@onready var ip_e = $VBoxContainer/IP
-@onready var port_l = $VBoxContainer/Port_Label
-@onready var port_e = $VBoxContainer/Port
-@onready var hj_b = $VBoxContainer/HostJoin
-@onready var vbox = $VBoxContainer
-@onready var conf_b = $VBoxContainer/HBoxContainer/Confirm
-@onready var canc_b = $VBoxContainer/HBoxContainer/Cancel
+@onready var ip_l:Label = $VBoxContainer/IP_Label
+@onready var ip_e:LineEdit = $VBoxContainer/IP
+@onready var port_l:Label = $VBoxContainer/Port_Label
+@onready var port_e:SpinBox = $VBoxContainer/Port
+@onready var hj_b:CheckButton = $VBoxContainer/HostJoin
+@onready var vbox:VBoxContainer = $VBoxContainer
+@onready var conf_b:Button = $VBoxContainer/HBoxContainer/Confirm
+@onready var canc_b:Button = $VBoxContainer/HBoxContainer/Cancel
 
-var ip_addr = "127.0.0.1"
-var port = 8080
+var ip_addr:String = "127.0.0.1"
+var port:int = 8080
 
-func show_popup(ip="",p=0):
+func show_popup(ip:String="",p:int=0)->void:
 	if not ip.is_empty():
 		ip_addr = ip
 	if p != 0:
@@ -27,7 +28,7 @@ func show_popup(ip="",p=0):
 	resize()
 	visible = true
 
-func set_ip_vis():
+func set_ip_vis()->void:
 	ip_l.visible = not hj_b.button_pressed
 	ip_e.visible = not hj_b.button_pressed
 	if hj_b.button_pressed:
@@ -35,16 +36,16 @@ func set_ip_vis():
 	else:
 		conf_b.text = "Join"
 
-func resize():
-	var width = vbox.size.x+20
-	var height = vbox.get_minimum_size().y +20
+func resize()->void:
+	var width:float = vbox.size.x+20
+	var height:float = vbox.get_minimum_size().y +20
 	set_size(Vector2(width,height))
 
-func _on_host_join_toggled(_toggled_on):
+func _on_host_join_toggled(_toggled_on:bool)->void:
 	set_ip_vis()
 	resize()
 
-func _on_ok_pressed():
+func _on_ok_pressed()->void:
 	if hj_b.button_pressed:
 		if ip_e.text.is_valid_ip_address():
 			ip_addr = ip_e.text
@@ -52,12 +53,12 @@ func _on_ok_pressed():
 			return
 	else:
 		ip_addr = "127.0.0.1"
-	port = port_e.value
+	port = int(port_e.value)
 	if hj_b.button_pressed:
 		host.emit(port)
 	else:
 		join.emit(ip_addr,port)
 	visible = false
 
-func _on_cancel_pressed():
+func _on_cancel_pressed()->void:
 	visible = false

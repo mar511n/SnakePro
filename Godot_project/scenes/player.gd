@@ -16,6 +16,12 @@ var peer_id = 0
 @onready var cam_node = $Camera2D
 @onready var module_node = $Modules
 @onready var gui_node = $GUI
+@onready var DeadSound = $DeadSound
+@onready var EatingSound = $EatingSound
+@onready var EatingRottenSound = $EatingRottenSound
+@onready var CollectItemSound = $CollectItemSound
+@onready var ReviveSound = $ReviveSound
+@onready var SpeedSound = $SpeedSound
 var sn_drawer_path : NodePath
 var sn_drawer : TileMap
 var startPos : Vector2
@@ -40,7 +46,7 @@ var delta_speed : float = 0.0 # in px per second
 var time_since_last_movement_update : float = 0.0 # seconds
 var firstInput : input_dir = input_dir.NONE
 var secondInput : input_dir = input_dir.NONE
-var CollLayers = []
+@export var CollLayers = []
 var CollMasks = []
 var module_vars = {}
 
@@ -220,6 +226,8 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 # -> reset player
 # -> inform peers that player is loaded
 func _ready():
+	set_physics_process(false)
+	set_process(false)
 	is_owner = peer_id == multiplayer.get_unique_id()
 	if !Global.debugging_on:
 		remove_child($Sprite2D)
@@ -239,7 +247,7 @@ func _ready():
 	if cam_node.enabled:
 		cam_node.position_smoothing_speed = 6
 		cam_node.position_smoothing_enabled = Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true)
-		Lobby.player_loaded.rpc_id(1)
+		Lobby.player_loaded.rpc()
 
 func remove_tiles_from_tail(n:int)->bool:
 	var has_enough = n+2 <= len(tiles)
@@ -258,8 +266,8 @@ func get_head_tile()->Vector2i:
 func reset_snake_tiles():
 	var spos = sn_drawer.local_to_map(sn_drawer.to_local(startPos))
 	tiles = [spos]
-	if fett < 1:
-		fett = 1
+	fett = Lobby.game_settings.get(Global.config_game_params_sec).get("startSnakeLength", Global.default_game_params["startSnakeLength"]) -1
+	set_speed(Lobby.game_settings.get(Global.config_game_params_sec).get("snakeSpeed", Global.default_game_params["snakeSpeed"]))
 	for i in range(1):
 		move_in_dir(startDir)
 	redraw_snake()

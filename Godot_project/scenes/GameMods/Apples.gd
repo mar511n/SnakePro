@@ -97,6 +97,7 @@ func check_apple_collision_for_local_player():
 		var head = player.get_head_tile()
 		if head in game.module_vars["ApplePositions"]:
 			if player.module_vars["PlayerIsAlive"]:
+				player.EatingSound.play()
 				#Global.Print("fett += %s" % AppleNutrition, 7)
 				player.fett += AppleNutrition
 				remove_apple.rpc_id(1,head)
@@ -104,6 +105,7 @@ func check_apple_collision_for_local_player():
 				ghostify_apple.rpc_id(1,head)
 		elif head in game.module_vars["GhostApplePositions"]:
 			if player.module_vars["PlayerIsAlive"]:
+				player.EatingRottenSound.play()
 				#Global.Print("fett -= %s" % GhostAppleDamage, 7)
 				#Global.Print("tiles = %s" % len(player.tiles), 7)
 				var survived = player.remove_tiles_from_tail(GhostAppleDamage)

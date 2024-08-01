@@ -39,7 +39,11 @@ texture_pressed = ExtResource("4_5wdu3")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+[node name="ControllerBtn" type="OptionButton" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ActionsBtn" type="OptionButton" parent="VBoxContainer"]
 layout_mode = 2
 expand_icon = true
 
@@ -56,6 +60,8 @@ autowrap_mode = 1
 
 [connection signal="resized" from="VBoxContainer" to="." method="_on_v_box_container_resized"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]
-[connection signal="item_selected" from="VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/ControllerBtn" to="." method="_on_controller_btn_item_selected"]
+[connection signal="pressed" from="VBoxContainer/ControllerBtn" to="." method="_on_controller_btn_pressed"]
+[connection signal="item_selected" from="VBoxContainer/ActionsBtn" to="." method="_on_option_button_item_selected"]
 [connection signal="button_down" from="VBoxContainer/Button" to="." method="_on_button_button_down"]
 [connection signal="toggled" from="VBoxContainer/Button" to="." method="_on_button_toggled"]
