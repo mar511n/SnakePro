@@ -69,7 +69,7 @@ func _ready()->void:
 	if debugging_on:
 		min_prio_toast = 5
 	else:
-		min_prio_toast = 7
+		min_prio_toast = 6
 
 func convert_tilemap_coords(pos1:Vector2i, t1:TileMap, t2:TileMap) -> Vector2i:
 	var gp:Vector2 = t1.to_global(t1.map_to_local(pos1))

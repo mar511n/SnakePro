@@ -43,7 +43,7 @@ func on_player_physics_process(_delta:float):
 
 func on_player_ready():
 	super()
-	Global.Print("Player %s collected item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 6)
+	Global.Print("Player %s collected item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
 	
 	local_player_gui = pl.gui_node.get_node("ItemGUI")
 	if local_player_gui != null:

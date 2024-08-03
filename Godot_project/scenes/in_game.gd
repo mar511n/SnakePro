@@ -171,8 +171,8 @@ func _ready()->void:
 	sn_drawer.reset(len(pl_list))
 	tile_size_px = (sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(1,0)))-sn_drawer.to_global(sn_drawer.map_to_local(Vector2i(0,0)))).x
 	if multiplayer.is_server():
-		var game_params:Dictionary = Lobby.game_settings.get(Global.config_game_params_sec,Global.default_game_params.duplicate())
-		load_map.rpc(game_params.get("mapPath", ""))
+		var game_params:Dictionary = Lobby.game_settings.get(Global.config_game_params_sec,{})
+		load_map.rpc(game_params.get("mapPath", Global.default_game_params["mapPath"]))
 		
 		var index:int = 0
 		for peer_id:int in pl_list:

@@ -58,11 +58,16 @@ func on_game_physics_process(delta):
 		# handle collision only on server
 
 func check_collision():
+	if game.coll_map.collides_at(pos.x,pos.y) != 0:
+		bullet_drawer.clear_bullet(pos)
+		bullet_drawer.clear_trace(trace)
+		remove_module()
+		return
 	for peer_id in game.playerlist:
 		var tile_idx = game.playerlist[peer_id].tiles.rfind(pos)
 		if tile_idx >= 0:
 			var survives = game.playerlist[peer_id].has_enough_tiles(tile_idx+1)
 			if survives:
 				game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,tile_idx+1)
-			else:
+			elif peer_id != owner_peer_id:
 				game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"owner":owner_peer_id}])

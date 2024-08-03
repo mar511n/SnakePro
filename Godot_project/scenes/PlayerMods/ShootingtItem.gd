@@ -22,7 +22,7 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and Input.is_action_just_pressed("use_item"):
 		pl.ShootingSound.play()
-		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 6)
+		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
 		pl.IG.start_module.rpc("bullet.gd", [pl.get_head_tile(),pl.get_direction_facing(),ItemShootingSpeed,ItemShootingRange,pl.peer_id])
 		mark_for_removal()
 	if is_marked_for_removal:

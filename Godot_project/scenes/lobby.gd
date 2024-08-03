@@ -39,6 +39,7 @@ func join_game(address:String = "", port:int = 0)->Error:
 	if port == 0:
 		port = DEFAULT_PORT
 	var peer:ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	Global.Print("join_game(%s, %s)"%[address, port])
 	var error:Error = peer.create_client(address, port)
 	if error:
 		return error

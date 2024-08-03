@@ -259,7 +259,7 @@ func update_map_list(gs:Dictionary)->void:
 	for map:String in mapdir.get_files():
 		map = map.trim_suffix(".remap")
 		mapPaths_b.add_item(map, id)
-		if map == gs.get("mapPath", Global.maps_dir+"basic_map1.tscn").split("/")[-1]:
+		if map == gs.get("mapPath", Global.default_game_params["mapPath"]).split("/")[-1]:
 			mapPaths_b.selected = id
 		id += 1
 

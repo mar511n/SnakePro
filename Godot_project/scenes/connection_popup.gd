@@ -46,7 +46,7 @@ func _on_host_join_toggled(_toggled_on:bool)->void:
 	resize()
 
 func _on_ok_pressed()->void:
-	if hj_b.button_pressed:
+	if not hj_b.button_pressed:
 		if ip_e.text.is_valid_ip_address():
 			ip_addr = ip_e.text
 		else:

@@ -24,7 +24,7 @@ func on_collected_by_player(player:SnakePlayer)->bool:
 func on_player_physics_process(_delta:float):
 	if !is_marked_for_removal and !is_used and Input.is_action_just_pressed("use_item"):
 		pl.ReviveSound.play()
-		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 6)
+		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
 		is_used = true
 		Global.Print("respawn player %s and mark ReviveItem for removal" % pl.peer_id)
 		pl.reset_snake_tiles()

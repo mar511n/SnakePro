@@ -34,7 +34,7 @@ func initialize()->void:
 	Lobby.server_disconnected.connect(self.server_disconnected)
 	Lobby.player_disconnected.connect(self.player_disconnected)
 	Lobby.player_info_updated.connect(self.player_info_updated)
-	load_con_settings()
+	#load_con_settings()
 	load_playerinfo()
 	ConPopup.visible = false
 	TabCont.current_tab = 0
@@ -42,12 +42,12 @@ func initialize()->void:
 	#GameSetPopup.visible = false
 
 func reset()->void:
-	Global.Print("loading config from %s" % Global.config_path, 5)
+	Global.Print("loading config from %s" % Global.config_path, 6)
 	if Global.config.load(Global.config_path) != OK:
-		Global.Print("ERROR while loading config from %s" % Global.config_path, 7)
-	Global.Print("loading inputconfig from %s" % Global.inputconfig_path, 5)
+		Global.Print("WARNING: no config found at %s" % Global.config_path, 7)
+	Global.Print("loading inputconfig from %s" % Global.inputconfig_path, 6)
 	if Global.inputconfig.load(Global.inputconfig_path) != OK:
-		Global.Print("ERROR while loading inputconfig from %s" % Global.inputconfig_path, 7)
+		Global.Print("WARNING: no inputconfig found at %s" % Global.inputconfig_path, 7)
 	if Global.inputconfig.has_section(Global.config_inputmap_sec):
 		Global.set_inputmap_dict(Global.get_section_dict(Global.inputconfig,Global.config_inputmap_sec))
 	update_stuff_from_usetts(Global.config_get_section_dict(Global.config_user_settings_sec))
@@ -121,14 +121,14 @@ func _on_start_game_pressed()->void:
 	if multiplayer.multiplayer_peer == null:
 		return
 	if multiplayer.is_server():
-		Global.Print("loading game_scene: %s" % game_scene_path, 5)
+		Global.Print("loading game_scene: %s" % game_scene_path)
 		Lobby.load_scene.rpc(game_scene_path)
 
 func _on_quit_game_pressed()->void:
 	get_tree().quit()
 
 func _on_connection_popup_host(port:int)->void:
-	Global.Print("hosting on %s" % port, 6)
+	Global.Print("hosting on %s:%s" % [IP.get_local_addresses()[0],port], 6)
 	var err:Error = Lobby.create_game()
 	if err != OK:
 		Global.Print("ERROR while hosting server: %s" % err, 7)
@@ -155,7 +155,7 @@ func update_playernames_list()->void:
 
 func _on_connection_settings_pressed()->void:
 	if !ConPopup.visible:
-		ConPopup.show_popup()
+		ConPopup.show_popup(Global.config.get_value("conn","ip","127.0.0.1"),Global.config.get_value("conn","port",8080))
 	else:
 		ConPopup.visible = false
 
@@ -167,17 +167,19 @@ func save_playerinfo()->void:
 func load_playerinfo()->void:
 	if Global.config.has_section(Global.config_player_info_sec):
 		Lobby.player_info = Global.config_get_section_dict(Global.config_player_info_sec)
-func save_con_settings()->void:
-	Global.config.set_value("conn", "ip", ConPopup.ip_addr)
+func save_con_settings(save_ip=true)->void:
+	if save_ip:
+		Global.config.set_value("conn", "ip", ConPopup.ip_addr)
 	Global.config.set_value("conn", "port", ConPopup.port)
 	Global.config.save(Global.config_path)
-	Global.Print("saving IP %s:%s to config" % [ConPopup.ip_addr,ConPopup.port],6)
+	if save_ip:
+		Global.Print("saving IP %s:%s to config" % [ConPopup.ip_addr,ConPopup.port],6)
 	Global.Print("saving config to %s" % Global.config_path)
-func load_con_settings()->void:
-	if Global.config.has_section_key("conn", "ip"):
-		ConPopup.ip_addr = Global.config.get_value("conn","ip")
-	if Global.config.has_section_key("conn", "port"):
-		ConPopup.port = Global.config.get_value("conn","port")
+#func load_con_settings()->void:
+#	if Global.config.has_section_key("conn", "ip"):
+#		ConPopup.ip_addr = Global.config.get_value("conn","ip")
+#	if Global.config.has_section_key("conn", "port"):
+#		ConPopup.port = Global.config.get_value("conn","port")
 func save_usersettings(us:Dictionary)->void:
 	Global.config_set_section_dict(Global.config_user_settings_sec, us)
 	Global.config.save(Global.config_path)

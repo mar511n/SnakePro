@@ -54,7 +54,7 @@ func on_game_post_ready():
 @rpc("any_peer", "call_local", "reliable")
 func spawn_item():
 	if !is_server:
-		Global.Print("ERROR: spawn_item should only be called on server")
+		Global.Print("ERROR: spawn_item should only be called on server", 7)
 		return
 	var pos = Vector2i.ZERO
 	for i in range(ItemSpawnTries):
@@ -68,7 +68,7 @@ func spawn_item():
 @rpc("any_peer", "call_local","reliable")
 func remove_item(pos:Vector2i):
 	if !is_server:
-		Global.Print("ERROR: remove_item should only be called on server")
+		Global.Print("ERROR: remove_item should only be called on server", 7)
 		return
 	if game.module_vars["IngameItems"].has(pos):
 		game.module_vars["IngameItems"].erase(pos)

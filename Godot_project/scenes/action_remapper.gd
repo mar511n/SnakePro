@@ -42,6 +42,11 @@ func _ready()->void:
 			id += 1
 	actionOpt.select(0)
 	button_update()
+	
+	var dir = DirAccess.open("res://assets/MatIcons/")
+	for file in dir.get_files():
+		if file.ends_with(".svg"):
+			print(file)
 
 func button_update(wfo:bool=false)->void:
 	if wfo:
@@ -61,13 +66,12 @@ func _input(event:InputEvent)->void:
 		var action:StringName = id_to_action[actionOpt.selected]
 		InputMap.action_erase_events(action)
 		InputMap.action_add_event(action, event)
-		waiting_for_input = false
 		if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 			Input.start_joy_vibration(event.device,0.5,0.5,0.3)
-		button_update()
+		if not event.is_action("ui_accept"):
+			waiting_for_input = false
+			button_update()
 		remap_done.emit()
-	elif event is InputEventMouseButton:
-		pass
 	else:
 		if event.is_action_type():
 			for action:StringName in remappables:
@@ -78,7 +82,9 @@ func _input(event:InputEvent)->void:
 						Input.start_joy_vibration(event.device,0.5,0.5,0.3)
 
 func _on_option_button_item_selected(_index:int)->void:
-	button_update()
+	Btn.set_pressed_no_signal(true)
+	_on_button_toggled(true)
+	#button_update()
 
 func _on_button_toggled(toggled_on:bool)->void:
 	if toggled_on:
