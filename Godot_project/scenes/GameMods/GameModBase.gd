@@ -13,9 +13,6 @@ func on_game_ready(g:InGame, g_is_server:bool):
 func on_game_post_ready():
 	pass
 
-#func on_game_process(_delta):
-#	pass
-
 func on_game_physics_process(_delta):
 	pass
 
@@ -28,3 +25,8 @@ func on_game_checked_collisions(_colls)->Array:
 # gets the player to be spawned and returns it
 func on_game_spawns_player(pl:SnakePlayer)->SnakePlayer:
 	return pl
+
+func remove_module():
+	Global.Print("Removing module %s from game" % name)
+	game.module_node.remove_child(self)
+	queue_free()

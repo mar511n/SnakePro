@@ -14,7 +14,7 @@ var coll_map : CollisionMap
 var playerlist:Dictionary = {} # peer_id -> player node
 var tmap : TileMap
 
-#var modules : Array[GameModBase]
+var module_scripts : Dictionary
 @export var module_vars:Dictionary = {}
 
 # helper variables
@@ -138,12 +138,18 @@ func _input(event:InputEvent)->void:
 func _ready()->void:
 	format_module_list()
 	
-	var mod_paths:Array = Global.get_enabled_mod_paths(Global.config_game_mods_sec)
-	#modules = []
-	for mod_path:String in mod_paths:
-		var mod:Resource = load(Global.game_modules_dir+mod_path)
+	module_scripts = {}
+	var dir:DirAccess = DirAccess.open(Global.game_modules_dir)
+	for mod_path:String in dir.get_files():
+		mod_path = mod_path.trim_suffix(".remap")
+		var mod_r:Resource = load(Global.game_modules_dir+mod_path)
+		if mod_r != null:
+			module_scripts[mod_path] = mod_r
+	
+	var en_mod_paths:Array = Global.get_enabled_mod_paths(Global.config_game_mods_sec)
+	for mod_path:String in en_mod_paths:
+		var mod:Resource = module_scripts.get(mod_path, null)
 		if mod != null:
-			#modules.append(mod.new())
 			module_node.add_child(mod.new())
 			Global.Print("loading game module %s: success" % mod_path)
 		else:
@@ -309,6 +315,18 @@ func player_disconnected(peer_id):
 func connection_failed():
 	Global.Print("ERROR: connection failed", 7)
 	return_to_main_menu(true,false)
+
+@rpc("any_peer","call_local", "reliable")
+func start_module(mod_path:String, args:Array):
+	#Global.Print("trying to start %s with arguments %s"%[mod_path,args])
+	#Global.Print(module_scripts)
+	if module_scripts.has(mod_path):
+		var mod:GameModBase = module_scripts[mod_path].new()
+		module_node.add_child(mod)
+		mod.on_game_ready(self,multiplayer.is_server())
+		mod.on_game_post_ready()
+		mod.callv("on_module_start", args)
+		Global.Print("started Gamemodule %s" % mod_path)
 
 func _on_tree_entered():
 	$MultiplayerSynchronizer.set_multiplayer_authority(1)

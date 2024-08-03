@@ -22,6 +22,7 @@ var peer_id = 0
 @onready var CollectItemSound = $CollectItemSound
 @onready var ReviveSound = $ReviveSound
 @onready var SpeedSound = $SpeedSound
+@onready var ShootingSound = $ShootingSound
 var sn_drawer_path : NodePath
 var sn_drawer : TileMap
 var startPos : Vector2
@@ -249,13 +250,15 @@ func _ready():
 		cam_node.position_smoothing_enabled = Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true)
 		Lobby.player_loaded.rpc()
 
-func remove_tiles_from_tail(n:int)->bool:
-	var has_enough = n+2 <= len(tiles)
-	if has_enough:
+func has_enough_tiles(n:int)->bool:
+	return n+2 <= len(tiles)
+
+@rpc("any_peer","call_local","reliable")
+func remove_tiles_from_tail(n:int)->void:
+	if has_enough_tiles(n):
 		tiles = tiles.slice(n)
 	else:
 		tiles = tiles.slice(-2)
-	return has_enough
 
 # returns the head of the snake
 func get_head_tile()->Vector2i:

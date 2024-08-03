@@ -108,8 +108,10 @@ func check_apple_collision_for_local_player():
 				player.EatingRottenSound.play()
 				#Global.Print("fett -= %s" % GhostAppleDamage, 7)
 				#Global.Print("tiles = %s" % len(player.tiles), 7)
-				var survived = player.remove_tiles_from_tail(GhostAppleDamage)
-				if !survived:
+				var survives = player.has_enough_tiles(GhostAppleDamage)
+				if survives:
+					player.remove_tiles_from_tail(GhostAppleDamage)
+				else:
 					Global.Print("dead", 7)
 					player.hit.rpc([Global.hit_causes.APPLE_DMG, {}])
 				remove_apple.rpc_id(1,head)

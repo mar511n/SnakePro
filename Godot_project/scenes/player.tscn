@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dffji00mprodh"]
+[gd_scene load_steps=35 format=3 uid="uid://dffji00mprodh"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_gv0ea"]
 [ext_resource type="Texture2D" uid="uid://bj1hqxypsq80v" path="res://assets/MatIcons/add_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="2_ure4r"]
@@ -21,6 +21,9 @@
 [ext_resource type="AudioStream" uid="uid://l3wd6trxhltc" path="res://assets/Sounds/Revive/2.wav" id="19_n7ugp"]
 [ext_resource type="AudioStream" uid="uid://bywj3smcyqhn2" path="res://assets/Sounds/Speed/1.wav" id="20_6eemm"]
 [ext_resource type="AudioStream" uid="uid://dasmqa1hcbd36" path="res://assets/Sounds/Speed/2.wav" id="21_3uw3j"]
+[ext_resource type="AudioStream" uid="uid://c1mtaskelao2y" path="res://assets/Sounds/Shooting/1.wav" id="22_kabyf"]
+[ext_resource type="AudioStream" uid="uid://d13bmdhlg47pn" path="res://assets/Sounds/Shooting/2.wav" id="23_fsu32"]
+[ext_resource type="AudioStream" uid="uid://ukjw7s8dea7i" path="res://assets/Sounds/Shooting/3.wav" id="24_hhtwo"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqkbk"]
 properties/0/path = NodePath(".:tiles")
@@ -105,6 +108,15 @@ stream_0/weight = 1.0
 stream_1/stream = ExtResource("21_3uw3j")
 stream_1/weight = 1.0
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_lvova"]
+streams_count = 3
+stream_0/stream = ExtResource("22_kabyf")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("23_fsu32")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("24_hhtwo")
+stream_2/weight = 1.0
+
 [node name="Player" type="Node2D" groups=["gameobj"]]
 script = ExtResource("1_gv0ea")
 
@@ -169,6 +181,10 @@ attenuation = 4.5
 
 [node name="SpeedSound" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_oumsq")
+attenuation = 4.5
+
+[node name="ShootingSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_lvova")
 attenuation = 4.5
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
