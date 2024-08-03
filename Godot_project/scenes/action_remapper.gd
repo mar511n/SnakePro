@@ -42,11 +42,6 @@ func _ready()->void:
 			id += 1
 	actionOpt.select(0)
 	button_update()
-	
-	var dir = DirAccess.open("res://assets/MatIcons/")
-	for file in dir.get_files():
-		if file.ends_with(".svg"):
-			print(file)
 
 func button_update(wfo:bool=false)->void:
 	if wfo:

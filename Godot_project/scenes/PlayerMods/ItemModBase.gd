@@ -47,7 +47,7 @@ func on_player_ready():
 	
 	local_player_gui = pl.gui_node.get_node("ItemGUI")
 	if local_player_gui != null:
-		local_player_gui_id = local_player_gui.add_item(item_code,true,true)
+		local_player_gui_id = local_player_gui.add_item(item_code,true)
 	else:
 		Global.Print("ERROR: ItemGUI node not found in player", 7)
 	

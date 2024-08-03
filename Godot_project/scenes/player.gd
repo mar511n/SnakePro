@@ -136,6 +136,9 @@ func process_input():
 					new_dir = input_dir.LEFT
 				else:
 					new_dir = input_dir.RIGHT
+	make_turn(new_dir)
+
+func make_turn(new_dir:input_dir)->void:
 	if new_dir != input_dir.NONE:
 		if firstInput == input_dir.NONE:
 			firstInput = new_dir

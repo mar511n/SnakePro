@@ -16,15 +16,15 @@ const item_code_to_texture = {
 	"revive":preload("res://assets/Images/Items/revive.png")
 }
 @onready var hbox = $HBoxContainer
+@onready var back = $Panel
 
-
-func add_item(item_code:String, is_ready=true, use_shader=true)->int:
+func add_item(item_code:String, is_ready=true)->int:
 	item_counter += 1
 	var txr = TextureRect.new()
 	txr.expand_mode = TextureRect.EXPAND_FIT_WIDTH
 	txr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	txr.texture = item_code_to_texture[item_code.trim_suffix("_g")]
-	if use_shader:
+	if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
 		if is_ready:
 			txr.material = shader_ready
 		else:
@@ -33,9 +33,9 @@ func add_item(item_code:String, is_ready=true, use_shader=true)->int:
 	hbox.add_child(txr)
 	return item_counter
 
-func set_item_ready(id:int, is_ready=false, use_shader=true):
+func set_item_ready(id:int, is_ready=false):
 	var txr = hbox.get_node("ItemUI_element"+str(id))
-	if txr != null and use_shader:
+	if txr != null and Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
 		if is_ready:
 			txr.material = shader_ready
 		else:
@@ -45,3 +45,10 @@ func remove_item(id:int):
 	var ch = hbox.get_node("ItemUI_element"+str(id))
 	if ch != null:
 		hbox.remove_child(ch)
+
+
+func _on_h_box_container_minimum_size_changed() -> void:
+	back.size.x = hbox.get_minimum_size().x+20
+	if back.size.x <= 20.01:
+		back.size.x = 0
+	back.position.x = hbox.size.x/2 + hbox.position.x - back.size.x/2

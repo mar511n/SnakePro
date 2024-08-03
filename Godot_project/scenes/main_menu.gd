@@ -42,6 +42,15 @@ func initialize()->void:
 	#GameSetPopup.visible = false
 
 func reset()->void:
+	var arguments = {}
+	for argument in OS.get_cmdline_user_args():
+		if argument.find("=") > -1:
+			var key_value = argument.split("=")
+			arguments[key_value[0]] = key_value[1]
+	if arguments.has("config"):
+		Global.config_path = arguments["config"]
+	if arguments.has("inputconfig"):
+		Global.inputconfig_path = arguments["inputconfig"]
 	Global.Print("loading config from %s" % Global.config_path, 6)
 	if Global.config.load(Global.config_path) != OK:
 		Global.Print("WARNING: no config found at %s" % Global.config_path, 7)
@@ -50,7 +59,8 @@ func reset()->void:
 		Global.Print("WARNING: no inputconfig found at %s" % Global.inputconfig_path, 7)
 	if Global.inputconfig.has_section(Global.config_inputmap_sec):
 		Global.set_inputmap_dict(Global.get_section_dict(Global.inputconfig,Global.config_inputmap_sec))
-	update_stuff_from_usetts(Global.config_get_section_dict(Global.config_user_settings_sec))
+	
+	call_next_process_frame.append([update_stuff_from_usetts , [Global.config_get_section_dict(Global.config_user_settings_sec),true]])
 	randomize()
 	initialize()
 	network_reset()
@@ -133,7 +143,7 @@ func _on_connection_popup_host(port:int)->void:
 	if err != OK:
 		Global.Print("ERROR while hosting server: %s" % err, 7)
 		return
-	save_con_settings()
+	save_con_settings(false)
 	show_hide_buttons_and_popups(true)
 
 func _on_connection_popup_join(ip:String, port:int)->void:
@@ -194,8 +204,8 @@ func _on_user_settings_on_settings_changed(plinfo:Dictionary, usetts:Dictionary)
 	save_playerinfo()
 	save_usersettings(usetts)
 
-func update_stuff_from_usetts(usetts:Dictionary)->void:
-	if usetts.has("splitscreenMode") and usetts["splitscreenMode"] != Global.config.get_value(Global.config_user_settings_sec, "splitscreenMode", 0):
+func update_stuff_from_usetts(usetts:Dictionary,force_screen_update=false)->void:
+	if usetts.has("splitscreenMode") and (force_screen_update or usetts["splitscreenMode"] != Global.config.get_value(Global.config_user_settings_sec, "splitscreenMode", 0)):
 		set_splitscreen_mode(usetts["splitscreenMode"])
 	if usetts.has("vsyncMode"):
 		DisplayServer.window_set_vsync_mode(Global.vsync_modes_map[usetts.get("vsyncMode")])
@@ -205,31 +215,51 @@ func update_stuff_from_usetts(usetts:Dictionary)->void:
 		else:
 			MainThemePlayer.volume_db = (usetts["musicvolume"]-100.0)*0.4
 
+func dummy_func():
+	pass
+
 func set_splitscreen_mode(spm:int)->void:
 	var wcs:int = get_tree().root.current_screen
 	var wci:int = get_tree().root.get_window_id()
 	if spm == 0:
-		if not DisplayServer.window_get_mode(wci) == DisplayServer.WINDOW_MODE_FULLSCREEN:
-			call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_FULLSCREEN,wci]])
+		#if not DisplayServer.window_get_mode(wci) == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_FULLSCREEN,wci]])
+		call_next_process_frame.append(0.1)
 		call_next_process_frame.append([window_set_borderless_ontop,[false,wci]])
 	elif spm == 5:
-		if not DisplayServer.window_get_mode(wci) == DisplayServer.WINDOW_MODE_WINDOWED:
-			call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		#if not DisplayServer.window_get_mode(wci) == DisplayServer.WINDOW_MODE_WINDOWED:
+		call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		call_next_process_frame.append(0.1)
 		call_next_process_frame.append([window_set_borderless_ontop,[false,wci]])
 		
 		#call_next_process_frame.append([window_set_size,[DisplayServer.screen_get_size(wcs)/2,wci]])
 		#call_next_process_frame.append([window_set_position,[DisplayServer.screen_get_position(wcs),wci]])
 	else:
-		if not DisplayServer.window_get_mode(wci) == DisplayServer.WINDOW_MODE_WINDOWED:
-			call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		#if not DisplayServer.window_get_mode(wci) == DisplayServer.WINDOW_MODE_WINDOWED:
+		call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		call_next_process_frame.append(0.1)
+		
 		call_next_process_frame.append([window_set_borderless_ontop,[true,wci]])
+		call_next_process_frame.append(0.1)
+		
+		call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		call_next_process_frame.append(0.1)
 		
 		var wrect : Rect2 = Global.splitscreen_modes[spm]
 		var screen_size:Vector2i = DisplayServer.screen_get_size(wcs)
 		
+		
+		#call_next_process_frame.append([window_set_position,[Vector2i(wrect.position*Vector2(screen_size))+DisplayServer.screen_get_position(wcs),wci]])
+		#call_next_process_frame.append(1.0)
+		#call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		#call_next_process_frame.append(1.0)
 		call_next_process_frame.append([window_set_size,[Vector2i(wrect.size*Vector2(screen_size)),wci]])
+		call_next_process_frame.append(0.1)
+		call_next_process_frame.append([window_set_mode,[DisplayServer.WINDOW_MODE_WINDOWED,wci]])
+		call_next_process_frame.append(0.1)
 		call_next_process_frame.append([window_set_position,[Vector2i(wrect.position*Vector2(screen_size))+DisplayServer.screen_get_position(wcs),wci]])
-
+		
+		
 
 func window_set_borderless_ontop(bt:bool,wci:int)->void:
 	Global.Print("window_set_borderless_ontop: %s" % bt)
@@ -282,7 +312,12 @@ func _on_action_remapper_remap_done()->void:
 	Global.Print("saving InputMap to inputconfig",6)
 	Global.Print("saving inputconfig to %s" % Global.inputconfig_path)
 
-func _process(_delta:float)->void:
+func _process(delta:float)->void:
 	if len(call_next_process_frame) > 0:
-		call_next_process_frame[0][0].callv(call_next_process_frame[0][1])
-		call_next_process_frame.remove_at(0)
+		if call_next_process_frame[0] is float:
+			call_next_process_frame[0] -= delta
+			if call_next_process_frame[0] <= 0:
+				call_next_process_frame.remove_at(0)
+		else:
+			call_next_process_frame[0][0].callv(call_next_process_frame[0][1])
+			call_next_process_frame.remove_at(0)

@@ -2,9 +2,12 @@ extends ItemModBase
 
 var ItemSpeedNewSpeed = 30.0
 var ItemSpeedDuration = 0.5
+const RandomTurns = 1
 
 var old_speed = 1.0
 var duration = 0.0
+
+var randTurnTimes = []
 
 var is_used = false
 
@@ -23,6 +26,11 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	super(player,enabled_mods)
 	ItemSpeedNewSpeed = Global.get_property(Global.config_player_mod_props_sec, "ItemSpeedNewSpeed", ItemSpeedNewSpeed)
 	ItemSpeedDuration = Global.get_property(Global.config_player_mod_props_sec, "ItemSpeedDuration", ItemSpeedDuration)
+	if is_ghost:
+		for i in range(RandomTurns):
+			randTurnTimes.append(randf()*ItemSpeedDuration)
+		randTurnTimes.sort()
+		print(randTurnTimes)
 
 func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and !is_used and !pl.module_vars.get("ItemSpeeding",false) and Input.is_action_just_pressed("use_item"):
@@ -34,9 +42,16 @@ func on_player_physics_process(delta:float):
 		old_speed = pl.get_speed()
 		pl.set_speed(ItemSpeedNewSpeed)
 		if local_player_gui != null:
-			local_player_gui.set_item_ready(local_player_gui_id, false, true)
+			local_player_gui.set_item_ready(local_player_gui_id, false)
 	elif is_used:
 		duration -= delta
+		if is_ghost and len(randTurnTimes) > 0:
+			if duration < randTurnTimes[-1]:
+				randTurnTimes.pop_back()
+				if randf() < 0.5:
+					pl.make_turn(SnakePlayer.input_dir.LEFT)
+				else:
+					pl.make_turn(SnakePlayer.input_dir.RIGHT)
 		if duration <= 0.0:
 			pl.set_speed(old_speed)
 			pl.module_vars["ItemSpeeding"] = false

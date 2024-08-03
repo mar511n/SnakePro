@@ -32,8 +32,10 @@ const main_menu_path:String = "res://scenes/main_menu.tscn"
 const maps_dir:String = "res://scenes/Maps/"
 const player_modules_dir:String = "res://scenes/PlayerMods/"
 const game_modules_dir:String = "res://scenes/GameMods/"
-const config_path:String = "user://config.txt"
-const inputconfig_path:String = "user://inputconfig.txt"
+
+var config_path:String = "user://config.txt"
+var inputconfig_path:String = "user://inputconfig.txt"
+
 const default_game_params:Dictionary = {
 	"startSnakeLength"=7.0,
 	"snakeSpeed"=8.5,
@@ -123,6 +125,11 @@ func get_inputmap_dict()->Dictionary:
 	for action:StringName in InputMap.get_actions():
 		dic[action] = InputMap.action_get_events(action)
 	return dic
+
+func rotate_direction(dir:Vector2i, clockwise:bool)->Vector2i:
+	if clockwise:
+		return Vector2i(dir.y,-dir.x)
+	return Vector2i(-dir.y,dir.x)
 
 func Print(v:Variant, prio:int=4)->void:
 	if prio >= min_prio_debug_print:

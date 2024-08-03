@@ -143,6 +143,14 @@ horizontal_alignment = 1
 layout_mode = 2
 value = 100.0
 
+[node name="HSeparator7" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="Shader" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+button_pressed = true
+text = "use Shader"
+
 [connection signal="focus_exited" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
 [connection signal="text_submitted" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/SnakeOpt" to="." method="_on_snake_opt_item_selected"]
@@ -151,3 +159,4 @@ value = 100.0
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/VSyncB" to="." method="_on_v_sync_b_item_selected"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/SplitScreenOpt" to="." method="_on_split_screen_opt_item_selected"]
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/MusicVolume" to="." method="_on_music_volume_drag_ended"]
+[connection signal="toggled" from="ScrollContainer/VFlowContainer/Shader" to="." method="_on_shader_toggled"]

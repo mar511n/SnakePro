@@ -23,7 +23,14 @@ func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and Input.is_action_just_pressed("use_item"):
 		pl.ShootingSound.play()
 		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
-		pl.IG.start_module.rpc("bullet.gd", [pl.get_head_tile(),pl.get_direction_facing(),ItemShootingSpeed,ItemShootingRange,pl.peer_id])
+		var dir = pl.get_direction_facing()
+		if is_ghost:
+			var rn = randf()
+			if rn < 0.4:
+				dir = Global.rotate_direction(dir,true)
+			elif rn < 0.8:
+				dir = Global.rotate_direction(dir,false)
+		pl.IG.start_module.rpc("bullet.gd", [pl.get_head_tile(),dir,ItemShootingSpeed,ItemShootingRange,pl.peer_id])
 		mark_for_removal()
 	if is_marked_for_removal:
 		remove_item()
