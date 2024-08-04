@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://ipjyhv4lr561"]
+
+[ext_resource type="TileSet" uid="uid://b7bxx38l7rwbh" path="res://assets/Images/Snakes/snake_tileset.tres" id="1_m2fnj"]
+[ext_resource type="Script" path="res://scenes/ModResources/bot_drawer.gd" id="2_lk4gx"]
+
+[node name="BotDrawer" type="TileMap" groups=["VariableGraphical"]]
+scale = Vector2(0.3, 0.3)
+tile_set = ExtResource("1_m2fnj")
+format = 2
+script = ExtResource("2_lk4gx")

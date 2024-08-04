@@ -24,6 +24,7 @@ func draw_items(poss:Array, codes:Array):
 		if item_code_to_atlas_pos.has(codes[i]):
 			set_cell(0,poss[i],0,item_code_to_atlas_pos[codes[i]],0)
 		else:
+			Global.Print("ERROR: trying to draw item with code %s"%codes[i])
 			set_cell(0,poss[i],unknown_item_source_id,Vector2i.ZERO,0)
 
 func clear_items():

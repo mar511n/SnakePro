@@ -9,13 +9,16 @@ var owner_peer_id : int
 var bullet_drawer : TileMap
 var travelingDir : Vector2i
 
+var active = true
+
 var time_since_last_update = 0.0
 var pos : Vector2i
 var trace : Array
 var traveled = 0
 
 func _init() -> void:
-	name = "Bullet"
+	pass
+	#name = "Bullet"
 
 func on_game_ready(g:InGame, g_is_server:bool):
 	super(g,g_is_server)
@@ -23,9 +26,11 @@ func on_game_ready(g:InGame, g_is_server:bool):
 	for child in game.get_children():
 		if child.name == "BulletDrawer":
 			bullet_drawer = child
+			#Global.Print("found BulletDrawer")
 	if not is_instance_valid(bullet_drawer):
 		bullet_drawer = bds.instantiate()
 		game.add_child(bullet_drawer)
+		#Global.Print("instantiated BulletDrawer")
 	bullet_drawer.scale_to_tile_size(game.tile_size_px*Vector2.ONE)
 
 func on_module_start(start:Vector2i,dir:Vector2i,speed:float,maxrange:int,owner_id:int):
@@ -38,14 +43,17 @@ func on_module_start(start:Vector2i,dir:Vector2i,speed:float,maxrange:int,owner_
 	trace = []
 
 func on_game_physics_process(delta):
+	super(delta)
+	if !active:
+		return
 	time_since_last_update += delta
 	if time_since_last_update > update_period:
 		time_since_last_update = fmod(time_since_last_update,update_period)
 		traveled += 1
 		bullet_drawer.clear_bullet(pos)
 		bullet_drawer.clear_trace(trace)
-		if traveled > maxRange:
-			remove_module()
+		if is_server and traveled > maxRange:
+			remove_bullet.rpc()
 			return
 		trace.append([pos, Vector2i(travelingDir)])
 		if len(trace) > trace_length:
@@ -59,9 +67,8 @@ func on_game_physics_process(delta):
 
 func check_collision():
 	if game.coll_map.collides_at(pos.x,pos.y) != 0:
-		bullet_drawer.clear_bullet(pos)
-		bullet_drawer.clear_trace(trace)
-		remove_module()
+		#remove_bullet()
+		remove_bullet.rpc()
 		return
 	for peer_id in game.playerlist:
 		var tile_idx = game.playerlist[peer_id].tiles.rfind(pos)
@@ -71,3 +78,10 @@ func check_collision():
 				game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,tile_idx+1)
 			elif peer_id != owner_peer_id:
 				game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"owner":owner_peer_id}])
+
+@rpc("authority", "call_local", "reliable")
+func remove_bullet():
+	active = false
+	bullet_drawer.clear_bullet(pos)
+	bullet_drawer.clear_trace(trace)
+	remove_module()

@@ -30,7 +30,6 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 		for i in range(RandomTurns):
 			randTurnTimes.append(randf()*ItemSpeedDuration)
 		randTurnTimes.sort()
-		print(randTurnTimes)
 
 func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and !is_used and !pl.module_vars.get("ItemSpeeding",false) and Input.is_action_just_pressed("use_item"):

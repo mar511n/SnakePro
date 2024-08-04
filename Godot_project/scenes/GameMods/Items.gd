@@ -77,7 +77,8 @@ func remove_item(pos:Vector2i):
 
 @rpc("any_peer", "call_local", "reliable")
 func ghostify_item(pos:Vector2i):
-	if game.module_vars["IngameItems"].has(pos):
+	if game.module_vars["IngameItems"].has(pos) and not item_code_is_ghost(game.module_vars["IngameItems"][pos]):
+		Global.Print("ghostify_item %s"%pos)
 		game.module_vars["IngameItems"][pos] += "_g" 
 		game.module_vars["ItemRedrawCounter"] += 1
 
@@ -112,8 +113,12 @@ func check_item_collision_for_local_player():
 	if is_instance_valid(player):
 		var head = player.get_head_tile()
 		if head in game.module_vars["IngameItems"].keys():
-			var item_code : String = game.module_vars["IngameItems"][head]
-			var mod : ItemModBase = spawnable_items[item_code.trim_suffix("_g")][2].new(item_code_is_ghost(item_code))
+			var ic:String = String(game.module_vars["IngameItems"][head])
+			var is_ghost_item = item_code_is_ghost(ic)
+			var ic_raw : String = String(ic)
+			ic_raw = ic_raw.trim_suffix("_g")
+			#Global.Print("ic=%s, gh=%s, ic_raw=%s"%[ic,is_ghost_item,ic_raw])
+			var mod : ItemModBase = spawnable_items[ic_raw][2].new(is_ghost_item)
 			if mod.on_collected_by_player(player):
 				player.CollectItemSound.play()
 				if is_instance_valid(local_player_item):
@@ -124,7 +129,8 @@ func check_item_collision_for_local_player():
 				player.module_node.add_child(mod)
 				mod.on_player_ready()
 				remove_item.rpc_id(1,head)
-			elif !item_code_is_ghost(item_code):
+			elif !is_ghost_item:
+				ghostify_item(head)
 				ghostify_item.rpc_id(1,head)
 
 func on_game_physics_process(_delta):

@@ -17,6 +17,9 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:module_vars")
 properties/1/spawn = true
 properties/1/replication_mode = 2
+properties/2/path = NodePath(".:module_vars_rapid")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [node name="InGame" type="Node2D" groups=["gameobj"]]
 script = ExtResource("1_dbxlh")
@@ -25,13 +28,11 @@ PlayerScene = ExtResource("2_qpixn")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_22db8")
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="." groups=["Synchronizer"]]
 _spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
 spawn_path = NodePath(".")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_interval = 1.0
-delta_interval = 0.1
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." groups=["Synchronizer"]]
 replication_config = SubResource("SceneReplicationConfig_52sk8")
 
 [node name="GUI" type="CanvasLayer" parent="."]

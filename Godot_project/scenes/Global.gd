@@ -51,7 +51,8 @@ var inputconfig:ConfigFile = ConfigFile.new()
 enum hit_causes {
 	COLLISION,
 	APPLE_DMG,
-	BULLET
+	BULLET,
+	BOT
 }
 
 enum collision {

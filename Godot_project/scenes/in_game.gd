@@ -16,6 +16,7 @@ var tmap : TileMap
 
 var module_scripts : Dictionary
 @export var module_vars:Dictionary = {}
+@export var module_vars_rapid:Dictionary = {}
 
 # helper variables
 var check_collisions:bool = false
@@ -289,6 +290,8 @@ func pause_game(pause, set_gui=true):
 	for node in get_tree().get_nodes_in_group("gameobj"):
 		node.call_deferred("set_physics_process", !pause)
 		node.call_deferred("set_process", !pause)
+	for child in module_node.get_children():
+		Global.Print(child)
 	if set_gui:
 		$GUI.visible = pause
 
@@ -297,6 +300,7 @@ func pause_game(pause, set_gui=true):
 func return_to_main_menu(reset_net=false, all_peers=false):
 	Global.Print("loading main_menu: %s" % Global.main_menu_path)
 	if all_peers:
+		get_tree().call_group("Synchronizer", "free")
 		Lobby.load_scene.rpc(Global.main_menu_path)
 	else:
 		if reset_net:
@@ -317,11 +321,12 @@ func connection_failed():
 	return_to_main_menu(true,false)
 
 @rpc("any_peer","call_local", "reliable")
-func start_module(mod_path:String, args:Array):
+func start_module(mod_path:String, args:Array, nodename:String):
 	#Global.Print("trying to start %s with arguments %s"%[mod_path,args])
 	#Global.Print(module_scripts)
 	if module_scripts.has(mod_path):
 		var mod:GameModBase = module_scripts[mod_path].new()
+		mod.name = nodename
 		module_node.add_child(mod)
 		mod.on_game_ready(self,multiplayer.is_server())
 		mod.on_game_post_ready()

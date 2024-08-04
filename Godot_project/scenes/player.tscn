@@ -139,7 +139,7 @@ grow_vertical = 0
 text = "60"
 horizontal_alignment = 1
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." groups=["Synchronizer"]]
 replication_config = SubResource("SceneReplicationConfig_aqkbk")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
