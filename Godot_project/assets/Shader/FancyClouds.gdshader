@@ -66,11 +66,11 @@ vec4 render( in vec3 ro, in vec3 rd, float time, inout float prm1 )
         vec2 mpv = map(pos,prm1);
 		float den = clamp(mpv.x-0.3,0.,1.)*1.12;
 		float dn = clamp((mpv.x + 2.),0.,3.);
-        
+
 		vec4 col = vec4(0);
         if (mpv.x > 0.6)
         {
-        
+
             col = vec4(sin(vec3(5.,0.4,0.2) + mpv.y*0.1 +sin(pos.z*0.4)*0.5 + 1.8)*0.5 + 0.5,0.08);
             col *= den*den*den;
 			col.rgb *= linstep(4.,-2.5, mpv.x)*2.3;
@@ -78,7 +78,7 @@ vec4 render( in vec3 ro, in vec3 rd, float time, inout float prm1 )
             dif += clamp((den - map(pos+.35,prm1).x)/2.5, 0.001, 1. );
             col.xyz *= den*(vec3(0.005,.045,.075) + 1.5*vec3(0.033,0.07,0.03)*dif);
         }
-		
+
 		float fogC = exp(t*0.2 - 2.2);
 		col.rgba += vec4(0.06,0.11,0.11, 0.1)*clamp(fogC-fogT, 0., 1.);
 		fogT = fogC;
@@ -108,7 +108,7 @@ vec3 iLerp(in vec3 a, in vec3 b, in float x)
 }
 
 void fragment()
-{	
+{
 	vec2 iResolution =  1.0 / SCREEN_PIXEL_SIZE; // for copy-paste
 //	vec2 q = FRAGCOORD.xy/iResolution.xy;
 	vec2 q = UV;
@@ -118,18 +118,18 @@ void fragment()
 		p.x *= iResolution.x/iResolution.y;
 	}
     vec2 bsMo = vec2(0);
-	float prm1 = 0.;	
-    
+	float prm1 = 0.;
+
 	float iTime = TIME*speed;
     float time = iTime*3.;
     vec3 ro = vec3(0,0,time);
-    
+
     ro += vec3(sin(iTime)*0.5,sin(iTime*1.)*0.,0);
-        
+
     float dspAmp = .85;
     ro.xy += disp(ro.z)*dspAmp;
     float tgtDst = 3.5;
-    
+
     vec3 target = normalize(ro - vec3(disp(time + tgtDst)*dspAmp, time + tgtDst));
     ro.x -= bsMo.x*2.;
     vec3 rightdir = normalize(cross(target, vec3(0,1,0)));
@@ -139,13 +139,13 @@ void fragment()
     rd.xy *= rot(-disp(time + 3.5).x*0.2 + bsMo.x);
     prm1 = smoothstep(-0.4, 0.4,sin(iTime*0.3));
 	vec4 scn = render(ro, rd, time,prm1);
-		
+
     vec3 col = scn.rgb;
     col = iLerp(col.bgr, col.rgb, clamp(1.-prm1,0.05,1.));
-    
+
     col = pow(col, vec3(.55,0.65,0.6))*vec3(1.,.97,.9);
 
     col *= pow( 16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y), 0.12)*0.7+0.3; //Vign
-    
+
 	COLOR = vec4( col, 1.0 );
 }

@@ -128,4 +128,3 @@ func clean_config(config):
 func show(config = {}):
 	var _config_cleaned = clean_config(config)
 	_add_new_label(_config_cleaned)
-
