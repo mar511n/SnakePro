@@ -132,7 +132,11 @@ func _input(event:InputEvent)->void:
 			print(node)
 			add_child(node)
 
-
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		get_tree().quit() # default behavior
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		pause_game.rpc(!$GUI.visible)
 
 # on server/client:
 # reset the game, load TileMap, spawn players
