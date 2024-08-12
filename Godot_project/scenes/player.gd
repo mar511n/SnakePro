@@ -100,6 +100,50 @@ func hit(cause:Array):
 	for mod in module_node.get_children():
 		mod.on_player_hit(cause)
 
+var touch_down_point : Vector2
+var touch_action_emitted = false
+var touch_down_time : float
+var minimum_moved_pixels = 50
+var max_double_tap_time = 0.2
+func  _input(event: InputEvent) -> void:
+	if is_owner:
+		if event is InputEventScreenTouch:
+			if event.pressed:
+				#Global.Print("touch down at %s" % event.position)
+				touch_down_point = event.position
+				touch_action_emitted = false
+				var t = Time.get_unix_time_from_system()
+				if t-touch_down_time < max_double_tap_time:
+					#Global.Print("using item")
+					emit_action_pressed("use_item")
+				touch_down_time = t
+		elif event is InputEventScreenDrag:
+			if not touch_action_emitted and (touch_down_point-event.position).length_squared() > minimum_moved_pixels*minimum_moved_pixels:
+				#Global.Print("move in dir %s" % [event.position-touch_down_point])
+				touch_action_emitted = true
+				emit_action_in_direction(event.position-touch_down_point)
+
+func emit_action_in_direction(dir:Vector2):
+	var angle = dir.angle()+PI
+	#Global.Print("angle = %s Pi"%[angle/PI])
+	if angle < 0.25*PI or angle > 1.75*PI:
+		#Global.Print("left")
+		emit_action_pressed("rel_left")
+		emit_action_pressed("abs_left")
+	elif angle >= 0.25*PI and angle <= 0.75*PI:
+		emit_action_pressed("abs_up")
+	elif angle > 0.75*PI and angle < 1.25*PI:
+		#Global.Print("right")
+		emit_action_pressed("rel_right")
+		emit_action_pressed("abs_right")
+	elif angle >= 1.25*PI and angle <= 1.75*PI:
+		emit_action_pressed("abs_down")
+
+func emit_action_pressed(an:String):
+	#Global.Print("emitting action %s"%an)
+	Input.action_press(an)
+	Input.action_release(an)
+
 # on server/client:
 # -> handle movement input
 func process_input():
