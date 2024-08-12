@@ -17,7 +17,12 @@ func on_game_post_ready():
 
 func on_game_physics_process(_delta):
 	if is_marked_for_removal:
+		if is_instance_valid(get_parent()):
+			get_parent().remove_child(self)
 		queue_free()
+		#else:
+			#Global.Print(get_tree().root.get_tree_string_pretty())
+			#free()
 
 # gets all collisions that happened and returns which ones are handled
 # colls is dictionary peer_id -> [[Global.collision, infos],...]

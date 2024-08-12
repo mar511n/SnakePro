@@ -29,7 +29,6 @@ PlayerScene = ExtResource("2_qpixn")
 environment = SubResource("Environment_22db8")
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="." groups=["Synchronizer"]]
-_spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
 spawn_path = NodePath(".")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." groups=["Synchronizer"]]

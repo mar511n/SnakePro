@@ -9,10 +9,13 @@ signal server_disconnected
 signal connecting_failed
 signal all_players_loaded
 signal player_info_updated(peer_id:int, pl_info:Dictionary)
+signal on_spawn_scene(scene)
 
 const DEFAULT_PORT:int = 8080
 const DEFAULT_SERVER_IP:String = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS:int = 20
+
+#var scene_spawner : MultiplayerSpawner
 
 # contains info of local player
 # name
@@ -32,6 +35,7 @@ func _ready()->void:
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
+
 
 func join_game(address:String = "", port:int = 0)->Error:
 	if address.is_empty():
@@ -73,6 +77,8 @@ func player_info_update(peer_id:int, pl_info:Dictionary)->void:
 
 @rpc("authority","call_local", "reliable")
 func load_scene(scene_path:String)->void:
+	#Global.Print("loading scene: %s" % scene_path)
+	#on_spawn_scene.emit(scene_path)
 	get_tree().change_scene_to_file(scene_path)
 
 # Every peer will call this when they have loaded the game scene.

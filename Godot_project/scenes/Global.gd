@@ -3,7 +3,7 @@ extends Node
 const debug_toast_bg:Color = Color(0, 0, 0, 0.7)
 const debug_toast_text:Color = Color(1, 1, 1, 1)
 const max_snake_path_length:int = 200
-const debugging_on:bool = false
+const debugging_on:bool = true
 
 const group_name_player_item:StringName = "PlayerItem"
 
@@ -29,6 +29,7 @@ const vsync_modes_map:Dictionary = {0:DisplayServer.VSYNC_ENABLED,1:DisplayServe
 const splitscreen_modes:Array = [null, Rect2(0,0,0.5,0.5), Rect2(0.5,0,0.5,0.5), Rect2(0,0.5,0.5,0.5), Rect2(0.5,0.5,0.5,0.5)]
 
 const main_menu_path:String = "res://scenes/main_menu.tscn"
+const ingame_path:String = "res://scenes/in_game.tscn"
 const maps_dir:String = "res://scenes/Maps/"
 const player_modules_dir:String = "res://scenes/PlayerMods/"
 const game_modules_dir:String = "res://scenes/GameMods/"

@@ -1,16 +1,20 @@
 extends PlModBase
 
-var queued_for_dying = false
+var recheck_alive_pl_timer = 0
+var recheck_alive_pl = false
+var MaxTimeBeforeGameover = 2
 
 func _init():
 	name = "Basic hit handler"
 	set_meta("name", "Basic hit handler")
+	set_meta("MaxTimeBeforeGameover", [2,0.2,10,0.2])
 	autoload = true
 	#set_meta("print_hit_cause", [true])
 
 func on_player_ready():
 	pl.module_vars["PlayerIsAlive"] = true
 	pl.module_vars["PlayerSetDeadFunc"] = set_player_dead
+	MaxTimeBeforeGameover = Global.get_property(Global.config_game_mod_props_sec, "MaxTimeBeforeGameover", 2)
 	pl.CollLayers.append(Global.scl.alive)
 	pl.CollMasks.append(Global.scl.alive)
 	pl.CollMasks.append(Global.scl.wall)
@@ -20,13 +24,23 @@ func on_player_hit(_cause:Array):
 	#queued_for_dying = true
 	set_player_dead(true)
 	pl.reset_snake_tiles()
+	if not recheck_alive_pl and pl.IG.multiplayer.is_server() and pl.IG.get_alive_players() <= 1:
+		recheck_alive_pl = true
+		recheck_alive_pl_timer = MaxTimeBeforeGameover
 
 func on_player_physics_process(delta):
-	super(delta)
-	if queued_for_dying:
-		queued_for_dying = false
-		set_player_dead(true)
-		pl.reset_snake_tiles()
+	if recheck_alive_pl:
+		recheck_alive_pl_timer -= delta
+		if recheck_alive_pl_timer <= 0:
+			recheck_alive_pl = false
+			if pl.IG.get_alive_players() <= 1:
+				pl.IG.return_to_main_menu(false,true)
+#func on_player_physics_process(delta):
+#	super(delta)
+#	if queued_for_dying:
+#		queued_for_dying = false
+#		set_player_dead(true)
+#		pl.reset_snake_tiles()
 
 @rpc("any_peer", "call_local", "reliable")
 func set_player_dead(dead:bool)->void:

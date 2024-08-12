@@ -131,8 +131,9 @@ func _on_start_game_pressed()->void:
 	if multiplayer.multiplayer_peer == null:
 		return
 	if multiplayer.is_server():
-		Global.Print("loading game_scene: %s" % game_scene_path)
+		#Global.Print("loading game_scene: %s" % game_scene_path)
 		Lobby.load_scene.rpc(game_scene_path)
+		#Lobby.scene_spawner.spawn(game_scene_path)
 
 func _on_quit_game_pressed()->void:
 	get_tree().quit()

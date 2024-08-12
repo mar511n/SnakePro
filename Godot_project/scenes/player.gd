@@ -226,7 +226,7 @@ func move_in_dir(dir:Vector2i):
 	if is_owner:
 		snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
 		while snake_path.point_count > Global.max_snake_path_length:
-			pass
+			#pass
 			snake_path.remove_point(0)
 			path_pos -= IG.tile_size_px
 		if Global.debugging_on:
@@ -318,6 +318,8 @@ func reset_snake_tiles():
 	tiles = [spos]
 	fett = Lobby.game_settings.get(Global.config_game_params_sec).get("startSnakeLength", Global.default_game_params["startSnakeLength"]) -1
 	set_speed(Lobby.game_settings.get(Global.config_game_params_sec).get("snakeSpeed", Global.default_game_params["snakeSpeed"]))
+	if is_owner:
+		snake_path.add_point(startPos)
 	for i in range(1):
 		move_in_dir(startDir)
 	redraw_snake()

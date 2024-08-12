@@ -111,6 +111,7 @@ func tile_check_collisions(pos:Vector2i,CollLayer:Array,max_colls:int=1)->Array:
 # -> process input
 func _input(event:InputEvent)->void:
 	if event.is_action_pressed("ui_cancel"):
+		Global.Print(get_tree().root.get_tree_string_pretty())
 		pause_game.rpc(!$GUI.visible)
 	elif event is InputEventKey:
 		if event.keycode == KEY_0 and event.pressed:
@@ -286,6 +287,13 @@ func spawn_player(data) -> Node:
 	playerlist[peer_id] = pl
 	return pl
 
+func get_alive_players()->int:
+	var al_pl = 0
+	for pl in playerlist:
+		if playerlist[pl].module_vars["PlayerIsAlive"]:
+			al_pl += 1
+	return al_pl
+
 # on server&client:
 # can be called remotely to pause the game for all gameobj
 @rpc("any_peer","call_local", "reliable")
@@ -294,17 +302,20 @@ func pause_game(pause, set_gui=true):
 	for node in get_tree().get_nodes_in_group("gameobj"):
 		node.call_deferred("set_physics_process", !pause)
 		node.call_deferred("set_process", !pause)
-	for child in module_node.get_children():
-		Global.Print(child)
+	#if is_instance_valid(get_tree().current_scene):
+	#	Global.Print(get_tree().current_scene.name)
+	#for child in module_node.get_children():
+	#	Global.Print(child)
 	if set_gui:
 		$GUI.visible = pause
 
 # on server/client:
 # -> loads the main menu (locally or for all peers) and resets networking if requested
 func return_to_main_menu(reset_net=false, all_peers=false):
-	Global.Print("loading main_menu: %s" % Global.main_menu_path)
+	#Global.Print("loading main_menu: %s" % Global.main_menu_path)
 	if all_peers:
-		get_tree().call_group("Synchronizer", "free")
+		#get_tree().call_group("Synchronizer", "free")
+		#Lobby.scene_spawner.spawn(Global.main_menu_path)
 		Lobby.load_scene.rpc(Global.main_menu_path)
 	else:
 		if reset_net:

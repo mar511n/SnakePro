@@ -61,6 +61,7 @@ func on_game_physics_process(delta):
 		pos += travelingDir
 		bullet_drawer.draw_bullet(pos,travelingDir)
 		bullet_drawer.draw_trace(trace)
+		
 		if is_server:
 			check_collision()
 		# handle collision only on server
