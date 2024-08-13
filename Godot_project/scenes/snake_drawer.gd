@@ -1,9 +1,9 @@
 extends TileMap
 class_name SnakeDrawerTileMap
 
-const base_snake_path:String = "res://assets/Images/Snakes/"
-const snake_paths:Array = ["test.png","blue.png","red.png","yellow.png","pink.png","bot_black.png"]
-const source_idx:Array = [1, 2, 3, 4, 5, 6]
+#const base_snake_path:String = "res://assets/Images/Snakes/"
+#const snake_paths:Array = ["test.png","blue.png","red.png","yellow.png","pink.png","bot_black.png"]
+#const source_idx:Array = [1, 2, 3, 4, 5, 6]
 enum tile_type {
 	HEAD,
 	TAIL,
@@ -26,7 +26,7 @@ func draw_snake(snake_idx:int, layer:int, pos:Array)->void:
 			place_tile(tile_type.BODY, pos[cpi], pos[lpi], pos[npi],snake_idx,layer)
 
 func place_tile(tile:tile_type, pos:Vector2i, lpos:Vector2i, npos:Vector2i, sn_idx:int, layer:int)->void:
-	var sid:int = source_idx[sn_idx]
+	var sid:int = Global.snake_tile_files.keys()[sn_idx]#source_idx[sn_idx]
 	var tac:int = 0
 	var tacai:int = 0
 	var diri:Vector2i = pos-lpos
@@ -95,10 +95,10 @@ const expected_image_height:int = 640
 # creates snake_tileset.tres from snake_paths
 func make_tileset()->void:
 	var s_ids:Array = []
-	tile_set = load(base_snake_path+"snake_tileset_base.tres")
-	for snakep in snake_paths:
+	tile_set = load(Global.snake_imgs_path+"snake_tileset_base.tres")
+	for source_id in Global.snake_tile_files:
 		var tss = tile_set.get_source(0).duplicate()
-		var tex : Texture2D = load(base_snake_path+snakep)
+		var tex : Texture2D = load(Global.snake_imgs_path+Global.snake_tile_files[source_id])
 		if tex.get_width() != expected_image_width or tex.get_height() != expected_image_height:
 			var tex_img : Image = tex.get_image()
 			tex_img.resize(expected_image_width,expected_image_height,Image.INTERPOLATE_LANCZOS)
@@ -107,6 +107,6 @@ func make_tileset()->void:
 		var sid = tile_set.add_source(tss)
 		s_ids.append(sid)
 	tile_set.remove_source(0)
-	ResourceSaver.save(tile_set, base_snake_path+"snake_tileset.tres")
+	ResourceSaver.save(tile_set, Global.snake_imgs_path+"snake_tileset.tres")
 	print(s_ids)
 	#set_cell(0, Vector2i(0,0), sid, Vector2i(0,0), 0)

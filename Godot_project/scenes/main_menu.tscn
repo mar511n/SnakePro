@@ -56,10 +56,11 @@ anchor_bottom = 1.0
 offset_right = -137.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 3
 tabs_visible = false
 
 [node name="Main" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -75,7 +76,6 @@ texture = ExtResource("1_biflu")
 expand_mode = 1
 
 [node name="PlayerList" type="RichTextLabel" parent="TabContainer/Main/Background"]
-self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 offset_left = 610.0
 offset_top = 458.0
@@ -146,7 +146,6 @@ grow_horizontal = 2
 text = "Game settings"
 
 [node name="Control Settings" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 

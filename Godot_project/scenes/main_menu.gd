@@ -132,6 +132,7 @@ func _on_start_game_pressed()->void:
 		return
 	if multiplayer.is_server():
 		#Global.Print("loading game_scene: %s" % game_scene_path)
+		Lobby.reset_game_stats.rpc()
 		Lobby.load_scene.rpc(game_scene_path)
 		#Lobby.scene_spawner.spawn(game_scene_path)
 
@@ -159,11 +160,17 @@ func _on_connection_popup_join(ip:String, port:int)->void:
 func update_playernames_list()->void:
 	PlList.clear()
 	for peer_id:int in Lobby.players:
+		var pl_name = Lobby.players[peer_id]["name"]
+		var pl_col = Color.BLACK.to_html()#Global.snake_colors[]
+		if Lobby.players[peer_id]["snake_tile_idx"] < len(Global.snake_colors):
+			pl_col = Global.snake_colors[Lobby.players[peer_id]["snake_tile_idx"]].to_html()
 		if peer_id == multiplayer.get_unique_id():
-			PlList.append_text("[center][b]%s[/b][/center]\n" % Lobby.players[peer_id]["name"])
+			PlList.append_text("[center][b][color=%s]%s[/color][/b][/center]" % [pl_col,pl_name])
 		else:
-			PlList.append_text("[center]%s[/center]\n" % Lobby.players[peer_id]["name"])
-
+			PlList.append_text("[center][color=%s]%s[/color][/center]" % [pl_col,pl_name])
+		if Lobby.game_stats.has("Winner") and Lobby.game_stats["Winner"] == peer_id:
+			PlList.append_text("    [img=50]res://assets/Images/UI/HallPokal1.png[/img]")
+		PlList.append_text("\n")
 func _on_connection_settings_pressed()->void:
 	if !ConPopup.visible:
 		ConPopup.show_popup(Global.config.get_value("conn","ip","127.0.0.1"),Global.config.get_value("conn","port",8080))

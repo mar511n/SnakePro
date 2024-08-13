@@ -50,6 +50,7 @@ var secondInput : input_dir = input_dir.NONE
 @export var CollLayers = []
 var CollMasks = []
 var module_vars = {}
+var is_main_mul_screen = false
 
 # on server/client:
 # -> redraw, if tiles changed
@@ -78,6 +79,12 @@ func _process(delta):
 			path_pos = clampf(path_pos+(cam_speed+delta_speed)*delta,0,spl)
 			global_position = snake_path.sample_baked(path_pos)
 			#global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
+		if is_main_mul_screen:
+			var mean_pos = Vector2.ZERO
+			for peer_id in IG.playerlist:
+				mean_pos += IG.playerlist[peer_id].global_position
+			mean_pos /= float(len(IG.playerlist))
+			cam_node.global_position = mean_pos
 	for mod in module_node.get_children():
 		mod.on_player_process(delta)
 
@@ -292,6 +299,10 @@ func _ready():
 	for mod in module_node.get_children():
 		mod.on_player_ready()
 	reset_snake_tiles()
+	is_main_mul_screen = Global.config_get_section_dict(Global.config_game_params_sec, {}).get("isMainMulScreen", false)
+	if is_main_mul_screen:
+		cam_node.set_as_top_level(true)
+		gui_node.visible = false
 	if cam_node.enabled:
 		cam_node.position_smoothing_speed = 6
 		cam_node.position_smoothing_enabled = Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true)

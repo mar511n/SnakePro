@@ -9,13 +9,19 @@ signal server_disconnected
 signal connecting_failed
 signal all_players_loaded
 signal player_info_updated(peer_id:int, pl_info:Dictionary)
-signal on_spawn_scene(scene)
+#signal on_spawn_scene(scene)
 
 const DEFAULT_PORT:int = 8080
 const DEFAULT_SERVER_IP:String = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS:int = 20
 
-#var scene_spawner : MultiplayerSpawner
+var game_stats = {}
+@rpc("any_peer", "call_local", "reliable")
+func reset_game_stats():
+	game_stats = {}
+@rpc("any_peer", "call_local", "reliable")
+func set_game_stats(key:Variant, value:Variant):
+	game_stats[key] = value
 
 # contains info of local player
 # name

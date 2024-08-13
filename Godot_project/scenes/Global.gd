@@ -43,6 +43,18 @@ const default_game_params:Dictionary = {
 	"mapPath"=maps_dir+"basic_map2.tscn"
 }
 
+const snake_imgs_path:String = "res://assets/Images/Snakes/"
+# source id -> file_path
+const snake_tile_files:Dictionary = {
+	1:"test.png",
+	2:"blue.png",
+	3:"red.png",
+	4:"yellow.png",
+	5:"pink.png",
+	6:"bot_black.png"
+}
+const snake_colors:Array = [Color.BLUE_VIOLET, Color.BLUE, Color.RED, Color("ffff00"), Color.DEEP_PINK,Color.BLACK]
+
 var min_prio_debug_print:int = 2
 var min_prio_toast:int = 5
 var first_game_reset:bool = false

@@ -148,9 +148,10 @@ func _ready()->void:
 	var dir:DirAccess = DirAccess.open(Global.game_modules_dir)
 	for mod_path:String in dir.get_files():
 		mod_path = mod_path.trim_suffix(".remap")
-		var mod_r:Resource = load(Global.game_modules_dir+mod_path)
-		if mod_r != null:
-			module_scripts[mod_path] = mod_r
+		if mod_path.ends_with(".gd"):
+			var mod_r:Resource = load(Global.game_modules_dir+mod_path)
+			if mod_r != null:
+				module_scripts[mod_path] = mod_r
 	
 	var en_mod_paths:Array = Global.get_enabled_mod_paths(Global.config_game_mods_sec)
 	for mod_path:String in en_mod_paths:
@@ -287,11 +288,11 @@ func spawn_player(data) -> Node:
 	playerlist[peer_id] = pl
 	return pl
 
-func get_alive_players()->int:
-	var al_pl = 0
+func get_alive_players()->Array:
+	var al_pl = []
 	for pl in playerlist:
 		if playerlist[pl].module_vars["PlayerIsAlive"]:
-			al_pl += 1
+			al_pl.append(playerlist[pl].peer_id)
 	return al_pl
 
 # on server&client:

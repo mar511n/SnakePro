@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://bdcc0njvy50mt" path="res://scenes/labeled_h_slider.tscn" id="2_36e5j"]
 
 [node name="GameSettings" type="Panel"]
-offset_right = 301.0
-offset_bottom = 364.0
+offset_right = 305.0
+offset_bottom = 385.0
 script = ExtResource("1_2yv24")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -64,6 +64,14 @@ layout_mode = 2
 [node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
+[node name="MainMultiplayerscreenBtn" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Main multi-
+player screen"
+
+[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
 [node name="Button" type="Button" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Load mod"
@@ -81,5 +89,6 @@ use_native_dialog = true
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/startSnakeLength" to="." method="_on_start_snake_length_drag_ended"]
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/snakeSpeed" to="." method="_on_snake_speed_drag_ended"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/mapPaths_b" to="." method="_on_map_paths_b_item_selected"]
+[connection signal="toggled" from="ScrollContainer/VFlowContainer/MainMultiplayerscreenBtn" to="." method="_on_main_multiplayerscreen_btn_toggled"]
 [connection signal="pressed" from="ScrollContainer/VFlowContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

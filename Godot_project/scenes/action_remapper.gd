@@ -91,7 +91,8 @@ func _on_button_toggled(toggled_on:bool)->void:
 
 
 func _on_v_box_container_resized()->void:
-	size = $VBoxContainer.size+Vector2(20,20)
+	pass
+	#size = $VBoxContainer.size+Vector2(20,20)
 
 func _on_texture_button_pressed()->void:
 	InputMap.load_from_project_settings()

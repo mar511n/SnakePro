@@ -27,9 +27,9 @@ func on_collected_by_player(player:SnakePlayer)->bool:
 func mark_for_removal():
 	is_marked_for_removal = true
 
-func remove_item():
+func remove_item(keep_ui=false):
 	Global.Print("Removing item %s from player %s" % [item_name, pl.peer_id])
-	if local_player_gui != null:
+	if local_player_gui != null and not keep_ui:
 		local_player_gui.remove_item(local_player_gui_id)
 	pl.module_node.remove_child(self)
 	var idx = pl.modules.find(self)
@@ -43,6 +43,8 @@ func on_player_physics_process(_delta:float):
 
 func on_player_ready():
 	super()
+	if is_ghost:
+		item_code += "_g"
 	Global.Print("Player %s collected item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
 	
 	local_player_gui = pl.gui_node.get_node("ItemGUI")
@@ -51,5 +53,5 @@ func on_player_ready():
 	else:
 		Global.Print("ERROR: ItemGUI node not found in player", 7)
 	
-	if item_code == "baseitem":
+	if item_code == "baseitem" or item_code == "baseitem_g":
 		remove_item()

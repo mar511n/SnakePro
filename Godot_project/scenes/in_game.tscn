@@ -35,6 +35,7 @@ spawn_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_52sk8")
 
 [node name="GUI" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Panel" type="Panel" parent="GUI"]
 anchors_preset = 8

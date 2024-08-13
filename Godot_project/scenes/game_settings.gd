@@ -16,6 +16,7 @@ const g_set_mbg:StringName = "GameModuleSettingCheckBtn"
 @onready var startSnakeLength:LabeledHSlider = $ScrollContainer/VFlowContainer/startSnakeLength
 @onready var snakeSpeed:LabeledHSlider = $ScrollContainer/VFlowContainer/snakeSpeed
 @onready var mapPaths_b:OptionButton = $ScrollContainer/VFlowContainer/mapPaths_b
+@onready var mainMulScreen_b:CheckButton = $ScrollContainer/VFlowContainer/MainMultiplayerscreenBtn
 
 var playerModuleProps:Dictionary = {}
 var gameModuleProps:Dictionary = {}
@@ -24,6 +25,7 @@ func show_popup()->void:
 	var gs:Dictionary = Global.config_get_section_dict(Global.config_game_params_sec)
 	startSnakeLength.set_prop_value(gs.get("startSnakeLength", 3))
 	snakeSpeed.set_prop_value(gs.get("snakeSpeed", 4))
+	mainMulScreen_b.set_pressed_no_signal(gs.get("isMainMulScreen", false))
 	
 	update_map_list(gs)
 	make_game_module_settings()
@@ -47,20 +49,22 @@ func make_game_module_settings()->void:
 	vflow.add_child(hsep)
 	
 	var dir:DirAccess = DirAccess.open(Global.game_modules_dir)
+	print(dir.get_files())
 	for g_mod_f:String in dir.get_files():
 		g_mod_f = g_mod_f.trim_suffix(".remap")
-		var g_mod_s:Resource = load(Global.game_modules_dir+g_mod_f)
-		if g_mod_s != null:
-			var g_mod : Object = g_mod_s.new()
-			var g_mod_name:String = ""
-			var props:Dictionary = {}
-			for prop:String in g_mod.get_meta_list():
-				if prop == "name":
-					g_mod_name = g_mod.get_meta(prop)
-				else:
-					props[prop] = g_mod.get_meta(prop)
-			if g_mod_name != "":
-				add_game_module(g_mod_f, g_mod_name, props)
+		if g_mod_f.ends_with(".gd"):
+			var g_mod_s:Resource = load(Global.game_modules_dir+g_mod_f)
+			if g_mod_s != null:
+				var g_mod : Object = g_mod_s.new()
+				var g_mod_name:String = ""
+				var props:Dictionary = {}
+				for prop:String in g_mod.get_meta_list():
+					if prop == "name":
+						g_mod_name = g_mod.get_meta(prop)
+					else:
+						props[prop] = g_mod.get_meta(prop)
+				if g_mod_name != "":
+					add_game_module(g_mod_f, g_mod_name, props)
 	gm_label.text = "Gamemodules ("+str(gameModuleProps.size())+")"
 	
 	var applyBtn:Button = Button.new()
@@ -160,18 +164,19 @@ func make_player_module_settings()->void:
 	var dir:DirAccess = DirAccess.open(Global.player_modules_dir)
 	for pl_mod_f:String in dir.get_files():
 		pl_mod_f = pl_mod_f.trim_suffix(".remap")
-		var pl_mod_s:Resource = load(Global.player_modules_dir+pl_mod_f)
-		if pl_mod_s != null:
-			var pl_mod : Object = pl_mod_s.new()
-			var pl_mod_name:String = ""
-			var props:Dictionary = {}
-			for prop:String in pl_mod.get_meta_list():
-				if prop == "name":
-					pl_mod_name = pl_mod.get_meta(prop)
-				else:
-					props[prop] = pl_mod.get_meta(prop)
-			if pl_mod_name != "":
-				add_player_module(pl_mod_f, pl_mod_name, props)
+		if pl_mod_f.ends_with(".gd"):
+			var pl_mod_s:Resource = load(Global.player_modules_dir+pl_mod_f)
+			if pl_mod_s != null:
+				var pl_mod : Object = pl_mod_s.new()
+				var pl_mod_name:String = ""
+				var props:Dictionary = {}
+				for prop:String in pl_mod.get_meta_list():
+					if prop == "name":
+						pl_mod_name = pl_mod.get_meta(prop)
+					else:
+						props[prop] = pl_mod.get_meta(prop)
+				if pl_mod_name != "":
+					add_player_module(pl_mod_f, pl_mod_name, props)
 	pm_label.text = "Playermodules ("+str(playerModuleProps.size())+")"
 	
 	var applyBtn:Button = Button.new()
@@ -268,6 +273,7 @@ func make_settings_dict() -> Dictionary:
 	gs["startSnakeLength"] = startSnakeLength.value
 	gs["snakeSpeed"] = snakeSpeed.value
 	gs["mapPath"] = Global.maps_dir+mapPaths_b.get_item_text(mapPaths_b.get_selected_id())
+	gs["isMainMulScreen"] = mainMulScreen_b.button_pressed
 	return gs
 
 func _on_settings_changed()->void:
@@ -306,3 +312,7 @@ func _on_button_pressed()->void:
 func _on_scroll_container_resized()->void:
 	if scrollCont != null and vflow != null:
 		vflow.custom_minimum_size = scrollCont.size
+
+
+func _on_main_multiplayerscreen_btn_toggled(_toggled_on: bool) -> void:
+	_on_settings_changed()

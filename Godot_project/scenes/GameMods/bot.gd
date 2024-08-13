@@ -11,6 +11,8 @@ var max_length : int
 var use_astar : bool
 var bot_id : int
 var alive_time = 10.0
+var max_alive_time = 10.0
+var gui_id = 0
 
 var active = true
 var next_dir = Vector2i.UP
@@ -35,7 +37,7 @@ func on_game_ready(g:InGame, g_is_server:bool):
 		#Global.Print("instantiated BotDrawer")
 	bot_drawer.scale_to_tile_size(game.tile_size_px*Vector2.ONE)
 
-func on_module_start(owner_id:int, ghost:bool, speed:float, length:int, astar:bool, time:float):
+func on_module_start(owner_id:int, ghost:bool, speed:float, length:int, astar:bool, time:float, local_player_gui_id:int):
 	Global.Print("spawning bot of player %s"%owner_id)
 	owner_peer_id = owner_id
 	is_ghost = ghost
@@ -44,6 +46,8 @@ func on_module_start(owner_id:int, ghost:bool, speed:float, length:int, astar:bo
 	use_astar = astar
 	bot_id = bot_drawer.add_bot()
 	alive_time = time
+	max_alive_time = time
+	gui_id = local_player_gui_id
 	
 	var start = game.playerlist[owner_peer_id].get_head_tile()
 	var dir = game.playerlist[owner_peer_id].get_direction_facing()
@@ -137,6 +141,12 @@ func get_coll_map()->CollisionMap:
 func remove_bot():
 	#Global.Print("1 removing bot of player %s with name %s"%[owner_peer_id,name])
 	active = false
+	if owner_peer_id == multiplayer.get_unique_id():
+		var local_player_gui = game.playerlist[owner_peer_id].gui_node.get_node("ItemGUI")
+		if local_player_gui != null:
+			local_player_gui.remove_item(gui_id)
+		else:
+			Global.Print("ERROR: ItemGUI node not found in player", 7)
 	if is_server:
 		game.module_vars_rapid.erase("BotSnake"+str(bot_id))
 	bot_drawer.remove_bot(bot_id)
@@ -157,7 +167,8 @@ func check_collision(cmap:CollisionMap, tiles:Array):
 		elif ci > 1:
 			var pl_head = game.playerlist[ci-1].get_head_tile()
 			if btile == pl_head:
-				game.playerlist[ci-1].hit.rpc([Global.hit_causes.BOT, {"owner":owner_peer_id}])
+				if ci-1 != owner_peer_id or alive_time < max_alive_time-max_length*update_period:
+					game.playerlist[ci-1].hit.rpc([Global.hit_causes.BOT, {"owner":owner_peer_id}])
 			if btile == bot_head:
 				#remove_bot()
 				remove_bot.rpc()

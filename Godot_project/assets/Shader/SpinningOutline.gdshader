@@ -19,8 +19,7 @@ void fragment() {
 	outline += texture(TEXTURE, UV + vec2(line_thickness, -line_thickness)).a;
 	outline += texture(TEXTURE, UV + vec2(line_thickness, -line_thickness * 0.5)).a;
 	outline = round(min(outline, 1.0));
-	float mul = round(texture(TEXTURE, UV).a);
-	if (mul > 0.5) {
+	if (texture(TEXTURE, UV).a > 0.2) {
 		COLOR = texture(TEXTURE, UV);
 	}else if (outline > 0.5) {
 		vec2 pos = UV - vec2(0.5);
