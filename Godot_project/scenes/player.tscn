@@ -55,67 +55,45 @@ properties/6/replication_mode = 2
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_v2hyg"]
 streams_count = 3
 stream_0/stream = ExtResource("3_ppts7")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("4_loqkv")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("5_jr288")
-stream_2/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ey8q2"]
 streams_count = 5
 stream_0/stream = ExtResource("6_udqfy")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("7_se8ye")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("8_p53rb")
-stream_2/weight = 1.0
 stream_3/stream = ExtResource("9_po5q8")
-stream_3/weight = 1.0
 stream_4/stream = ExtResource("10_arxja")
-stream_4/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_621yt"]
 streams_count = 4
 stream_0/stream = ExtResource("11_ydxhw")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("12_vckau")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("13_7aur7")
-stream_2/weight = 1.0
 stream_3/stream = ExtResource("14_ni4s4")
-stream_3/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_eyowu"]
 streams_count = 3
 stream_0/stream = ExtResource("15_iixr8")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("16_xvyrr")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("17_i5iwu")
-stream_2/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_e1fr1"]
 streams_count = 2
 stream_0/stream = ExtResource("18_ddpsx")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("19_n7ugp")
-stream_1/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_oumsq"]
 streams_count = 2
 stream_0/stream = ExtResource("20_6eemm")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("21_3uw3j")
-stream_1/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_lvova"]
 streams_count = 3
 stream_0/stream = ExtResource("22_kabyf")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("23_fsu32")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("24_hhtwo")
-stream_2/weight = 1.0
 
 [node name="Player" type="Node2D" groups=["gameobj"]]
 script = ExtResource("1_gv0ea")

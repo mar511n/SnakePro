@@ -35,7 +35,6 @@ spawn_path = NodePath(".")
 replication_config = SubResource("SceneReplicationConfig_52sk8")
 
 [node name="GUI" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Panel" type="Panel" parent="GUI"]
 anchors_preset = 8
@@ -43,10 +42,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -166.0
-offset_top = -84.0
-offset_right = 166.0
-offset_bottom = 84.0
+offset_left = -198.0
+offset_top = -87.0
+offset_right = 198.0
+offset_bottom = 87.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_ru1c1")

@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bdcc0njvy50mt" path="res://scenes/labeled_h_slider.tscn" id="3_d0h0d"]
 
 [node name="UserSettings" type="Panel"]
-offset_right = 333.0
-offset_bottom = 342.0
+offset_right = 366.0
+offset_bottom = 379.0
 script = ExtResource("1_fr42r")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -48,11 +48,10 @@ horizontal_alignment = 1
 layout_mode = 2
 icon_alignment = 1
 expand_icon = true
-item_count = 1
 selected = 0
+item_count = 1
 popup/item_0/text = " "
 popup/item_0/icon = ExtResource("2_vihr5")
-popup/item_0/id = 0
 
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
@@ -65,10 +64,9 @@ horizontal_alignment = 1
 [node name="InputOpt" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 alignment = 1
-item_count = 2
 selected = 0
+item_count = 2
 popup/item_0/text = "relativ"
-popup/item_0/id = 0
 popup/item_1/text = "absolute"
 popup/item_1/id = 1
 
@@ -95,10 +93,9 @@ horizontal_alignment = 1
 
 [node name="VSyncB" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
-item_count = 4
 selected = 1
+item_count = 4
 popup/item_0/text = "enabled"
-popup/item_0/id = 0
 popup/item_1/text = "disabled"
 popup/item_1/id = 1
 popup/item_2/text = "adaptive"
@@ -116,10 +113,9 @@ horizontal_alignment = 1
 
 [node name="SplitScreenOpt" type="OptionButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
-item_count = 6
 selected = 0
+item_count = 6
 popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
 popup/item_1/text = "Left top"
 popup/item_1/id = 1
 popup/item_2/text = "Right top"
