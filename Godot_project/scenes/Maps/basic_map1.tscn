@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3n4088c2wis1"]
+[gd_scene load_steps=3 format=3 uid="uid://d3n4088c2wis1"]
 
 [ext_resource type="TileSet" uid="uid://bwq0e8erubnxw" path="res://assets/Images/TileSets/basic1_tileset.tres" id="1_gce6k"]
+[ext_resource type="Script" path="res://scenes/Maps/basic_map_1.gd" id="2_7bi5a"]
 
 [node name="BasicMap1" type="TileMap" groups=["StaticGraphical"]]
 texture_filter = 1
@@ -17,6 +18,7 @@ layer_2/name = "Shadow"
 layer_2/modulate = Color(1, 1, 1, 0.556863)
 layer_2/z_index = 10
 layer_2/tile_data = PackedInt32Array(393221, 458759, 3, 1114128, 458759, 3, 720906, 458759, 0, 917510, 720903, 6, 655377, 458759, 6, 393230, 851975, 6)
+script = ExtResource("2_7bi5a")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -10

@@ -1,4 +1,4 @@
-extends TileMap
+extends SaveableTileMap
 
 const source_idx = 6
 enum tile_type {
@@ -91,3 +91,16 @@ func place_tile(tile:tile_type, pos:Vector2i, lpos:Vector2i, npos:Vector2i, laye
 			elif diri.y < 0 and diro.x > 0:
 				tacai = 7
 	set_cell(layer,pos,source_idx,tile_atlas_coords[tac],tacai)
+
+
+func get_res_path()->String:
+	return "res://scenes/ModResources/bot_drawer.tscn"
+
+func get_data()->Dictionary:
+	var dic = super()
+	dic["scale"] = scale
+	return dic
+
+func set_data(dic:Dictionary):
+	super(dic)
+	scale = dic.get("scale", 1)

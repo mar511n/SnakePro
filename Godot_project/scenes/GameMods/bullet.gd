@@ -8,6 +8,7 @@ var maxRange : int
 var owner_peer_id : int
 var bullet_drawer : TileMap
 var travelingDir : Vector2i
+var headshot_survive_length : int
 
 var active = true
 
@@ -33,7 +34,7 @@ func on_game_ready(g:InGame, g_is_server:bool):
 		#Global.Print("instantiated BulletDrawer")
 	bullet_drawer.scale_to_tile_size(game.tile_size_px*Vector2.ONE)
 
-func on_module_start(start:Vector2i,dir:Vector2i,speed:float,maxrange:int,owner_id:int):
+func on_module_start(start:Vector2i,dir:Vector2i,speed:float,maxrange:int,owner_id:int,survive_length:int):
 	Global.Print("spawning bullet at %s"%start)
 	pos = start
 	travelingDir = dir
@@ -41,6 +42,7 @@ func on_module_start(start:Vector2i,dir:Vector2i,speed:float,maxrange:int,owner_
 	owner_peer_id = owner_id
 	update_period = 1.0/speed
 	trace = []
+	headshot_survive_length = survive_length
 
 func on_game_physics_process(delta):
 	super(delta)
@@ -78,7 +80,11 @@ func check_collision():
 			if survives:
 				game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,tile_idx+1)
 			elif peer_id != owner_peer_id:
-				game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"owner":owner_peer_id}])
+				var sn_len = len(game.playerlist[peer_id].tiles)
+				if sn_len >= headshot_survive_length:
+					game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,sn_len-2)
+				else:
+					game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"owner":owner_peer_id}])
 
 @rpc("authority", "call_local", "reliable")
 func remove_bullet():

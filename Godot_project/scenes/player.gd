@@ -299,7 +299,7 @@ func _ready():
 	for mod in module_node.get_children():
 		mod.on_player_ready()
 	reset_snake_tiles()
-	is_main_mul_screen = Global.config_get_section_dict(Global.config_game_params_sec, {}).get("isMainMulScreen", false)
+	is_main_mul_screen = Global.config_get_section_dict(Global.config_user_settings_sec, {}).get("mainMultiplayerScreen", false)
 	if is_main_mul_screen:
 		cam_node.set_as_top_level(true)
 		gui_node.visible = false

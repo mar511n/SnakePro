@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://seq5vxt4g0lj"]
+[gd_scene load_steps=3 format=3 uid="uid://seq5vxt4g0lj"]
 
 [ext_resource type="TileSet" uid="uid://bwq0e8erubnxw" path="res://assets/Images/TileSets/basic1_tileset.tres" id="1_y4tkj"]
+[ext_resource type="Script" path="res://scenes/Maps/basic_map_2.gd" id="2_pxq60"]
 
 [node name="BasicMap2" type="TileMap" groups=["StaticGraphical"]]
 texture_filter = 1
@@ -23,6 +24,7 @@ layer_3/tile_data = PackedInt32Array(983045, 524292, 3, 983057, 524292, 3, 32769
 layer_4/name = "Walls"
 layer_4/z_index = -1
 layer_4/tile_data = PackedInt32Array(1, 327685, 1, -65536, 262149, 1, 2, 131077, 6, 3, 196613, 6, 4, 65541, 6, 5, 131077, 6, 6, 262149, 6, 8, 131077, 6, 9, 262149, 6, 10, 65541, 6, 11, 65541, 6, 12, 65541, 6, 13, 65541, 6, 15, 65541, 6, 16, 196613, 6, 17, 262149, 6, 18, 131077, 6, 19, 131077, 6, 20, 131077, 6, 14, 393221, 6, 7, 393221, 6, 21, 458757, 1, -65514, 524293, 1)
+script = ExtResource("2_pxq60")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -10

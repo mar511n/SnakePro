@@ -1,4 +1,4 @@
-extends TileMap
+extends SaveableTileMap
 
 func scale_to_tile_size(ts:Vector2)->void:
 	scale = ts/Vector2(tile_set.tile_size)
@@ -33,3 +33,15 @@ func clear_trace(trace:Array)->void:
 
 func clear_bullets()->void:
 	clear()
+
+func get_res_path()->String:
+	return "res://scenes/ModResources/BulletDrawer.tscn"
+
+func get_data()->Dictionary:
+	var dic = super()
+	dic["scale"] = scale
+	return dic
+
+func set_data(dic:Dictionary):
+	super(dic)
+	scale = dic.get("scale", 1)

@@ -1,0 +1,89 @@
+[gd_scene load_steps=10 format=3 uid="uid://cfr8jj4fbggxj"]
+
+[ext_resource type="Script" path="res://scenes/game_viewer.gd" id="1_anmje"]
+[ext_resource type="Texture2D" uid="uid://dvoujj10xcjeg" path="res://assets/MatIcons/play_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="2_8iap7"]
+[ext_resource type="Texture2D" uid="uid://cc2pcwlfola66" path="res://assets/MatIcons/pause_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="3_4xs6o"]
+[ext_resource type="Texture2D" uid="uid://bgxv2hrcj6kqw" path="res://assets/MatIcons/arrow_back_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="4_ckvet"]
+[ext_resource type="Texture2D" uid="uid://bf1v5r2t18r0e" path="res://assets/MatIcons/arrow_back_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="5_ekpnd"]
+[ext_resource type="Texture2D" uid="uid://b4kotfol1p8ft" path="res://assets/MatIcons/save_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_twlmd"]
+[ext_resource type="Texture2D" uid="uid://du10m7m1a272o" path="res://assets/MatIcons/save_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_uqml2"]
+[ext_resource type="Texture2D" uid="uid://cfhpmivj41kkk" path="res://assets/MatIcons/file_open_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="8_x5i7a"]
+[ext_resource type="Texture2D" uid="uid://cy00omyrhd770" path="res://assets/MatIcons/file_open_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="9_y8eug"]
+
+[node name="GameViewer" type="Node2D"]
+script = ExtResource("1_anmje")
+
+[node name="Static" type="Node2D" parent="."]
+
+[node name="Variable" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+position_smoothing_enabled = true
+
+[node name="GUI" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="Control" type="Control" parent="GUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TimeSlider" type="HSlider" parent="GUI/Control"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -26.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+step = 0.1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BackBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("4_ckvet")
+texture_pressed = ExtResource("5_ekpnd")
+
+[node name="PlayBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_8iap7")
+texture_pressed = ExtResource("3_4xs6o")
+
+[node name="SaveBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("6_twlmd")
+texture_pressed = ExtResource("7_uqml2")
+
+[node name="LoadBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("8_x5i7a")
+texture_pressed = ExtResource("9_y8eug")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 2
+size = Vector2i(500, 600)
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+root_subfolder = "replays"
+
+[connection signal="value_changed" from="GUI/Control/TimeSlider" to="." method="_on_time_slider_value_changed"]
+[connection signal="pressed" from="GUI/Control/HBoxContainer/BackBtn" to="." method="_on_back_btn_pressed"]
+[connection signal="toggled" from="GUI/Control/HBoxContainer/PlayBtn" to="." method="_on_play_btn_toggled"]
+[connection signal="pressed" from="GUI/Control/HBoxContainer/SaveBtn" to="." method="_on_save_btn_pressed"]
+[connection signal="pressed" from="GUI/Control/HBoxContainer/LoadBtn" to="." method="_on_load_btn_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

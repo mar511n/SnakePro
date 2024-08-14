@@ -329,3 +329,7 @@ func _process(delta:float)->void:
 		else:
 			call_next_process_frame[0][0].callv(call_next_process_frame[0][1])
 			call_next_process_frame.remove_at(0)
+
+
+func _on_watch_replay_pressed() -> void:
+	Lobby.load_scene(Global.gameviewer_path)

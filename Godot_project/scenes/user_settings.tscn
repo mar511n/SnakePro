@@ -145,7 +145,23 @@ layout_mode = 2
 [node name="Shader" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 button_pressed = true
-text = "use Shader"
+text = "Use shader"
+
+[node name="HSeparator8" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="CaptureReplay" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Capture replay"
+
+[node name="HSeparator9" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
+[node name="MultiMainScreen" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Main multi-
+player screen"
 
 [connection signal="focus_exited" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_focus_exited"]
 [connection signal="text_submitted" from="ScrollContainer/VFlowContainer/PlayerName" to="." method="_on_player_name_text_submitted"]
@@ -156,3 +172,5 @@ text = "use Shader"
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/SplitScreenOpt" to="." method="_on_split_screen_opt_item_selected"]
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/MusicVolume" to="." method="_on_music_volume_drag_ended"]
 [connection signal="toggled" from="ScrollContainer/VFlowContainer/Shader" to="." method="_on_shader_toggled"]
+[connection signal="toggled" from="ScrollContainer/VFlowContainer/CaptureReplay" to="." method="_on_capture_replay_toggled"]
+[connection signal="toggled" from="ScrollContainer/VFlowContainer/MultiMainScreen" to="." method="_on_multi_main_screen_toggled"]

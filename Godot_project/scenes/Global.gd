@@ -30,12 +30,14 @@ const splitscreen_modes:Array = [null, Rect2(0,0,0.5,0.5), Rect2(0.5,0,0.5,0.5),
 
 const main_menu_path:String = "res://scenes/main_menu.tscn"
 const ingame_path:String = "res://scenes/in_game.tscn"
+const gameviewer_path:String = "res://scenes/game_viewer.tscn"
 const maps_dir:String = "res://scenes/Maps/"
 const player_modules_dir:String = "res://scenes/PlayerMods/"
 const game_modules_dir:String = "res://scenes/GameMods/"
 
 var config_path:String = "user://config.txt"
 var inputconfig_path:String = "user://inputconfig.txt"
+var replay_dir_path:String = "user://replays/"
 
 const default_game_params:Dictionary = {
 	"startSnakeLength"=7.0,
@@ -156,3 +158,48 @@ func Print(v:Variant, prio:int=4)->void:
 			"gravity": "bottom",                   # top or bottom
 			"direction": "left"               # left or center or right
 		})
+
+const variable_graphic_group:StringName = "VariableGraphical"
+const static_graphic_group:StringName = "StaticGraphical"
+const res_path_func_name:StringName = "get_res_path"
+const get_data_func_name:StringName = "get_data"
+const set_data_func_name:StringName = "set_data"
+
+# the static gamestate at the start
+var static_gamestate:Dictionary
+# capture start time
+var capture_start_time:float
+# [time in seconds since start, gamestate]
+var variable_gamestates:Array
+
+func start_game_state_capture():
+	static_gamestate = save_game_state(static_graphic_group)
+	variable_gamestates = []
+	capture_start_time = Time.get_unix_time_from_system()
+	save_variable_gamestate_if_needed()
+
+func save_variable_gamestate_if_needed():
+	var vgs = save_game_state(variable_graphic_group)
+	if len(variable_gamestates) == 0 or not vgs.recursive_equal(variable_gamestates[-1][1],20):
+		variable_gamestates.append([Time.get_unix_time_from_system()-capture_start_time, vgs])
+
+func save_game_state(groupName:StringName)->Dictionary:
+	var nodes = get_tree().get_nodes_in_group(groupName)
+	var dic = {}
+	for node in nodes:
+		if node.has_method(res_path_func_name) and node.has_method(get_data_func_name):
+			var resPath = node.call(res_path_func_name)
+			var data = node.call(get_data_func_name)
+			dic[resPath] = data
+		else:
+			Print("ERROR in save_game_state: node %s misses function %s or %s" % [node.name, res_path_func_name, get_data_func_name])
+	return dic
+
+func load_game_state(parentNode:Node, gs:Dictionary):
+	for resPath in gs:
+		var node:Node = load(resPath).instantiate()
+		if node.has_method(set_data_func_name):
+			node.call(set_data_func_name, gs[resPath])
+			parentNode.add_child(node)
+		else:
+			Print("ERROR in load_game_state: node %s misses function %s" % [node.name, set_data_func_name])

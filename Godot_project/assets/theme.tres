@@ -1,5 +1,15 @@
-[gd_resource type="Theme" format=3 uid="uid://cmbo3c7rnoun7"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cmbo3c7rnoun7"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_0d6jq"]
+content_margin_left = 4.0
+content_margin_top = 0.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+color = Color(0.5, 0.5, 0.5, 1)
+thickness = 5
 
 [resource]
 default_base_scale = 2.0
 default_font_size = 32
+HSeparator/constants/separation = 4
+HSeparator/styles/separator = SubResource("StyleBoxLine_0d6jq")

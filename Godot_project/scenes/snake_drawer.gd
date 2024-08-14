@@ -1,4 +1,4 @@
-extends TileMap
+extends SaveableTileMap
 class_name SnakeDrawerTileMap
 
 #const base_snake_path:String = "res://assets/Images/Snakes/"
@@ -110,3 +110,13 @@ func make_tileset()->void:
 	ResourceSaver.save(tile_set, Global.snake_imgs_path+"snake_tileset.tres")
 	print(s_ids)
 	#set_cell(0, Vector2i(0,0), sid, Vector2i(0,0), 0)
+
+func get_res_path()->String:
+	return "res://scenes/snake_drawer.tscn"
+
+func get_data()->Dictionary:
+	var dic = super()
+	return dic
+
+func set_data(dic:Dictionary):
+	super(dic)

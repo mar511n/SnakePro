@@ -16,7 +16,7 @@ const g_set_mbg:StringName = "GameModuleSettingCheckBtn"
 @onready var startSnakeLength:LabeledHSlider = $ScrollContainer/VFlowContainer/startSnakeLength
 @onready var snakeSpeed:LabeledHSlider = $ScrollContainer/VFlowContainer/snakeSpeed
 @onready var mapPaths_b:OptionButton = $ScrollContainer/VFlowContainer/mapPaths_b
-@onready var mainMulScreen_b:CheckButton = $ScrollContainer/VFlowContainer/MainMultiplayerscreenBtn
+#@onready var mainMulScreen_b:CheckButton = $ScrollContainer/VFlowContainer/MainMultiplayerscreenBtn
 
 var playerModuleProps:Dictionary = {}
 var gameModuleProps:Dictionary = {}
@@ -25,7 +25,7 @@ func show_popup()->void:
 	var gs:Dictionary = Global.config_get_section_dict(Global.config_game_params_sec)
 	startSnakeLength.set_prop_value(gs.get("startSnakeLength", 3))
 	snakeSpeed.set_prop_value(gs.get("snakeSpeed", 4))
-	mainMulScreen_b.set_pressed_no_signal(gs.get("isMainMulScreen", false))
+	#mainMulScreen_b.set_pressed_no_signal(gs.get("isMainMulScreen", false))
 	
 	update_map_list(gs)
 	make_game_module_settings()
@@ -49,7 +49,7 @@ func make_game_module_settings()->void:
 	vflow.add_child(hsep)
 	
 	var dir:DirAccess = DirAccess.open(Global.game_modules_dir)
-	print(dir.get_files())
+	#print(dir.get_files())
 	for g_mod_f:String in dir.get_files():
 		g_mod_f = g_mod_f.trim_suffix(".remap")
 		if g_mod_f.ends_with(".gd"):
@@ -66,6 +66,10 @@ func make_game_module_settings()->void:
 				if g_mod_name != "":
 					add_game_module(g_mod_f, g_mod_name, props)
 	gm_label.text = "Gamemodules ("+str(gameModuleProps.size())+")"
+	gm_label.label_settings = LabelSettings.new()
+	gm_label.label_settings.font_size = 32
+	gm_label.label_settings.outline_size = 10
+	gm_label.label_settings.outline_color = Color.RED
 	
 	var applyBtn:Button = Button.new()
 	applyBtn.text = "Save gamemodule properties"
@@ -73,9 +77,9 @@ func make_game_module_settings()->void:
 	applyBtn.add_to_group(g_set_g)
 	vflow.add_child(applyBtn)
 	
-	hsep = HSeparator.new()
-	hsep.add_to_group(g_set_g)
-	vflow.add_child(hsep)
+	#hsep = HSeparator.new()
+	#hsep.add_to_group(g_set_g)
+	#vflow.add_child(hsep)
 
 func set_game_module_settings()->void:
 	var mods:Dictionary = Global.config_get_section_dict(Global.config_game_mods_sec)
@@ -130,6 +134,10 @@ func add_game_module(path:String, mname:String, properties:Dictionary)->void:
 		else:
 			var propL:Label = Label.new()
 			propL.text = prop
+			propL.label_settings = LabelSettings.new()
+			propL.label_settings.font_size = 24
+			#propL.label_settings.outline_size = 6
+			#propL.label_settings.outline_color = Color.BLUE
 			propL.add_to_group(g_set_g)
 			vflow.add_child(propL)
 			if properties[prop][0] is float or properties[prop][0] is int:
@@ -145,9 +153,6 @@ func add_game_module(path:String, mname:String, properties:Dictionary)->void:
 	hsep.add_to_group(g_set_g)
 	vflow.add_child(hsep)
 
-
-
-
 func make_player_module_settings()->void:
 	clear_player_modules()
 	
@@ -155,6 +160,10 @@ func make_player_module_settings()->void:
 	hsep.add_to_group(pl_set_g)
 	vflow.add_child(hsep)
 	var pm_label:Label = Label.new()
+	pm_label.label_settings = LabelSettings.new()
+	pm_label.label_settings.font_size = 32
+	pm_label.label_settings.outline_size = 10
+	pm_label.label_settings.outline_color = Color.RED
 	pm_label.add_to_group(pl_set_g)
 	vflow.add_child(pm_label)
 	hsep = HSeparator.new()
@@ -242,6 +251,10 @@ func add_player_module(path:String, mname:String, properties:Dictionary)->void:
 		else:
 			var propL:Label = Label.new()
 			propL.text = prop
+			propL.label_settings = LabelSettings.new()
+			propL.label_settings.font_size = 24
+			#propL.label_settings.outline_size = 6
+			#propL.label_settings.outline_color = Color.BLUE
 			propL.add_to_group(pl_set_g)
 			vflow.add_child(propL)
 			if properties[prop][0] is float or properties[prop][0] is int:
@@ -273,7 +286,7 @@ func make_settings_dict() -> Dictionary:
 	gs["startSnakeLength"] = startSnakeLength.value
 	gs["snakeSpeed"] = snakeSpeed.value
 	gs["mapPath"] = Global.maps_dir+mapPaths_b.get_item_text(mapPaths_b.get_selected_id())
-	gs["isMainMulScreen"] = mainMulScreen_b.button_pressed
+	#gs["isMainMulScreen"] = mainMulScreen_b.button_pressed
 	return gs
 
 func _on_settings_changed()->void:

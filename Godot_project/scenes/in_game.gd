@@ -9,6 +9,7 @@ class_name InGame
 @onready var module_node:Node = $Modules
 
 var tile_size_px:float = 96.0
+var capture_replay_on = true
 
 var coll_map : CollisionMap
 var playerlist:Dictionary = {} # peer_id -> player node
@@ -45,6 +46,8 @@ func _physics_process(delta:float)->void:
 			check_collisions = false
 		for mod:Node in module_node.get_children():
 			mod.on_game_physics_process(delta)
+		if capture_replay_on:
+			Global.save_variable_gamestate_if_needed()
 
 # on server:
 # -> note movement of player (to check collision on next physics frame)
@@ -144,6 +147,8 @@ func _notification(what):
 func _ready()->void:
 	format_module_list()
 	
+	capture_replay_on = Global.config_get_section_dict(Global.config_user_settings_sec, {}).get("captureReplay", true)
+	
 	module_scripts = {}
 	var dir:DirAccess = DirAccess.open(Global.game_modules_dir)
 	for mod_path:String in dir.get_files():
@@ -196,6 +201,8 @@ func post_ready()->void:
 	for mod:Node in module_node.get_children():
 		mod.on_game_post_ready()
 	ready_phase = 3
+	if capture_replay_on:
+		Global.start_game_state_capture()
 
 func format_module_list()->void:
 	#print(str(Lobby.game_settings))

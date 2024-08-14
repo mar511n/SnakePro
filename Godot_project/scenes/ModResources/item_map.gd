@@ -1,4 +1,4 @@
-extends TileMap
+extends SaveableTileMap
 
 const item_code_to_atlas_pos = {
 	"bomb":Vector2i(0,0),
@@ -29,3 +29,15 @@ func draw_items(poss:Array, codes:Array):
 
 func clear_items():
 	clear()
+
+func get_res_path()->String:
+	return "res://scenes/ModResources/item_map.tscn"
+
+func get_data()->Dictionary:
+	var dic = super()
+	dic["scale"] = scale
+	return dic
+
+func set_data(dic:Dictionary):
+	super(dic)
+	scale = dic.get("scale", 1)

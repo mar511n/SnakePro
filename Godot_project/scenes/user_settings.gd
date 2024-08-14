@@ -17,6 +17,8 @@ const input_options:Dictionary = {0:["rel","relative"],1:["abs","absolute"]}
 @onready var vflow:VFlowContainer = $ScrollContainer/VFlowContainer
 @onready var scrollCont:ScrollContainer = $ScrollContainer
 @onready var shaderBtn:CheckButton = $ScrollContainer/VFlowContainer/Shader
+@onready var captureReplayBtn:CheckButton = $ScrollContainer/VFlowContainer/CaptureReplay
+@onready var mainMultiScreenBtn:CheckButton = $ScrollContainer/VFlowContainer/MultiMainScreen
 
 #@export var min_width:int = -1
 
@@ -51,6 +53,8 @@ func show_popup()->void:
 	SplitScreenOpt.select(Global.config.get_value(Global.config_user_settings_sec,"splitscreenMode", 0))
 	MusicVolSl.set_prop_value(Global.config.get_value(Global.config_user_settings_sec,"musicvolume", 100.0))
 	shaderBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"useShader", true))
+	captureReplayBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"captureReplay", true))
+	mainMultiScreenBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"mainMultiplayerScreen", false))
 	visible = true
 
 func make_user_settings_dict() -> Dictionary:
@@ -64,6 +68,8 @@ func make_user_settings_dict() -> Dictionary:
 	us["splitscreenMode"] = SplitScreenOpt.selected
 	us["musicvolume"] = MusicVolSl.value
 	us["useShader"] = shaderBtn.button_pressed
+	us["captureReplay"] = captureReplayBtn.button_pressed
+	us["mainMultiplayerScreen"] = mainMultiScreenBtn.button_pressed
 	return us
 func make_player_info_dict() -> Dictionary:
 	var pli:Dictionary = {}
@@ -112,4 +118,10 @@ func _on_music_volume_drag_ended(_value_changed: bool) -> void:
 	_on_settings_changed()
 
 func _on_shader_toggled(_toggled_on: bool) -> void:
+	_on_settings_changed()
+
+func _on_capture_replay_toggled(toggled_on: bool) -> void:
+	_on_settings_changed()
+
+func _on_multi_main_screen_toggled(toggled_on: bool) -> void:
 	_on_settings_changed()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://6mp7bp17ft6w"]
+[gd_scene load_steps=33 format=3 uid="uid://6mp7bp17ft6w"]
 
 [ext_resource type="Texture2D" uid="uid://cvdwlujqq8r81" path="res://assets/Images/UI/WinBack.png" id="1_biflu"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_i16v8"]
@@ -13,9 +13,11 @@
 [ext_resource type="PackedScene" uid="uid://dxobh2gxukmej" path="res://scenes/action_remapper.tscn" id="6_dxjc5"]
 [ext_resource type="Texture2D" uid="uid://c0rgficet05i6" path="res://assets/MatIcons/settings_applications_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_sfhnf"]
 [ext_resource type="Texture2D" uid="uid://c7k8nkeora5ht" path="res://assets/MatIcons/logout_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_yvnxy"]
+[ext_resource type="Texture2D" uid="uid://idto6fgb1vm3" path="res://assets/MatIcons/replay_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="7_8jax7"]
 [ext_resource type="Texture2D" uid="uid://cb4ypsmhduaep" path="res://assets/MatIcons/home_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_fl2qb"]
 [ext_resource type="Texture2D" uid="uid://b4kqbqxhfpdrm" path="res://assets/MatIcons/logout_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_q6i58"]
 [ext_resource type="Texture2D" uid="uid://bsslav3tq3ad4" path="res://assets/MatIcons/settings_applications_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_sbrbm"]
+[ext_resource type="Texture2D" uid="uid://dxxecrbjub4o1" path="res://assets/MatIcons/replay_24dp_E8EAED_FILL0_wght700_GRAD200_opsz24.svg" id="8_fkynm"]
 [ext_resource type="PackedScene" uid="uid://cyc3y0utjf0lp" path="res://scenes/connection_status.tscn" id="8_lu7j6"]
 [ext_resource type="PackedScene" uid="uid://bractynrlw3vs" path="res://scenes/connection_popup.tscn" id="8_q25uu"]
 [ext_resource type="Texture2D" uid="uid://bjw61wbk3q8q2" path="res://assets/MatIcons/close_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="10_usqbb"]
@@ -27,13 +29,13 @@
 
 [sub_resource type="ImageTexture" id="ImageTexture_ggknu"]
 
+[sub_resource type="ImageTexture" id="ImageTexture_cg561"]
+
 [sub_resource type="ImageTexture" id="ImageTexture_lpa1i"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_cfn6u"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_5b0h3"]
-
-[sub_resource type="ImageTexture" id="ImageTexture_cg561"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_1gkq2"]
 
@@ -56,11 +58,10 @@ anchor_bottom = 1.0
 offset_right = -137.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 3
+current_tab = 0
 tabs_visible = false
 
 [node name="Main" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -146,6 +147,7 @@ grow_horizontal = 2
 text = "Game settings"
 
 [node name="Control Settings" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -186,6 +188,14 @@ tooltip_text = "home"
 texture_normal = ExtResource("6_8cisp")
 texture_pressed = ExtResource("7_fl2qb")
 texture_disabled = SubResource("ImageTexture_ggknu")
+stretch_mode = 3
+
+[node name="WatchReplay" type="TextureButton" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "start game"
+texture_normal = ExtResource("7_8jax7")
+texture_pressed = ExtResource("8_fkynm")
+texture_disabled = SubResource("ImageTexture_cg561")
 stretch_mode = 3
 
 [node name="UserSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -269,6 +279,7 @@ grow_vertical = 1
 [connection signal="on_settings_changed" from="TabContainer/Game Settings/GameSettings" to="." method="_on_game_settings_on_settings_changed"]
 [connection signal="remap_done" from="TabContainer/Control Settings/ActionRemapper" to="." method="_on_action_remapper_remap_done"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Home" to="." method="_on_home_pressed"]
+[connection signal="pressed" from="Buttons/VBoxContainer/WatchReplay" to="." method="_on_watch_replay_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/UserSettings" to="." method="_on_user_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/GameSettings" to="." method="_on_game_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/ControlSettings" to="." method="_on_control_settings_pressed"]
