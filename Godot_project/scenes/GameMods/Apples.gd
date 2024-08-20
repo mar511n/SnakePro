@@ -32,7 +32,7 @@ func on_game_ready(g:InGame, g_is_server:bool):
 	if is_server:
 		game.module_vars["AppleCount"] = int(Global.get_property(Global.config_game_mod_props_sec, "AppleCount", 10))
 		game.module_vars["ApplePositions"] = []
-		game.module_vars["GhostApplePositions"] = []
+		game.module_vars["GhostApplePositions"] = {}
 		game.module_vars["AppleRedrawCounter"] = 0
 
 # spawn apples here
@@ -47,18 +47,18 @@ func spawn_apple():
 	var pos = Vector2i.ZERO
 	for i in range(AppleSpawnTries):
 		pos = Vector2i(randi_range(0,game.coll_map.size_x),randi_range(0,game.coll_map.size_y))
-		if not pos in game.module_vars["ApplePositions"] and not pos in game.module_vars["GhostApplePositions"] and not pos in game.module_vars["IngameItems"].keys():
+		if not pos in game.module_vars["ApplePositions"] and not game.module_vars["GhostApplePositions"].has(pos) and not pos in game.module_vars["IngameItems"].keys():
 			if len(game.tile_check_collisions(pos, [Global.scl.alive,Global.scl.dead,Global.scl.wall],1))==0:
 				break
 	game.module_vars["ApplePositions"].append(pos)
 	game.module_vars["AppleRedrawCounter"] += 1
 
 @rpc("any_peer", "call_local", "reliable")
-func ghostify_apple(pos:Vector2i):
+func ghostify_apple(pos:Vector2i, caused_by_id=1):
 	var idx = game.module_vars["ApplePositions"].find(pos)
 	if idx >= 0:
 		game.module_vars["ApplePositions"].remove_at(idx)
-		game.module_vars["GhostApplePositions"].append(pos)
+		game.module_vars["GhostApplePositions"][pos] = caused_by_id
 		game.module_vars["AppleRedrawCounter"] += 1
 		RottenApples[pos] = AppleRottTime
 
@@ -70,16 +70,15 @@ func remove_apple(pos:Vector2i):
 		game.module_vars["AppleRedrawCounter"] += 1
 		spawn_apple()
 	else:
-		idx = game.module_vars["GhostApplePositions"].find(pos)
-		if idx >= 0:
-			game.module_vars["GhostApplePositions"].remove_at(idx)
+		if game.module_vars["GhostApplePositions"].has(pos):
+			game.module_vars["GhostApplePositions"].erase(pos)
 			game.module_vars["AppleRedrawCounter"] += 1
 			spawn_apple()
 
 func redraw_apples():
 	apple_drawer.clear_apples()
 	apple_drawer.draw_apples(game.module_vars["ApplePositions"], false)
-	apple_drawer.draw_apples(game.module_vars["GhostApplePositions"], true)
+	apple_drawer.draw_apples(game.module_vars["GhostApplePositions"].keys(), true)
 
 # gets all collisions that happened and returns which ones are handled
 # colls is dictionary peer_id -> [[Global.collision, infos],...]
@@ -102,8 +101,8 @@ func check_apple_collision_for_local_player():
 				player.fett += AppleNutrition
 				remove_apple.rpc_id(1,head)
 			else:
-				ghostify_apple.rpc_id(1,head)
-		elif head in game.module_vars["GhostApplePositions"]:
+				ghostify_apple.rpc_id(1,head,player.peer_id)
+		elif game.module_vars["GhostApplePositions"].has(head):
 			if player.module_vars["PlayerIsAlive"]:
 				player.EatingRottenSound.play()
 				#Global.Print("fett -= %s" % GhostAppleDamage, 7)
@@ -112,7 +111,7 @@ func check_apple_collision_for_local_player():
 				if survives:
 					player.remove_tiles_from_tail(GhostAppleDamage)
 				else:
-					player.hit.rpc([Global.hit_causes.APPLE_DMG, {}])
+					player.hit.rpc([Global.hit_causes.APPLE_DMG, {"caused_by_id":game.module_vars["GhostApplePositions"][head]}])
 				remove_apple.rpc_id(1,head)
 
 func on_game_physics_process(delta):

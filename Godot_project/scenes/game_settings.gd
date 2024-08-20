@@ -274,12 +274,15 @@ func update_map_list(gs:Dictionary)->void:
 	var mapdir:DirAccess = DirAccess.open(Global.maps_dir)
 	mapPaths_b.clear()
 	var id:int = 0
+	var files = []
 	for map:String in mapdir.get_files():
 		map = map.trim_suffix(".remap")
-		mapPaths_b.add_item(map, id)
-		if map == gs.get("mapPath", Global.default_game_params["mapPath"]).split("/")[-1]:
-			mapPaths_b.selected = id
-		id += 1
+		if map.ends_with(".tscn") and not map in files:
+			files.append(map)
+			mapPaths_b.add_item(map, id)
+			if map == gs.get("mapPath", Global.default_game_params["mapPath"]).split("/")[-1]:
+				mapPaths_b.selected = id
+			id += 1
 
 func make_settings_dict() -> Dictionary:
 	var gs:Dictionary = {}

@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cfr8jj4fbggxj"]
+[gd_scene load_steps=11 format=3 uid="uid://cfr8jj4fbggxj"]
 
 [ext_resource type="Script" path="res://scenes/game_viewer.gd" id="1_anmje"]
 [ext_resource type="Texture2D" uid="uid://dvoujj10xcjeg" path="res://assets/MatIcons/play_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="2_8iap7"]
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="2_q0stn"]
 [ext_resource type="Texture2D" uid="uid://cc2pcwlfola66" path="res://assets/MatIcons/pause_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="3_4xs6o"]
 [ext_resource type="Texture2D" uid="uid://bgxv2hrcj6kqw" path="res://assets/MatIcons/arrow_back_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="4_ckvet"]
 [ext_resource type="Texture2D" uid="uid://bf1v5r2t18r0e" path="res://assets/MatIcons/arrow_back_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="5_ekpnd"]
@@ -31,6 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_q0stn")
 
 [node name="TimeSlider" type="HSlider" parent="GUI/Control"]
 layout_mode = 1
@@ -59,8 +61,8 @@ texture_pressed = ExtResource("5_ekpnd")
 [node name="PlayBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
 layout_mode = 2
 toggle_mode = true
-texture_normal = ExtResource("2_8iap7")
-texture_pressed = ExtResource("3_4xs6o")
+texture_normal = ExtResource("3_4xs6o")
+texture_pressed = ExtResource("2_8iap7")
 
 [node name="SaveBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
 layout_mode = 2
@@ -72,18 +74,13 @@ layout_mode = 2
 texture_normal = ExtResource("8_x5i7a")
 texture_pressed = ExtResource("9_y8eug")
 
-[node name="FileDialog" type="FileDialog" parent="."]
-title = "Open a File"
-initial_position = 2
-size = Vector2i(500, 600)
-ok_button_text = "Open"
-file_mode = 0
-access = 1
-root_subfolder = "replays"
+[node name="ReplaysBtn" type="OptionButton" parent="GUI/Control/HBoxContainer"]
+visible = false
+layout_mode = 2
 
 [connection signal="value_changed" from="GUI/Control/TimeSlider" to="." method="_on_time_slider_value_changed"]
 [connection signal="pressed" from="GUI/Control/HBoxContainer/BackBtn" to="." method="_on_back_btn_pressed"]
 [connection signal="toggled" from="GUI/Control/HBoxContainer/PlayBtn" to="." method="_on_play_btn_toggled"]
 [connection signal="pressed" from="GUI/Control/HBoxContainer/SaveBtn" to="." method="_on_save_btn_pressed"]
 [connection signal="pressed" from="GUI/Control/HBoxContainer/LoadBtn" to="." method="_on_load_btn_pressed"]
-[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="item_selected" from="GUI/Control/HBoxContainer/ReplaysBtn" to="." method="_on_replays_btn_item_selected"]

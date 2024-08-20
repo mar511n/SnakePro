@@ -59,7 +59,7 @@ func spawn_item():
 	var pos = Vector2i.ZERO
 	for i in range(ItemSpawnTries):
 		pos = Vector2i(randi_range(0,game.coll_map.size_x-1),randi_range(0,game.coll_map.size_y-1))
-		if not pos in game.module_vars["ApplePositions"] and not pos in game.module_vars["GhostApplePositions"] and not pos in game.module_vars["IngameItems"].keys():
+		if not pos in game.module_vars["ApplePositions"] and not game.module_vars["GhostApplePositions"].has(pos) and not pos in game.module_vars["IngameItems"].keys():
 			if len(game.tile_check_collisions(pos, [Global.scl.alive,Global.scl.dead,Global.scl.wall],1))==0:
 				break
 	game.module_vars["IngameItems"][pos] = get_random_item_code()

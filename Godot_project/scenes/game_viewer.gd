@@ -5,7 +5,8 @@ extends Node2D
 @onready var time_slider = $GUI/Control/TimeSlider
 @onready var play_btn = $GUI/Control/HBoxContainer/PlayBtn
 @onready var cam = $Camera2D
-@onready var file_dialog = $FileDialog
+#@onready var file_dialog = $FileDialog
+@onready var replay_btn = $GUI/Control/HBoxContainer/ReplaysBtn
 
 var timer = 0
 var next_gsi = 0
@@ -93,7 +94,8 @@ func _on_time_slider_value_changed(value: float) -> void:
 
 func _on_save_btn_pressed() -> void:
 	create_replay_dir_if_needed()
-	var fname = Time.get_datetime_string_from_system()
+	var fname = Time.get_datetime_string_from_system().replace(":","_")
+	fname += ".dat"
 	var file = FileAccess.open(Global.replay_dir_path+fname,FileAccess.WRITE)
 	file.store_var([Global.static_gamestate, Global.variable_gamestates])
 	file.close()
@@ -106,10 +108,15 @@ func create_replay_dir_if_needed():
 	DirAccess.make_dir_absolute(Global.replay_dir_path)
 
 func _on_load_btn_pressed() -> void:
-	file_dialog.show()
-	time_slider.call_deferred("grab_focus")
+	set_replay_btn()
+	replay_btn.visible = true
+	#file_dialog.show()
+	#time_slider.call_deferred("grab_focus")
 
 func _on_file_dialog_file_selected(path: String) -> void:
+	load_replay(path)
+
+func load_replay(path:String):
 	Global.Print("loading replay %s ..." % path.trim_prefix(Global.replay_dir_path), 6)
 	var file = FileAccess.open(path,FileAccess.READ)
 	var gs = file.get_var()
@@ -117,3 +124,18 @@ func _on_file_dialog_file_selected(path: String) -> void:
 	Global.static_gamestate = gs[0]
 	Global.variable_gamestates = gs[1]
 	_ready()
+
+func set_replay_btn():
+	replay_btn.clear()
+	replay_btn.add_item("")
+	replay_btn.select(0)
+	var dir = DirAccess.open(Global.replay_dir_path)
+	for file in dir.get_files():
+		replay_btn.add_item(file)
+
+func _on_replays_btn_item_selected(index: int) -> void:
+	if index > 0:
+		var file = replay_btn.get_item_text(index)
+		load_replay(Global.replay_dir_path+file)
+		replay_btn.visible = false
+		time_slider.call_deferred("grab_focus")

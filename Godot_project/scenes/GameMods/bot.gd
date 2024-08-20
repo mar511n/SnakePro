@@ -168,7 +168,7 @@ func check_collision(cmap:CollisionMap, tiles:Array):
 			var pl_head = game.playerlist[ci-1].get_head_tile()
 			if btile == pl_head:
 				if ci-1 != owner_peer_id or alive_time < max_alive_time-max_length*update_period:
-					game.playerlist[ci-1].hit.rpc([Global.hit_causes.BOT, {"owner":owner_peer_id}])
+					game.playerlist[ci-1].hit.rpc([Global.hit_causes.BOT, {"caused_by_id":owner_peer_id}])
 			if btile == bot_head:
 				#remove_bot()
 				remove_bot.rpc()

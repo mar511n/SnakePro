@@ -99,6 +99,12 @@ func _physics_process(delta):
 	for mod in module_node.get_children():
 		mod.on_player_physics_process(delta)
 
+func find_module(modName:String):
+	for mod in modules:
+		if mod.name == modName:
+			return mod
+	return null
+
 # on server&client:
 # cause is array[2] with first entry of hit_causes and second entry additional infos 
 @rpc("any_peer","call_local","reliable")

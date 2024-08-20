@@ -3,6 +3,9 @@ extends PlModBase
 var recheck_alive_pl_timer = 0
 var recheck_alive_pl = false
 
+var player_kills = []
+var player_deaths = []
+
 func _init():
 	name = "Basic hit handler"
 	set_meta("name", "Basic hit handler")
@@ -18,7 +21,14 @@ func on_player_ready():
 	pl.CollMasks.append(Global.scl.wall)
 
 # this is called on every client if any player dies
-func on_player_hit(_cause:Array):
+func on_player_hit(cause:Array):
+	if not Global.player_stats.has(pl.peer_id):
+		Global.player_stats[pl.peer_id] = {"kills":[],"deaths":[]}
+	Global.player_stats[pl.peer_id]["deaths"].append(cause)
+	if cause[1].has("caused_by_id"):
+		if not Global.player_stats.has(cause[1]["caused_by_id"]):
+			Global.player_stats[cause[1]["caused_by_id"]] = {"kills":[],"deaths":[]}
+		Global.player_stats[cause[1]["caused_by_id"]]["kills"].append([pl.peer_id,cause[0],cause[1]])
 	#queued_for_dying = true
 	set_player_dead(true)
 	pl.reset_snake_tiles()

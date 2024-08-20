@@ -84,7 +84,7 @@ func check_collision():
 				if sn_len >= headshot_survive_length:
 					game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,sn_len-2)
 				else:
-					game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"owner":owner_peer_id}])
+					game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"caused_by_id":owner_peer_id}])
 
 @rpc("authority", "call_local", "reliable")
 func remove_bullet():

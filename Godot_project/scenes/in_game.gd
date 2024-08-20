@@ -70,12 +70,11 @@ func check_snake_collisions()->void:
 		var colld:Array = colls[peer_id]
 		if colld[0] != Global.collision.NO:
 			if colld[0] == Global.collision.PLAYERHEAD:
-				#playerlist[colld[1]].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERHEAD,"peer_id":peer_id}])
-				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERHEAD,"peer_id":colld[1]}])
+				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERHEAD,"caused_by_id":colld[1]}])
 			elif colld[0] == Global.collision.WALL:
 				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.WALL,"wall_v":colld[1]}])
 			elif colld[0] == Global.collision.PLAYERBODY:
-				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERBODY,"peer_id":colld[1]}])
+				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERBODY,"caused_by_id":colld[1]}])
 
 # on server:
 # -> check collisions of tile with:

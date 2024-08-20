@@ -3,7 +3,7 @@ extends Node
 const debug_toast_bg:Color = Color(0, 0, 0, 0.7)
 const debug_toast_text:Color = Color(1, 1, 1, 1)
 const max_snake_path_length:int = 200
-const debugging_on:bool = true
+const debugging_on:bool = false
 
 const group_name_player_item:StringName = "PlayerItem"
 
@@ -64,18 +64,20 @@ var config:ConfigFile = ConfigFile.new()
 var inputconfig:ConfigFile = ConfigFile.new()
 
 enum hit_causes {
-	COLLISION,
-	APPLE_DMG,
-	BULLET,
-	BOT
+	COLLISION, # infos: {"type":collision, "caused_by_id":int / "wall_v":int}
+	APPLE_DMG, # infos: {"caused_by_id":int}
+	BULLET,    # infos: {"caused_by_id":int}
+	BOT        # infos: {"caused_by_id":int}
 }
+const hit_cause_names = ["collision", "apple damage", "bullet", "bot"]
 
 enum collision {
 	NO,
-	WALL,
+	WALL, 
 	PLAYERBODY,
 	PLAYERHEAD
 }
+const collision_names = ["", "wall", "playerbody", "playerhead"]
 
 enum scl {
 	alive,
@@ -164,6 +166,9 @@ const static_graphic_group:StringName = "StaticGraphical"
 const res_path_func_name:StringName = "get_res_path"
 const get_data_func_name:StringName = "get_data"
 const set_data_func_name:StringName = "set_data"
+
+# peer_id -> {}
+var player_stats = {}
 
 # the static gamestate at the start
 var static_gamestate:Dictionary
