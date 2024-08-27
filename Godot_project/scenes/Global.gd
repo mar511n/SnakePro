@@ -67,7 +67,8 @@ enum hit_causes {
 	COLLISION, # infos: {"type":collision, "caused_by_id":int / "wall_v":int}
 	APPLE_DMG, # infos: {"caused_by_id":int}
 	BULLET,    # infos: {"caused_by_id":int}
-	BOT        # infos: {"caused_by_id":int}
+	BOT,       # infos: {"caused_by_id":int}
+	FART,      # infos: {"caused_by_id":int}
 }
 const hit_cause_names = ["collision", "apple damage", "bullet", "bot"]
 
