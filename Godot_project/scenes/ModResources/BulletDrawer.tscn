@@ -4,40 +4,36 @@
 [ext_resource type="Texture2D" uid="uid://f7o7220yodro" path="res://assets/Images/Items/shoot_s.png" id="2_jedjn"]
 [ext_resource type="Script" path="res://scenes/ModResources/BulletDrawer.gd" id="3_5l2ql"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sal8b"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8d5qu"]
 texture = ExtResource("1_i1iak")
-texture_region_size = Vector2i(550, 550)
+texture_region_size = Vector2i(60, 60)
 0:0/next_alternative_id = 4
 0:0/0 = 0
 0:0/1 = 1
-0:0/1/flip_h = true
 0:0/1/flip_v = true
 0:0/2 = 2
-0:0/2/flip_v = true
 0:0/2/transpose = true
 0:0/3 = 3
 0:0/3/flip_h = true
 0:0/3/transpose = true
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ugos"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_imsu2"]
 texture = ExtResource("2_jedjn")
-texture_region_size = Vector2i(550, 550)
+texture_region_size = Vector2i(60, 60)
 0:0/next_alternative_id = 4
 0:0/0 = 0
 0:0/1 = 1
-0:0/1/flip_h = true
 0:0/1/flip_v = true
 0:0/2 = 2
-0:0/2/flip_v = true
 0:0/2/transpose = true
 0:0/3 = 3
 0:0/3/flip_h = true
 0:0/3/transpose = true
 
 [sub_resource type="TileSet" id="TileSet_es0fy"]
-tile_size = Vector2i(275, 275)
-sources/0 = SubResource("TileSetAtlasSource_sal8b")
-sources/1 = SubResource("TileSetAtlasSource_7ugos")
+tile_size = Vector2i(60, 60)
+sources/0 = SubResource("TileSetAtlasSource_8d5qu")
+sources/1 = SubResource("TileSetAtlasSource_imsu2")
 
 [node name="BulletDrawer" type="TileMap" groups=["VariableGraphical"]]
 tile_set = SubResource("TileSet_es0fy")

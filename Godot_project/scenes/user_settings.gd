@@ -120,8 +120,8 @@ func _on_music_volume_drag_ended(_value_changed: bool) -> void:
 func _on_shader_toggled(_toggled_on: bool) -> void:
 	_on_settings_changed()
 
-func _on_capture_replay_toggled(toggled_on: bool) -> void:
+func _on_capture_replay_toggled(_toggled_on: bool) -> void:
 	_on_settings_changed()
 
-func _on_multi_main_screen_toggled(toggled_on: bool) -> void:
+func _on_multi_main_screen_toggled(_toggled_on: bool) -> void:
 	_on_settings_changed()

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://di32gc16xjasi"]
+
+[ext_resource type="Texture2D" uid="uid://j44bnsusq460" path="res://assets/Images/Items/fart_A.png" id="1_4egev"]
+[ext_resource type="Texture2D" uid="uid://dej81mjg7bllf" path="res://assets/Images/Items/fart_A_G.png" id="2_uoidr"]
+
+[node name="FartSprite" type="Node2D"]
+visible = false
+
+[node name="SpriteN" type="Sprite2D" parent="."]
+texture = ExtResource("1_4egev")
+
+[node name="SpriteG" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_uoidr")

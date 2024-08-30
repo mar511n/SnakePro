@@ -23,6 +23,7 @@ var peer_id = 0
 @onready var ReviveSound = $ReviveSound
 @onready var SpeedSound = $SpeedSound
 @onready var ShootingSound = $ShootingSound
+@onready var FartSound = $FartSound
 var sn_drawer_path : NodePath
 var sn_drawer : TileMap
 var startPos : Vector2
@@ -81,8 +82,8 @@ func _process(delta):
 			#global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
 		if is_main_mul_screen:
 			var mean_pos = Vector2.ZERO
-			for peer_id in IG.playerlist:
-				mean_pos += IG.playerlist[peer_id].global_position
+			for pid in IG.playerlist:
+				mean_pos += IG.playerlist[pid].global_position
 			mean_pos /= float(len(IG.playerlist))
 			cam_node.global_position = mean_pos
 	for mod in module_node.get_children():

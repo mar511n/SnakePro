@@ -91,11 +91,11 @@ func on_game_physics_process(delta):
 						next_dir = dir_from_to(tiles[-1],target)
 				else:
 					next_dir = dir_from_to(tiles[-1],target)
-				
-				game.module_vars_rapid["BotSnake"+str(bot_id)].append(tiles[-1]+next_dir)
-				while len(game.module_vars_rapid["BotSnake"+str(bot_id)]) > max_length:
-					game.module_vars_rapid["BotSnake"+str(bot_id)].pop_front()
-				check_collision(cmap_snakes, get_tiles())
+				if next_dir != Vector2i.ZERO:
+					game.module_vars_rapid["BotSnake"+str(bot_id)].append(tiles[-1]+next_dir)
+					while len(game.module_vars_rapid["BotSnake"+str(bot_id)]) > max_length:
+						game.module_vars_rapid["BotSnake"+str(bot_id)].pop_front()
+					check_collision(cmap_snakes, get_tiles())
 			
 	check_redraw()
 

@@ -22,6 +22,10 @@ func reset_game_stats():
 @rpc("any_peer", "call_local", "reliable")
 func set_game_stats(key:Variant, value:Variant):
 	game_stats[key] = value
+	if key == "Winner":
+		if not Global.player_stats.has(value):
+			Global.player_stats[value] = {"kills":[],"deaths":[],"wins":0}
+		Global.player_stats[value]["wins"] += 1
 
 # contains info of local player
 # name
@@ -82,9 +86,11 @@ func player_info_update(peer_id:int, pl_info:Dictionary)->void:
 	player_info_updated.emit(peer_id, pl_info)
 
 @rpc("authority","call_local", "reliable")
-func load_scene(scene_path:String)->void:
+func load_scene(scene_path:String,game_finished=false)->void:
 	#Global.Print("loading scene: %s" % scene_path)
 	#on_spawn_scene.emit(scene_path)
+	if game_finished:
+		Global.player_stats_on_game_finished()
 	get_tree().change_scene_to_file(scene_path)
 
 # Every peer will call this when they have loaded the game scene.

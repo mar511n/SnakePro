@@ -72,7 +72,7 @@ func check_snake_collisions()->void:
 			if colld[0] == Global.collision.PLAYERHEAD:
 				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERHEAD,"caused_by_id":colld[1]}])
 			elif colld[0] == Global.collision.WALL:
-				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.WALL,"wall_v":colld[1]}])
+				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.WALL,"wall_v":colld[1],"caused_by_id":multiplayer.get_unique_id()}])
 			elif colld[0] == Global.collision.PLAYERBODY:
 				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERBODY,"caused_by_id":colld[1]}])
 
@@ -320,14 +320,15 @@ func pause_game(pause, set_gui=true):
 # -> loads the main menu (locally or for all peers) and resets networking if requested
 func return_to_main_menu(reset_net=false, all_peers=false):
 	#Global.Print("loading main_menu: %s" % Global.main_menu_path)
+	
 	if all_peers:
 		#get_tree().call_group("Synchronizer", "free")
 		#Lobby.scene_spawner.spawn(Global.main_menu_path)
-		Lobby.load_scene.rpc(Global.main_menu_path)
+		Lobby.load_scene.rpc(Global.main_menu_path,true)
 	else:
 		if reset_net:
 			Lobby.reset_network()
-		Lobby.load_scene(Global.main_menu_path)
+		Lobby.load_scene(Global.main_menu_path,true)
 
 # on server/client:
 # -> remove player from SceneTree and playerlist

@@ -8,14 +8,14 @@ var item_counter = 0
 const items_path = "res://assets/Images/Items/"
 const item_code_to_texture = {
 	"baseitem":preload("res://assets/Images/Items/unknown.png"),
-	"bomb":preload("res://assets/Images/Items/bomb.png"),
+	#"bomb":preload("res://assets/Images/Items/bomb.png"),
 	"bot":preload("res://assets/Images/Items/bot.png"),
 	"fart":preload("res://assets/Images/Items/fart.png"),
 	"shot":preload("res://assets/Images/Items/laser.png"),
 	"speed":preload("res://assets/Images/Items/speed.png"),
 	"revive":preload("res://assets/Images/Items/revive.png"),
 	"baseitem_g":preload("res://assets/Images/Items/unknown.png"),
-	"bomb_g":preload("res://assets/Images/Items/bomb_G.png"),
+	#"bomb_g":preload("res://assets/Images/Items/bomb_G.png"),
 	"bot_g":preload("res://assets/Images/Items/bot_G.png"),
 	"fart_g":preload("res://assets/Images/Items/fart_G.png"),
 	"shot_g":preload("res://assets/Images/Items/laser_G.png"),

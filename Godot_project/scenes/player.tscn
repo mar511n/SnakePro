@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dffji00mprodh"]
+[gd_scene load_steps=40 format=3 uid="uid://dffji00mprodh"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_gv0ea"]
 [ext_resource type="Texture2D" uid="uid://bj1hqxypsq80v" path="res://assets/MatIcons/add_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="2_ure4r"]
@@ -24,6 +24,10 @@
 [ext_resource type="AudioStream" uid="uid://c1mtaskelao2y" path="res://assets/Sounds/Shooting/1.wav" id="22_kabyf"]
 [ext_resource type="AudioStream" uid="uid://d13bmdhlg47pn" path="res://assets/Sounds/Shooting/2.wav" id="23_fsu32"]
 [ext_resource type="AudioStream" uid="uid://ukjw7s8dea7i" path="res://assets/Sounds/Shooting/3.wav" id="24_hhtwo"]
+[ext_resource type="AudioStream" uid="uid://657r4r24eln1" path="res://assets/Sounds/Farting/1.wav" id="25_4bga1"]
+[ext_resource type="AudioStream" uid="uid://bwtxdgs17kfgo" path="res://assets/Sounds/Farting/2.wav" id="26_u66ef"]
+[ext_resource type="AudioStream" uid="uid://bgyn373xladv6" path="res://assets/Sounds/Farting/3.wav" id="27_2pdh4"]
+[ext_resource type="AudioStream" uid="uid://d1y2btfkiwiw7" path="res://assets/Sounds/Farting/4.wav" id="28_jn5df"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqkbk"]
 properties/0/path = NodePath(".:tiles")
@@ -95,6 +99,13 @@ stream_0/stream = ExtResource("22_kabyf")
 stream_1/stream = ExtResource("23_fsu32")
 stream_2/stream = ExtResource("24_hhtwo")
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ndnn5"]
+streams_count = 4
+stream_0/stream = ExtResource("25_4bga1")
+stream_1/stream = ExtResource("26_u66ef")
+stream_2/stream = ExtResource("27_2pdh4")
+stream_3/stream = ExtResource("28_jn5df")
+
 [node name="Player" type="Node2D" groups=["gameobj"]]
 script = ExtResource("1_gv0ea")
 
@@ -163,6 +174,10 @@ attenuation = 4.5
 
 [node name="ShootingSound" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_lvova")
+attenuation = 4.5
+
+[node name="FartSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_ndnn5")
 attenuation = 4.5
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]

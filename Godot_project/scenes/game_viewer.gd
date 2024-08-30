@@ -66,7 +66,7 @@ func clear_variable_gs():
 
 func set_to_time(time:float):
 	if len(Global.variable_gamestates) > 0:
-		print("setting time to %s" % time)
+		#print("setting time to %s" % time)
 		timer = time
 		next_gsi = 0
 		update_needed = true

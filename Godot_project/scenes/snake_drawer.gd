@@ -90,11 +90,15 @@ func reset(layers:int=1,layer_prop:Array=[])->void:
 			if layer_prop[layer_idx].has("enabled"):
 				set_layer_enabled(layer_idx,layer_prop[layer_idx]["enabled"])
 
+func _ready() -> void:
+	pass
+	#make_tileset()
+
 const expected_image_width:int = 800
 const expected_image_height:int = 640
 # creates snake_tileset.tres from snake_paths
 func make_tileset()->void:
-	var s_ids:Array = []
+	var s_ids:Dictionary = {}
 	tile_set = load(Global.snake_imgs_path+"snake_tileset_base.tres")
 	for source_id in Global.snake_tile_files:
 		var tss = tile_set.get_source(0).duplicate()
@@ -105,9 +109,10 @@ func make_tileset()->void:
 			tex = ImageTexture.create_from_image(tex_img)
 		tss.texture = tex
 		var sid = tile_set.add_source(tss)
-		s_ids.append(sid)
+		s_ids[sid] = Global.snake_tile_files[source_id]
 	tile_set.remove_source(0)
 	ResourceSaver.save(tile_set, Global.snake_imgs_path+"snake_tileset.tres")
+	print("Global.snake_tile_files should be set to")
 	print(s_ids)
 	#set_cell(0, Vector2i(0,0), sid, Vector2i(0,0), 0)
 

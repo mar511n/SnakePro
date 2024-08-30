@@ -21,6 +21,8 @@ const config_game_mods_sec:StringName = "GameModules"
 const config_game_mod_props_sec:StringName = "GameModuleProperties"
 # Dict with  action:[InputEvents]
 const config_inputmap_sec:StringName = "InputMap"
+# Dict with stats of local player
+const stats_sec:StringName = "Stats"
 # Dict with  "inputmethod":"rel"/"abs", "smoothCam": bool, "vsyncMode": 0/1/2/3 (enabled/disabled/adaptive/mailbox)
 const config_user_settings_sec:StringName = "UserSettings"
 
@@ -37,6 +39,7 @@ const game_modules_dir:String = "res://scenes/GameMods/"
 
 var config_path:String = "user://config.txt"
 var inputconfig_path:String = "user://inputconfig.txt"
+var stats_path:String = "user://stats.txt"
 var replay_dir_path:String = "user://replays/"
 
 const default_game_params:Dictionary = {
@@ -62,6 +65,7 @@ var min_prio_toast:int = 5
 var first_game_reset:bool = false
 var config:ConfigFile = ConfigFile.new()
 var inputconfig:ConfigFile = ConfigFile.new()
+var stats:ConfigFile = ConfigFile.new()
 
 enum hit_causes {
 	COLLISION, # infos: {"type":collision, "caused_by_id":int / "wall_v":int}
@@ -87,6 +91,7 @@ enum scl {
 }
 
 func _ready()->void:
+	
 	if debugging_on:
 		min_prio_toast = 5
 	else:
@@ -158,7 +163,7 @@ func Print(v:Variant, prio:int=4)->void:
 			"text": str(v),                     # Text (emojis can be used)
 			"bgcolor": debug_toast_bg,          # Background Color
 			"color": debug_toast_text,          # Text Color
-			"gravity": "bottom",                   # top or bottom
+			"gravity": "top",                   # top or bottom
 			"direction": "left"               # left or center or right
 		})
 
@@ -170,6 +175,21 @@ const set_data_func_name:StringName = "set_data"
 
 # peer_id -> {}
 var player_stats = {}
+
+func player_stats_on_game_finished():
+	#player_stats[-1] = player_stats.get(multiplayer.get_unique_id(), {})
+	save_own_player_stats()
+
+func player_stats_on_game_start():
+	# TODO: at game start every client tells every other client the stats of the local player
+	pass
+
+func save_own_player_stats():
+	set_section_dict(stats,stats_sec,player_stats.get(-1,{}))
+	stats.save(stats_path)
+
+func load_own_player_stats():
+	player_stats[-1] = Global.get_section_dict(stats,stats_sec,player_stats.get(-1,{}))
 
 # the static gamestate at the start
 var static_gamestate:Dictionary

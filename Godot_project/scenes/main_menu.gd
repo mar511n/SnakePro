@@ -13,6 +13,7 @@ extends Control
 @onready var UserSettings:UserSettingsPanel = $"TabContainer/User Settings/UserSettings"
 @onready var GameSettings:GameSettingsPanel = $"TabContainer/Game Settings/GameSettings"
 @onready var InputSettings:ControllSettingsPanel = $"TabContainer/Control Settings/ActionRemapper"
+@onready var Statistics:Panel = $TabContainer/Statistics/Statistics
 @onready var TabCont:TabContainer = $TabContainer
 @onready var ConnStat:ConnectionStatusTexture = $ConnectionStatus
 
@@ -51,6 +52,8 @@ func reset()->void:
 		Global.config_path = arguments["config"]
 	if arguments.has("inputconfig"):
 		Global.inputconfig_path = arguments["inputconfig"]
+	if arguments.has("stats"):
+		Global.stats_path = arguments["stats"]
 	Global.Print("loading config from %s" % Global.config_path, 6)
 	if Global.config.load(Global.config_path) != OK:
 		Global.Print("WARNING: no config found at %s" % Global.config_path, 7)
@@ -59,6 +62,11 @@ func reset()->void:
 		Global.Print("WARNING: no inputconfig found at %s" % Global.inputconfig_path, 7)
 	if Global.inputconfig.has_section(Global.config_inputmap_sec):
 		Global.set_inputmap_dict(Global.get_section_dict(Global.inputconfig,Global.config_inputmap_sec))
+	Global.Print("loading stats from %s" % Global.stats_path, 6)
+	if Global.stats.load(Global.stats_path) != OK:
+		Global.Print("WARNING: no stats found at %s" % Global.stats_path, 7)
+	if Global.stats.has_section(Global.stats_sec):
+		Global.load_own_player_stats()
 	
 	call_next_process_frame.append([update_stuff_from_usetts , [Global.config_get_section_dict(Global.config_user_settings_sec),true]])
 	randomize()
@@ -333,3 +341,8 @@ func _process(delta:float)->void:
 
 func _on_watch_replay_pressed() -> void:
 	Lobby.load_scene(Global.gameviewer_path)
+
+func _on_stats_pressed() -> void:
+	TabCont.current_tab = 4
+	Statistics.update_stats()
+	#InputSettings.button_update()

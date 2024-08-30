@@ -3,7 +3,7 @@ extends ItemModBase
 static var fart_num = 0
 
 var ItemFartDuration = 8.0
-var ItemFartRadius = 2
+var ItemFartRadius = 2.5
 var ItemFartDamage = 3.0
 
 var is_used = false
@@ -17,7 +17,7 @@ func _init(ghost=false):
 	set_meta("name", item_name)
 	set_meta("ItemFartProbability", [1,0,4,0.1])
 	set_meta("ItemFartDuration",[ItemFartDuration,0,20,0.5])
-	set_meta("ItemFartRadius",[ItemFartRadius,0,10,1])
+	set_meta("ItemFartRadius",[ItemFartRadius,0.5,10.5,1])
 	set_meta("ItemFartDamage",[ItemFartDamage,0,8,0.2])
 
 func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
@@ -30,9 +30,9 @@ func on_player_physics_process(_delta:float):
 	if !is_marked_for_removal and !is_used and Input.is_action_just_pressed("use_item"):
 		is_used = true
 		local_player_gui.set_item_ready(local_player_gui_id,false)
-		#pl.ShootingSound.play()
+		pl.FartSound.play()
 		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
-		pl.IG.start_module.rpc("fart.gd", [pl.peer_id,is_ghost,ItemFartDuration,ItemFartRadius+0.5,ItemFartDamage,pl.tiles[0],local_player_gui_id], "Fart_"+str(pl.peer_id)+"_"+str(fart_num))
+		pl.IG.start_module.rpc("fart.gd", [pl.peer_id,is_ghost,ItemFartDuration,ItemFartRadius,ItemFartDamage,pl.tiles[0],local_player_gui_id], "Fart_"+str(pl.peer_id)+"_"+str(fart_num))
 		fart_num += 1
 		mark_for_removal()
 	if is_marked_for_removal:

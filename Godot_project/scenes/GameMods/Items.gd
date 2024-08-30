@@ -62,7 +62,7 @@ func spawn_item():
 		if not pos in game.module_vars["ApplePositions"] and not game.module_vars["GhostApplePositions"].has(pos) and not pos in game.module_vars["IngameItems"].keys():
 			if len(game.tile_check_collisions(pos, [Global.scl.alive,Global.scl.dead,Global.scl.wall],1))==0:
 				break
-	game.module_vars["IngameItems"][pos] = get_random_item_code()
+	game.module_vars["IngameItems"][pos] = get_random_item_code()+"_g"
 	game.module_vars["ItemRedrawCounter"] += 1
 
 @rpc("any_peer", "call_local","reliable")

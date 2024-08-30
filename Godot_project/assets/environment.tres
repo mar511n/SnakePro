@@ -1,0 +1,8 @@
+[gd_resource type="Environment" format=3 uid="uid://cso3v2rbcamxu"]
+
+[resource]
+background_mode = 3
+tonemap_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+glow_hdr_scale = 0.0

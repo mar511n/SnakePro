@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://btrdu3mw4p7px"]
+
+[ext_resource type="Environment" uid="uid://cso3v2rbcamxu" path="res://assets/environment.tres" id="1_incyf"]
+[ext_resource type="Texture2D" uid="uid://dq6cged7oywrw" path="res://assets/Images/images.svg" id="1_x27si"]
+
+[node name="VisualTest" type="Node2D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_incyf")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Drawing" type="Sprite2D" parent="."]
+position = Vector2(1.52588e-05, 3.05176e-05)
+scale = Vector2(0.676407, 0.676407)
+texture = ExtResource("1_x27si")

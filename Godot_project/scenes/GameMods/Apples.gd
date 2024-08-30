@@ -111,7 +111,8 @@ func check_apple_collision_for_local_player():
 				if survives:
 					player.remove_tiles_from_tail(GhostAppleDamage)
 				else:
-					player.hit.rpc([Global.hit_causes.APPLE_DMG, {"caused_by_id":game.module_vars["GhostApplePositions"][head]}])
+					var cbid = game.module_vars["GhostApplePositions"][head]
+					player.hit.rpc([Global.hit_causes.APPLE_DMG, {"caused_by_id":cbid}])
 				remove_apple.rpc_id(1,head)
 
 func on_game_physics_process(delta):

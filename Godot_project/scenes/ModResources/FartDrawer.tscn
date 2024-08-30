@@ -1,19 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvdig8r72r0p4"]
+[gd_scene load_steps=3 format=3 uid="uid://bvdig8r72r0p4"]
 
-[ext_resource type="Texture2D" uid="uid://j44bnsusq460" path="res://assets/Images/Items/fart_A.png" id="1_737yp"]
 [ext_resource type="Script" path="res://scenes/ModResources/fart_drawer.gd" id="1_hqd2w"]
-[ext_resource type="Texture2D" uid="uid://dej81mjg7bllf" path="res://assets/Images/Items/fart_A_G.png" id="2_xnipq"]
+[ext_resource type="PackedScene" uid="uid://di32gc16xjasi" path="res://scenes/ModResources/fart_sprite.tscn" id="2_duhdv"]
 
-[node name="FartDrawer" type="Node2D"]
+[node name="FartDrawer" type="Node2D" groups=["VariableGraphical"]]
 z_index = -2
 script = ExtResource("1_hqd2w")
-
-[node name="FartSprite" type="Node2D" parent="."]
-visible = false
-
-[node name="SpriteN" type="Sprite2D" parent="FartSprite"]
-texture = ExtResource("1_737yp")
-
-[node name="SpriteG" type="Sprite2D" parent="FartSprite"]
-visible = false
-texture = ExtResource("2_xnipq")
+fartSpriteScene = ExtResource("2_duhdv")

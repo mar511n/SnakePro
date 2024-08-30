@@ -1,6 +1,6 @@
-[gd_scene load_steps=33 format=3 uid="uid://6mp7bp17ft6w"]
+[gd_scene load_steps=37 format=3 uid="uid://6mp7bp17ft6w"]
 
-[ext_resource type="Texture2D" uid="uid://cvdwlujqq8r81" path="res://assets/Images/UI/WinBack.png" id="1_biflu"]
+[ext_resource type="Texture2D" uid="uid://cvdwlujqq8r81" path="res://old_res/Images/UI/WinBack.png" id="1_biflu"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_i16v8"]
 [ext_resource type="Script" path="res://scenes/main_menu.gd" id="2_6byix"]
 [ext_resource type="Texture2D" uid="uid://dd6xe4apdlud7" path="res://assets/MatIcons/login_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="4_1aehp"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://c0rgficet05i6" path="res://assets/MatIcons/settings_applications_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_sfhnf"]
 [ext_resource type="Texture2D" uid="uid://c7k8nkeora5ht" path="res://assets/MatIcons/logout_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_yvnxy"]
 [ext_resource type="Texture2D" uid="uid://idto6fgb1vm3" path="res://assets/MatIcons/replay_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="7_8jax7"]
+[ext_resource type="PackedScene" uid="uid://bc2wn8f5my0q0" path="res://scenes/statistics.tscn" id="7_dmrd2"]
 [ext_resource type="Texture2D" uid="uid://cb4ypsmhduaep" path="res://assets/MatIcons/home_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_fl2qb"]
 [ext_resource type="Texture2D" uid="uid://b4kqbqxhfpdrm" path="res://assets/MatIcons/logout_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_q6i58"]
 [ext_resource type="Texture2D" uid="uid://bsslav3tq3ad4" path="res://assets/MatIcons/settings_applications_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="7_sbrbm"]
@@ -26,16 +27,20 @@
 [ext_resource type="Texture2D" uid="uid://c4snw0jedeqam" path="res://assets/MatIcons/sports_esports_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="14_rd4jv"]
 [ext_resource type="PackedScene" uid="uid://106bjfe7jhy2" path="res://scenes/user_settings.tscn" id="18_2jx18"]
 [ext_resource type="PackedScene" uid="uid://cop3iatxem278" path="res://scenes/game_settings.tscn" id="19_qw0xi"]
+[ext_resource type="Texture2D" uid="uid://4nfystimx6ja" path="res://assets/MatIcons/analytics_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="21_2w5kh"]
+[ext_resource type="Texture2D" uid="uid://ddyginewiylul" path="res://assets/MatIcons/analytics_24dp_E8EAED_FILL0_wght700_GRAD200_opsz24.svg" id="22_d30u4"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_ggknu"]
-
-[sub_resource type="ImageTexture" id="ImageTexture_cg561"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_lpa1i"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_cfn6u"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_5b0h3"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_cg561"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_g6p7x"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_1gkq2"]
 
@@ -55,13 +60,14 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -137.0
+offset_top = 136.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 4
 tabs_visible = false
 
 [node name="Main" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -70,11 +76,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -137.0
+offset_bottom = 136.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_biflu")
-expand_mode = 1
 
 [node name="PlayerList" type="RichTextLabel" parent="TabContainer/Main/Background"]
 layout_mode = 1
@@ -100,7 +105,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 77.0
-offset_right = -10.0
+offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -116,6 +121,7 @@ offset_right = 91.5
 offset_bottom = 57.0
 grow_horizontal = 2
 text = "User settings"
+horizontal_alignment = 1
 
 [node name="Game Settings" type="Control" parent="TabContainer"]
 visible = false
@@ -129,7 +135,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 77.0
-offset_right = -10.0
+offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -145,6 +151,7 @@ offset_right = 94.0
 offset_bottom = 57.0
 grow_horizontal = 2
 text = "Game settings"
+horizontal_alignment = 1
 
 [node name="Control Settings" type="Control" parent="TabContainer"]
 visible = false
@@ -156,30 +163,64 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -871.5
+offset_left = -940.0
 offset_top = 77.0
-offset_right = 881.5
-offset_bottom = 1060.0
+offset_right = 940.0
+offset_bottom = 924.0
 grow_horizontal = 2
+
+[node name="Label" type="Label" parent="TabContainer/Control Settings"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -94.0
+offset_top = 20.0
+offset_right = 94.0
+offset_bottom = 57.0
+grow_horizontal = 2
+text = "Input settings"
+horizontal_alignment = 1
+
+[node name="Statistics" type="Control" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 4
+
+[node name="Label" type="Label" parent="TabContainer/Statistics"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -94.0
+offset_top = 20.0
+offset_right = 94.0
+offset_bottom = 57.0
+grow_horizontal = 2
+text = "Statistics"
+horizontal_alignment = 1
+
+[node name="Statistics" parent="TabContainer/Statistics" instance=ExtResource("7_dmrd2")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 77.0
+offset_right = 1900.0
+offset_bottom = 924.0
 
 [node name="Buttons" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -137.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Buttons"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 136.0
+offset_bottom = 136.0
 grow_horizontal = 2
-grow_vertical = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_right = -137.0
+offset_bottom = 116.0
+grow_horizontal = 2
 alignment = 1
 
 [node name="Home" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -188,14 +229,6 @@ tooltip_text = "home"
 texture_normal = ExtResource("6_8cisp")
 texture_pressed = ExtResource("7_fl2qb")
 texture_disabled = SubResource("ImageTexture_ggknu")
-stretch_mode = 3
-
-[node name="WatchReplay" type="TextureButton" parent="Buttons/VBoxContainer"]
-layout_mode = 2
-tooltip_text = "start game"
-texture_normal = ExtResource("7_8jax7")
-texture_pressed = ExtResource("8_fkynm")
-texture_disabled = SubResource("ImageTexture_cg561")
 stretch_mode = 3
 
 [node name="UserSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -238,12 +271,28 @@ texture_pressed = ExtResource("7_q6i58")
 texture_disabled = SubResource("ImageTexture_5b0h3")
 stretch_mode = 3
 
+[node name="WatchReplay" type="TextureButton" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "watch replay"
+texture_normal = ExtResource("7_8jax7")
+texture_pressed = ExtResource("8_fkynm")
+texture_disabled = SubResource("ImageTexture_cg561")
+stretch_mode = 3
+
+[node name="Stats" type="TextureButton" parent="Buttons/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "statistics"
+texture_normal = ExtResource("21_2w5kh")
+texture_pressed = ExtResource("22_d30u4")
+texture_disabled = SubResource("ImageTexture_cg561")
+stretch_mode = 3
+
 [node name="StartGame" type="TextureButton" parent="Buttons/VBoxContainer"]
 layout_mode = 2
 tooltip_text = "start game"
 texture_normal = ExtResource("5_h2wa0")
 texture_pressed = ExtResource("6_c3u34")
-texture_disabled = SubResource("ImageTexture_cg561")
+texture_disabled = SubResource("ImageTexture_g6p7x")
 stretch_mode = 3
 
 [node name="QuitGame" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -268,10 +317,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_left = 1461.0
-offset_top = 10.0
-offset_right = 1773.0
-offset_bottom = 374.0
+offset_left = 1588.0
+offset_top = 156.0
+offset_right = 1900.0
+offset_bottom = 520.0
 grow_horizontal = 1
 grow_vertical = 1
 
@@ -279,12 +328,13 @@ grow_vertical = 1
 [connection signal="on_settings_changed" from="TabContainer/Game Settings/GameSettings" to="." method="_on_game_settings_on_settings_changed"]
 [connection signal="remap_done" from="TabContainer/Control Settings/ActionRemapper" to="." method="_on_action_remapper_remap_done"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Home" to="." method="_on_home_pressed"]
-[connection signal="pressed" from="Buttons/VBoxContainer/WatchReplay" to="." method="_on_watch_replay_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/UserSettings" to="." method="_on_user_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/GameSettings" to="." method="_on_game_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/ControlSettings" to="." method="_on_control_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/ConnectionSettings" to="." method="_on_connection_settings_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Disconnect" to="." method="_on_disconnect_pressed"]
+[connection signal="pressed" from="Buttons/VBoxContainer/WatchReplay" to="." method="_on_watch_replay_pressed"]
+[connection signal="pressed" from="Buttons/VBoxContainer/Stats" to="." method="_on_stats_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="host" from="ConnectionPopup" to="." method="_on_connection_popup_host"]

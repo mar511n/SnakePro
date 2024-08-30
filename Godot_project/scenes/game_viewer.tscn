@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://cfr8jj4fbggxj"]
+[gd_scene load_steps=12 format=3 uid="uid://cfr8jj4fbggxj"]
 
 [ext_resource type="Script" path="res://scenes/game_viewer.gd" id="1_anmje"]
 [ext_resource type="Texture2D" uid="uid://dvoujj10xcjeg" path="res://assets/MatIcons/play_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="2_8iap7"]
+[ext_resource type="Environment" uid="uid://cso3v2rbcamxu" path="res://assets/environment.tres" id="2_8ur7l"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="2_q0stn"]
 [ext_resource type="Texture2D" uid="uid://cc2pcwlfola66" path="res://assets/MatIcons/pause_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" id="3_4xs6o"]
 [ext_resource type="Texture2D" uid="uid://bgxv2hrcj6kqw" path="res://assets/MatIcons/arrow_back_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="4_ckvet"]
@@ -13,6 +14,9 @@
 
 [node name="GameViewer" type="Node2D"]
 script = ExtResource("1_anmje")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_8ur7l")
 
 [node name="Static" type="Node2D" parent="."]
 

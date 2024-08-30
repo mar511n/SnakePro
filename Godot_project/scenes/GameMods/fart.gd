@@ -13,7 +13,7 @@ var max_alive_time = 10.0
 var gui_id = 0
 
 var position = Vector2i.ZERO
-var radius : int = 2
+var radius : float = 2.5
 var coll_rect : Rect2i
 
 var active = true
@@ -72,7 +72,7 @@ func check_collision():
 	#if game.coll_map.collides_at(pos.x,pos.y) != 0:
 		#return
 	for peer_id in game.playerlist:
-		if peer_id != owner_peer_id and coll_rect.has_point(game.playerlist[peer_id].tiles[-1]):
+		if (is_ghost or peer_id != owner_peer_id) and coll_rect.has_point(game.playerlist[peer_id].tiles[-1]):
 			var survives = game.playerlist[peer_id].has_enough_tiles(1)
 			if survives:
 				game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,1)

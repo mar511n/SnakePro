@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bc2wn8f5my0q0"]
+
+[ext_resource type="Script" path="res://scenes/statistics.gd" id="1_r234p"]
+
+[node name="Statistics" type="Panel"]
+offset_right = 1844.0
+offset_bottom = 954.0
+script = ExtResource("1_r234p")
