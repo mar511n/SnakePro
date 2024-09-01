@@ -2,7 +2,7 @@
 
 
 SnakePro is a professional snake game made in Godot 4.3.
-The Game includes the following features:
+The game includes the following features:
 1. Multiplayer (over IPv4)
 2. In-game items such as:
     - Speed Boost
@@ -13,3 +13,12 @@ The Game includes the following features:
 3. Game statistics & replays
 4. Different playable Maps
 5. Controller Support
+
+## Installation
+To run the game simply download "SnakePro.x86_64"/"SnakePro.exe" for Linux/Windows and "SnakePro.pck".
+You can place them anywhere, but both files must be in the same folder.
+On Android only "SnakePro.apk" is needed.
+
+## First Steps
+SnakePro is supposed to be a multiplayer game. It can be played with devices on the same LAN or over the internet (this is more complicated).
+It's also possible to play on the same device with multiple Players, by opening multiple SnakePro-windows/applications.
