@@ -5,11 +5,11 @@ SnakePro is a professional snake game made in Godot 4.3.
 The Game includes the following features:
 1. Multiplayer (over IPv4)
 2. In-game items such as:
-  - Speed Boost
-  - Shooting
-  - Killer bots
-  - Farts
-  - Medkit
+    - Speed Boost
+    - Shooting
+    - Killer bots
+    - Farts
+    - Medkit
 3. Game statistics & replays
 4. Different playable Maps
 5. Controller Support
