@@ -26,6 +26,8 @@ layout_mode = 2
 
 [node name="startSnakeLength_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
+tooltip_text = "in tiles"
+mouse_filter = 1
 text = "Snake start length"
 horizontal_alignment = 1
 
@@ -40,7 +42,9 @@ layout_mode = 2
 
 [node name="snakeSpeed_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
-text = "Snake speed (tiles/second)"
+tooltip_text = "in tiles/second"
+mouse_filter = 1
+text = "Snake speed"
 horizontal_alignment = 1
 
 [node name="snakeSpeed" parent="ScrollContainer/VFlowContainer" instance=ExtResource("2_36e5j")]
@@ -55,6 +59,8 @@ layout_mode = 2
 
 [node name="snakeTraceLength_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
+tooltip_text = "in tiles"
+mouse_filter = 1
 text = "Snake trace length"
 horizontal_alignment = 1
 
@@ -80,6 +86,10 @@ layout_mode = 2
 
 [node name="Button" type="Button" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
+tooltip_text = "this allows to load game modifications, which
+can overwrite visuals and behaviour.
+see https://docs.godotengine.org/en/latest/
+tutorials/export/exporting_pcks.html"
 text = "Load mod"
 
 [node name="FileDialog" type="FileDialog" parent="."]

@@ -62,14 +62,17 @@ func make_game_module_settings()->void:
 			if g_mod_s != null:
 				var g_mod : Object = g_mod_s.new()
 				var g_mod_name:String = ""
+				var g_mod_description:String = ""
 				var props:Dictionary = {}
 				for prop:String in g_mod.get_meta_list():
 					if prop == "name":
 						g_mod_name = g_mod.get_meta(prop)
+					elif prop == "description":
+						g_mod_description = g_mod.get_meta(prop)
 					else:
 						props[prop] = g_mod.get_meta(prop)
 				if g_mod_name != "":
-					add_game_module(g_mod_f, g_mod_name, props)
+					add_game_module(g_mod_f, g_mod_name, props, g_mod_description)
 
 	gm_label.text = "Gamemodules ("+str(gameModuleProps.size())+")"
 	gm_label.label_settings = LabelSettings.new()
@@ -116,13 +119,14 @@ func clear_game_modules()->void:
 		if child.is_in_group(g_set_g):
 			vflow.remove_child(child)
 
-func add_game_module(path:String, mname:String, properties:Dictionary)->void:
+func add_game_module(path:String, mname:String, properties:Dictionary,mdescription:String)->void:
 	gameModuleProps[mname] = {}
 	gameModuleProps[mname]["path"] = path
 	gameModuleProps[mname]["name"] = mname
 	gameModuleProps[mname]["props"] = {}
 	var mod_btn:CheckButton = CheckButton.new()
 	mod_btn.text = mname
+	mod_btn.tooltip_text = mdescription
 	#mod_btn.set_meta("path", path)
 	mod_btn.add_to_group(g_set_g)
 	#mod_btn.add_to_group(pl_set_mbg)
@@ -131,7 +135,10 @@ func add_game_module(path:String, mname:String, properties:Dictionary)->void:
 	for prop:String in properties:
 		if properties[prop][0] is bool:
 			var propB:LabeledCheckButton = labeledButton.instantiate()
+			propB.add_theme_font_size_override("font_size", 24)
 			propB.text = prop
+			if properties[prop].size() == 2:
+				propB.set_tooltip_text(properties[prop][1])
 			propB.set_prop_value(properties[prop][0])
 			propB.add_to_group(g_set_g)
 			vflow.add_child(propB)
@@ -141,6 +148,9 @@ func add_game_module(path:String, mname:String, properties:Dictionary)->void:
 			propL.text = prop
 			propL.label_settings = LabelSettings.new()
 			propL.label_settings.font_size = 24
+			if properties[prop].size() == 5:
+				propL.set_tooltip_text(properties[prop][4])
+				propL.mouse_filter = Control.MOUSE_FILTER_PASS
 			#propL.label_settings.outline_size = 6
 			#propL.label_settings.outline_color = Color.BLUE
 			propL.add_to_group(g_set_g)
@@ -183,14 +193,17 @@ func make_player_module_settings()->void:
 			if pl_mod_s != null:
 				var pl_mod : Object = pl_mod_s.new()
 				var pl_mod_name:String = ""
+				var pl_mod_description:String = ""
 				var props:Dictionary = {}
 				for prop:String in pl_mod.get_meta_list():
 					if prop == "name":
 						pl_mod_name = pl_mod.get_meta(prop)
+					elif prop == "description":
+						pl_mod_description = pl_mod.get_meta(prop)
 					else:
 						props[prop] = pl_mod.get_meta(prop)
 				if pl_mod_name != "":
-					add_player_module(pl_mod_f, pl_mod_name, props)
+					add_player_module(pl_mod_f, pl_mod_name, props, pl_mod_description)
 	pm_label.text = "Playermodules ("+str(playerModuleProps.size())+")"
 	
 	var applyBtn:Button = Button.new()
@@ -233,13 +246,14 @@ func clear_player_modules()->void:
 		if child.is_in_group(pl_set_g):
 			vflow.remove_child(child)
 
-func add_player_module(path:String, mname:String, properties:Dictionary)->void:
+func add_player_module(path:String, mname:String, properties:Dictionary, mdescription:String)->void:
 	playerModuleProps[mname] = {}
 	playerModuleProps[mname]["path"] = path
 	playerModuleProps[mname]["name"] = mname
 	playerModuleProps[mname]["props"] = {}
 	var mod_btn:CheckButton = CheckButton.new()
 	mod_btn.text = mname
+	mod_btn.tooltip_text = mdescription
 	#mod_btn.set_meta("path", path)
 	mod_btn.add_to_group(pl_set_g)
 	#mod_btn.add_to_group(pl_set_mbg)
@@ -248,7 +262,10 @@ func add_player_module(path:String, mname:String, properties:Dictionary)->void:
 	for prop:String in properties:
 		if properties[prop][0] is bool:
 			var propB:LabeledCheckButton = labeledButton.instantiate()
+			propB.add_theme_font_size_override("font_size", 24)
 			propB.text = prop
+			if properties[prop].size() == 2:
+				propB.set_tooltip_text(properties[prop][1])
 			propB.set_prop_value(properties[prop][0])
 			propB.add_to_group(pl_set_g)
 			vflow.add_child(propB)
@@ -258,6 +275,9 @@ func add_player_module(path:String, mname:String, properties:Dictionary)->void:
 			propL.text = prop
 			propL.label_settings = LabelSettings.new()
 			propL.label_settings.font_size = 24
+			if properties[prop].size() == 5:
+				propL.set_tooltip_text(properties[prop][4])
+				propL.mouse_filter = Control.MOUSE_FILTER_PASS
 			#propL.label_settings.outline_size = 6
 			#propL.label_settings.outline_color = Color.BLUE
 			propL.add_to_group(pl_set_g)

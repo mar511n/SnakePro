@@ -150,6 +150,7 @@ func _on_quit_game_pressed()->void:
 
 func _on_connection_popup_host(port:int)->void:
 	Global.Print("hosting on %s:%s" % [IP.get_local_addresses()[0],port], 6)
+	DisplayServer.clipboard_set("%s:%s"%[IP.get_local_addresses()[0],port])
 	var err:Error = Lobby.create_game()
 	if err != OK:
 		Global.Print("ERROR while hosting server: %s" % err, 7)

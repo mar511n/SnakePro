@@ -12,10 +12,11 @@ var GhostAppleDamage = 3
 func _init():
 	name = "AppleMod"
 	set_meta("name", "Apples")
-	set_meta("AppleCount", [int(10),0,100,1])
-	set_meta("AppleNutrition", [int(3),0,31,1])
-	set_meta("AppleRottTime", [10,0,120,0.5])
-	set_meta("GhostAppleDamage", [int(3),0,31,1])
+	set_meta("description", "adds apples to the game, which can be eaten and corrupted by ghosts")
+	set_meta("AppleCount", [int(10),0,100,1,"number of apples in the game"])
+	set_meta("AppleNutrition", [int(3),0,31,1,"tiles gained by eating an apple"])
+	set_meta("AppleRottTime", [10,0,120,0.5,"time it takes for ghost apples to despawn"])
+	set_meta("GhostAppleDamage", [int(3),0,31,1,"damage (in tiles) done by ghost apples"])
 
 func on_game_ready(g:InGame, g_is_server:bool):
 	super(g,g_is_server)

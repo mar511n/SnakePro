@@ -9,6 +9,7 @@ func _init(ghost=false):
 	item_code = "revive"
 	name = item_name
 	set_meta("name", item_name)
+	set_meta("description", "revives the player, if killed")
 	set_meta("ItemReviveProbability", [1,0,4,0.1])
 
 func on_collected_by_player(player:SnakePlayer)->bool:

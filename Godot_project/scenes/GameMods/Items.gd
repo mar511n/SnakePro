@@ -15,7 +15,8 @@ const ItemSpawnTries = 1000
 func _init():
 	name = "ItemsMod"
 	set_meta("name", "Items")
-	set_meta("ItemCount", [ItemCount,0,100,1])
+	set_meta("description", "adds items to the game, which can be collected and used by players")
+	set_meta("ItemCount", [ItemCount,0,100,1,"number of items in the game"])
 	#spawnable_items["baseitem"] = ["BaseItem", 1, preload("res://scenes/PlayerMods/ItemModBase.gd")]
 
 func on_game_ready(g:InGame, g_is_server:bool):

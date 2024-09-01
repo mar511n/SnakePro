@@ -12,10 +12,11 @@ func _init(ghost=false):
 	item_code = "shot"
 	name = item_name
 	set_meta("name", item_name)
+	set_meta("description", "shoots a bullet, which damages/kills players")
 	set_meta("ItemShootingProbability", [1,0,4,0.1])
-	set_meta("ItemShootingSpeed",[ItemShootingSpeed,0,60,1])
-	set_meta("ItemShootingRange",[ItemShootingRange,0,30,1])
-	set_meta("ItemShootingSurvLen",[ItemShootingSurvLen,0,40,1])
+	set_meta("ItemShootingSpeed",[ItemShootingSpeed,0,60,1,"speed of the bullet in tiles/second"])
+	set_meta("ItemShootingRange",[ItemShootingRange,0,30,1,"distance, which the bullet travels before despawning"])
+	set_meta("ItemShootingSurvLen",[ItemShootingSurvLen,0,40,1,"minimum length of a snake to survive a headshot"])
 
 func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	super(player,enabled_mods)

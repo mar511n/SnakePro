@@ -9,7 +9,8 @@ var player_deaths = []
 func _init():
 	name = "Basic hit handler"
 	set_meta("name", "Basic hit handler")
-	set_meta("MaxTimeBeforeGameover", [2,0.2,10,0.2])
+	set_meta("description", "handles player collision and hits")
+	set_meta("MaxTimeBeforeGameover", [2,0.2,10,0.2,"time, which the game waits before returning\nto the main menu, if only one player is alive"])
 	autoload = true
 	#set_meta("print_hit_cause", [true])
 

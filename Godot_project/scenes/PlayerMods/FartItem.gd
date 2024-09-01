@@ -15,10 +15,11 @@ func _init(ghost=false):
 	item_code = "fart"
 	name = item_name
 	set_meta("name", item_name)
+	set_meta("description", "spawns a fart area, which deals damage to players")
 	set_meta("ItemFartProbability", [1,0,4,0.1])
-	set_meta("ItemFartDuration",[ItemFartDuration,0,20,0.5])
-	set_meta("ItemFartRadius",[ItemFartRadius,0.5,10.5,1])
-	set_meta("ItemFartDamage",[ItemFartDamage,0,8,0.2])
+	set_meta("ItemFartDuration",[ItemFartDuration,0,20,0.5,"time until the fart despawns"])
+	set_meta("ItemFartRadius",[ItemFartRadius,0.5,10.5,1,"radius of the fart area in tiles"])
+	set_meta("ItemFartDamage",[ItemFartDamage,0,8,0.2,"damage done to players in the fart area in tiles/second"])
 
 func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	super(player,enabled_mods)

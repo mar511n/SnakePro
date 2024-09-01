@@ -20,11 +20,12 @@ func _init(ghost=false):
 	item_code = "speed"
 	name = item_name
 	set_meta("name", item_name)
+	set_meta("description", "increases the movement speed of the player")
 	set_meta("ItemSpeedProbability", [1,0,4,0.1])
-	set_meta("ItemSpeedNewSpeed",[ItemSpeedNewSpeed,0,60,1])
-	set_meta("ItemSpeedDuration",[ItemSpeedDuration,0,5,0.1])
-	set_meta("ItemSpeedRandNum",[ItemSpeedRandNum,0,5,1])
-	set_meta("ItemSpeedRandDiff",[ItemSpeedRandDiff,0,1.0,0.05])
+	set_meta("ItemSpeedNewSpeed",[ItemSpeedNewSpeed,0,60,1,"increased speed in tiles/second"])
+	set_meta("ItemSpeedDuration",[ItemSpeedDuration,0,5,0.1,"duration of the speed boost"])
+	set_meta("ItemSpeedRandNum",[ItemSpeedRandNum,0,5,1,"number of random speed changes, if item is corrupted"])
+	set_meta("ItemSpeedRandDiff",[ItemSpeedRandDiff,0,1.0,0.05, "relative maximum change of the random speed change"])
 
 func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	super(player,enabled_mods)

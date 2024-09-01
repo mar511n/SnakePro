@@ -67,8 +67,8 @@ func set_data(dic:Dictionary):
 		if not f_id_f is String:
 			var f_id = int(f_id_f)
 			var fart_scene = fartSpriteScene.instantiate()
-			fart_scene.get_node("SpriteG/GPUParticles2D").visible = false
-			fart_scene.get_node("SpriteN/GPUParticles2D").visible = false
+			#fart_scene.get_node("SpriteG/GPUParticles2D").visible = false
+			#fart_scene.get_node("SpriteN/GPUParticles2D").visible = false
 			fart_scene.name = "Fart"+str(f_id)
 			add_child(fart_scene)
 			fart_scene.visible = true
