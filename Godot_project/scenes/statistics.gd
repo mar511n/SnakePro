@@ -62,12 +62,12 @@ func update_stats():
 		if pname != "":
 			var pls = session_stats[pl]
 			win_s.append([get_wins(pls),pname,pl_col])
-			kill_s.append([get_kills_without_self(pls),pname,pl_col])
-			shot_s.append([get_kills_of_type(pls,Global.hit_causes.BULLET),pname,pl_col])
-			bot_s.append([get_kills_of_type(pls,Global.hit_causes.BOT),pname,pl_col])
-			fart_s.append([get_kills_of_type(pls,Global.hit_causes.FART),pname,pl_col])
-			skill_s.append([get_kills_of_type(pls,Global.hit_causes.COLLISION)+get_kills_of_type(pls,Global.hit_causes.APPLE_DMG),pname,pl_col])
-			std_s.append([get_kills(pls)-get_kills_without_self(pls),pname,pl_col])
+			kill_s.append([get_kills_without_self(pls,pl),pname,pl_col])
+			shot_s.append([get_kills_of_type(pls,Global.hit_causes.BULLET,pl),pname,pl_col])
+			bot_s.append([get_kills_of_type(pls,Global.hit_causes.BOT,pl),pname,pl_col])
+			fart_s.append([get_kills_of_type(pls,Global.hit_causes.FART,pl),pname,pl_col])
+			skill_s.append([get_kills_of_type(pls,Global.hit_causes.COLLISION,pl)+get_kills_of_type(pls,Global.hit_causes.APPLE_DMG,pl),pname,pl_col])
+			std_s.append([get_kills(pls)-get_kills_without_self(pls,pl),pname,pl_col])
 	WinsT.set_places(win_s)
 	KillsT.set_places(kill_s)
 	HeadshotT.set_places(shot_s)
@@ -80,14 +80,14 @@ func write_stats_to_RTLabel(pls:Dictionary,pname:String,peer_id:int,RTLabel:Rich
 	RTLabel.append_text("[b]%s[/b] (%s)\n" % [pname,peer_id])
 	
 	var kills = get_kills(pls)
-	var kills_wo_self = get_kills_without_self(pls)
+	var kills_wo_self = get_kills_without_self(pls,peer_id)
 	var deaths = get_deaths(pls)
 	var wins = get_wins(pls)
 	
 	RTLabel.append_text("wins: %s\n" % [wins])
 	RTLabel.append_text("self kills: %s\n" % [kills-kills_wo_self])
 	RTLabel.append_text("[u]kills[/u]: %s\n" % [kills_wo_self])
-	var kill_ts = get_kill_types(pls)
+	var kill_ts = get_kill_types(pls,peer_id)
 	for kill_t in kill_ts:
 		RTLabel.append_text("%s kills: %s\n" % [kill_t,kill_ts[kill_t]])
 	
@@ -120,16 +120,16 @@ func get_death_of_type(pls:Dictionary, type:Global.hit_causes, coll_type:Global.
 				num += 1
 	return num
 
-func get_kill_types(pls:Dictionary, wo_self=true)->Dictionary:
+func get_kill_types(pls:Dictionary,pl:int, wo_self=true)->Dictionary:
 	var kill_ts = {}
 	for type in Global.hit_cause_list:
 		kill_ts[Global.hit_cause_names[int(type)]] = get_kills_of_type(pls,type, wo_self)
 	return kill_ts
 
-func get_kills_of_type(pls:Dictionary, type:Global.hit_causes, wo_self=true)->int:
+func get_kills_of_type(pls:Dictionary, type:Global.hit_causes,pl:int, wo_self=true)->int:
 	var num = 0
 	for kill in pls.get("kills",[]):
-		if kill[1]==type and ((not wo_self) or kill[0]!=-1):
+		if kill[1]==type and ((not wo_self) or kill[0]!=pl):
 			num += 1
 	return num
 
@@ -141,10 +141,10 @@ func get_killed_players(pls:Dictionary)->Dictionary:
 		kills[kill[0]] += 1
 	return kills
 
-func get_kills_without_self(pls:Dictionary)->int:
+func get_kills_without_self(pls:Dictionary,pl:int)->int:
 	var num = 0
 	for kill in pls.get("kills",[]):
-		if kill[0]!=-1:
+		if kill[0]!=pl:
 			num += 1
 	return num
 

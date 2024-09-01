@@ -13,9 +13,9 @@ func set_places(pl_arr:Array):
 	$Panel/RichTextLabel.clear()
 	for i in range(pl_arr.size()):
 		if pl_arr[i].size()>2:
-			$Panel/RichTextLabel.append_text("[center]%s. [color=%s]%s[/color] : %s[/center]\n" % [i+1,pl_arr[i][2].to_html(),pl_arr[i][1],pl_arr[i][0]])
+			$Panel/RichTextLabel.append_text("[center][color=%s]%s[/color] : %s[/center]\n" % [pl_arr[i][2].to_html(),pl_arr[i][1],pl_arr[i][0]])
 		else:
-			$Panel/RichTextLabel.append_text("[center]%s. %s : %s[/center]\n" % [i+1,pl_arr[i][1],pl_arr[i][0]])
+			$Panel/RichTextLabel.append_text("[center]%s : %s[/center]\n" % [pl_arr[i][1],pl_arr[i][0]])
 
 func _ready() -> void:
 	set_trophy(trophy_texture,trophy_name)

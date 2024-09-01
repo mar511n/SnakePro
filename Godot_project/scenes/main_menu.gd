@@ -95,6 +95,7 @@ func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->voi
 		Disconn_b.disabled = false
 		GameSet_b.disabled = false
 		
+		TabCont.current_tab = 0
 		TabCont.set_tab_disabled(2, false)
 		ConnStat.set_hosting()
 	else:
