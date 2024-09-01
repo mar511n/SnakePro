@@ -1,8 +1,100 @@
-[gd_scene load_steps=2 format=3 uid="uid://bc2wn8f5my0q0"]
+[gd_scene load_steps=11 format=3 uid="uid://bc2wn8f5my0q0"]
 
 [ext_resource type="Script" path="res://scenes/statistics.gd" id="1_r234p"]
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_ygqqw"]
+[ext_resource type="PackedScene" uid="uid://bb04s44xahkyh" path="res://scenes/stat_trophy.tscn" id="3_lurt5"]
+[ext_resource type="Texture2D" uid="uid://bgua531re8by0" path="res://assets/Images/UI/HallPokal1.png" id="4_pell5"]
+[ext_resource type="Texture2D" uid="uid://by8e76lksaxc8" path="res://assets/Images/UI/HallPokal2.png" id="5_8oeov"]
+[ext_resource type="Texture2D" uid="uid://dvbtpc23w7iu6" path="res://assets/Images/UI/HallPokal4.png" id="6_cg2nt"]
+[ext_resource type="Texture2D" uid="uid://c8vqk2el56jr5" path="res://assets/Images/UI/HallPokal6.png" id="7_kwiad"]
+[ext_resource type="Texture2D" uid="uid://ouskrwo5534d" path="res://assets/Images/UI/HallPokal8.png" id="8_7dj0w"]
+[ext_resource type="Texture2D" uid="uid://dq2cxv4nd5gh2" path="res://assets/Images/UI/HallPokal7.png" id="9_d3itj"]
+[ext_resource type="Texture2D" uid="uid://ddulcf57kb1xb" path="res://assets/Images/UI/HallPokal5.png" id="10_ord0s"]
 
 [node name="Statistics" type="Panel"]
 offset_right = 1844.0
 offset_bottom = 954.0
+theme = ExtResource("1_ygqqw")
 script = ExtResource("1_r234p")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_alignment = 1
+current_tab = 0
+
+[node name="Session" type="Control" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="TabContainer/Session"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+alignment = 1
+
+[node name="WinsTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("4_pell5")
+trophy_name = "Wins"
+
+[node name="KillsTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("5_8oeov")
+trophy_name = "Kills"
+
+[node name="HeadshotTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("6_cg2nt")
+trophy_name = "Headshot kills"
+
+[node name="BotTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("7_kwiad")
+trophy_name = "Bot kills"
+
+[node name="FartTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("8_7dj0w")
+trophy_name = "Fart kills"
+
+[node name="SkillTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("9_d3itj")
+trophy_name = "Skill kills"
+
+[node name="StupiddeathsTrophy" parent="TabContainer/Session/HFlowContainer" instance=ExtResource("3_lurt5")]
+layout_mode = 2
+trophy_texture = ExtResource("10_ord0s")
+trophy_name = "Stupid deaths"
+
+[node name="Detailed" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Detailed"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true

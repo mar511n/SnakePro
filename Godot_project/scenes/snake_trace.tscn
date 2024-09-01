@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://ca002hua4n667"]
+
+[ext_resource type="Script" path="res://scenes/snake_trace.gd" id="1_4fjyh"]
+
+[sub_resource type="Curve" id="Curve_4lfs1"]
+_data = [Vector2(0, 0.200365), 0.0, 0.799635, 0, 1, Vector2(1, 1), 0.799635, 0.0, 1, 0]
+point_count = 2
+
+[node name="Trace" type="Line2D" groups=["VariableGraphical"]]
+top_level = true
+z_index = -2
+width = 40.0
+width_curve = SubResource("Curve_4lfs1")
+default_color = Color(0, 0, 0, 0.3)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_4fjyh")

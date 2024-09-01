@@ -17,6 +17,7 @@ const input_options:Dictionary = {0:["rel","relative"],1:["abs","absolute"]}
 @onready var vflow:VFlowContainer = $ScrollContainer/VFlowContainer
 @onready var scrollCont:ScrollContainer = $ScrollContainer
 @onready var shaderBtn:CheckButton = $ScrollContainer/VFlowContainer/Shader
+@onready var particlesBtn:CheckButton = $ScrollContainer/VFlowContainer/Particles
 @onready var captureReplayBtn:CheckButton = $ScrollContainer/VFlowContainer/CaptureReplay
 @onready var mainMultiScreenBtn:CheckButton = $ScrollContainer/VFlowContainer/MultiMainScreen
 
@@ -53,6 +54,7 @@ func show_popup()->void:
 	SplitScreenOpt.select(Global.config.get_value(Global.config_user_settings_sec,"splitscreenMode", 0))
 	MusicVolSl.set_prop_value(Global.config.get_value(Global.config_user_settings_sec,"musicvolume", 100.0))
 	shaderBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"useShader", true))
+	particlesBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"useParticles", true))
 	captureReplayBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"captureReplay", true))
 	mainMultiScreenBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"mainMultiplayerScreen", false))
 	visible = true
@@ -61,13 +63,13 @@ func make_user_settings_dict() -> Dictionary:
 	var us:Dictionary = {}
 	#us["name"] = PlayerName.text
 	#us["snake_tile_idx"] = SnakeOpt.get_selected_id()
-	# TODO: actually change vsync and make these settings not synced but only local(maybe look at netwroking and make some improvement to not use to much bandwidth)
 	us["inputmethod"] = InputOpt.get_selected_metadata()
 	us["smoothCam"] = !SmoothCam.button_pressed
 	us["vsyncMode"] = VSyncOpt.selected
 	us["splitscreenMode"] = SplitScreenOpt.selected
 	us["musicvolume"] = MusicVolSl.value
 	us["useShader"] = shaderBtn.button_pressed
+	us["useParticles"] = particlesBtn.button_pressed
 	us["captureReplay"] = captureReplayBtn.button_pressed
 	us["mainMultiplayerScreen"] = mainMultiScreenBtn.button_pressed
 	return us
@@ -124,4 +126,8 @@ func _on_capture_replay_toggled(_toggled_on: bool) -> void:
 	_on_settings_changed()
 
 func _on_multi_main_screen_toggled(_toggled_on: bool) -> void:
+	_on_settings_changed()
+
+
+func _on_particles_toggled(_toggled_on: bool) -> void:
 	_on_settings_changed()

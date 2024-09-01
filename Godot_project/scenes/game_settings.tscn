@@ -53,6 +53,20 @@ value = 4.0
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
+[node name="snakeTraceLength_L" type="Label" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+text = "Snake trace length"
+horizontal_alignment = 1
+
+[node name="snakeTraceLength" parent="ScrollContainer/VFlowContainer" instance=ExtResource("2_36e5j")]
+layout_mode = 2
+min_value = 1.0
+max_value = 50.0
+value = 15.0
+
+[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
 [node name="mapPath_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 text = "Map"
@@ -80,6 +94,7 @@ use_native_dialog = true
 [connection signal="resized" from="ScrollContainer" to="." method="_on_scroll_container_resized"]
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/startSnakeLength" to="." method="_on_start_snake_length_drag_ended"]
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/snakeSpeed" to="." method="_on_snake_speed_drag_ended"]
+[connection signal="drag_ended" from="ScrollContainer/VFlowContainer/snakeTraceLength" to="." method="_on_snake_trace_length_drag_ended"]
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/mapPaths_b" to="." method="_on_map_paths_b_item_selected"]
 [connection signal="pressed" from="ScrollContainer/VFlowContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

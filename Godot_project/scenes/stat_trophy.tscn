@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb04s44xahkyh"]
+
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_l7uin"]
+[ext_resource type="Texture2D" uid="uid://bgua531re8by0" path="res://assets/Images/UI/HallPokal1.png" id="1_sb3oe"]
+[ext_resource type="Script" path="res://scenes/stat_trophy.gd" id="2_f21by"]
+
+[node name="StatTrophy" type="Control"]
+custom_minimum_size = Vector2(416, 280)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 416.0
+offset_bottom = 280.0
+theme = ExtResource("1_l7uin")
+script = ExtResource("2_f21by")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.36
+offset_bottom = -0.0400009
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_sb3oe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.36
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.0400009
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true

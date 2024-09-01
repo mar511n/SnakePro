@@ -75,6 +75,14 @@ region = Rect2(0, 240, 300, 240)
 atlas = ExtResource("2_h7p7v")
 region = Rect2(360, 240, 240, 120)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_iv1ya"]
+atlas = ExtResource("2_h7p7v")
+region = Rect2(0, 720, 300, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5kr1t"]
+atlas = ExtResource("2_h7p7v")
+region = Rect2(360, 720, 240, 120)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_nhtwe"]
 atlas = ExtResource("2_h7p7v")
 region = Rect2(0, 480, 300, 240)
@@ -82,14 +90,6 @@ region = Rect2(0, 480, 300, 240)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dwmde"]
 atlas = ExtResource("2_h7p7v")
 region = Rect2(360, 480, 240, 120)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_78rqe"]
-atlas = ExtResource("2_h7p7v")
-region = Rect2(0, 720, 300, 240)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0uub5"]
-atlas = ExtResource("2_h7p7v")
-region = Rect2(360, 720, 240, 120)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ufum3"]
 atlas = ExtResource("2_h7p7v")
@@ -127,10 +127,10 @@ shoot = SubResource("AtlasTexture_ssynb")
 shoot_s = SubResource("AtlasTexture_6qmry")
 blue = SubResource("AtlasTexture_tg8e8")
 blue_preview = SubResource("AtlasTexture_hfiqu")
-red = SubResource("AtlasTexture_nhtwe")
-red_preview = SubResource("AtlasTexture_dwmde")
-pink = SubResource("AtlasTexture_78rqe")
-pink_preview = SubResource("AtlasTexture_0uub5")
+red = SubResource("AtlasTexture_iv1ya")
+red_preview = SubResource("AtlasTexture_5kr1t")
+pink = SubResource("AtlasTexture_nhtwe")
+pink_preview = SubResource("AtlasTexture_dwmde")
 yellow = SubResource("AtlasTexture_ufum3")
 yellow_preview = SubResource("AtlasTexture_uahl5")
 bot_black = SubResource("AtlasTexture_shvhe")

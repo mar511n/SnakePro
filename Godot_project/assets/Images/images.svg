@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="true"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="1.617936"
-     inkscape:cx="314.28932"
-     inkscape:cy="154.20882"
+     inkscape:zoom="2.1378822"
+     inkscape:cx="911.88374"
+     inkscape:cy="787.9293"
      inkscape:window-width="2560"
      inkscape:window-height="1408"
      inkscape:window-x="0"
@@ -2269,5 +2269,13 @@
        id="path13407-5-6-4-9"
        style="fill:#7a367b;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
        d="m 134.9375,145.78542 v 2.11667 h 1.05833 c 0.5845,0 1.05833,-0.47384 1.05833,-1.05833 1e-5,-0.5845 -0.47383,-1.05834 -1.05833,-1.05834 z" />
+    <path
+       id="path1282"
+       style="fill:#7a4841;stroke-width:0.79375;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       d="m 214.3125,269.875 a 7.9375,7.9375 0 0 1 -7.9375,7.9375 7.9375,7.9375 0 0 1 -7.9375,-7.9375 7.9375,7.9375 0 0 1 7.9375,-7.9375 7.9375,7.9375 0 0 1 7.9375,7.9375 z" />
+    <path
+       id="path1282-4"
+       style="fill:#25562e;stroke-width:0.79375;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       d="m 246.0625,269.875 a 7.9375,7.9375 0 0 1 -7.9375,7.9375 7.9375,7.9375 0 0 1 -7.9375,-7.9375 7.9375,7.9375 0 0 1 7.9375,-7.9375 7.9375,7.9375 0 0 1 7.9375,7.9375 z" />
   </g>
 </svg>

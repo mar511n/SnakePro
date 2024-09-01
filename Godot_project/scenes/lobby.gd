@@ -19,13 +19,14 @@ var game_stats = {}
 @rpc("any_peer", "call_local", "reliable")
 func reset_game_stats():
 	game_stats = {}
+	Global.player_stats_on_game_start()
 @rpc("any_peer", "call_local", "reliable")
 func set_game_stats(key:Variant, value:Variant):
 	game_stats[key] = value
 	if key == "Winner":
-		if not Global.player_stats.has(value):
-			Global.player_stats[value] = {"kills":[],"deaths":[],"wins":0}
-		Global.player_stats[value]["wins"] += 1
+		if not Global.player_stats[-1].has(value):
+			Global.player_stats[-1][value] = {"kills":[],"deaths":[],"wins":0}
+		Global.player_stats[-1][value]["wins"] += 1
 
 # contains info of local player
 # name
@@ -58,6 +59,7 @@ func join_game(address:String = "", port:int = 0)->Error:
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
+	Global.player_stats = [{}]
 	return OK
 
 
@@ -73,6 +75,7 @@ func create_game(port:int = 0)->Error:
 	update_game_settings_on_server()
 	players[1] = player_info
 	player_connected.emit(1, player_info)
+	Global.player_stats = [{}]
 	return OK
 
 func reset_network()->void:

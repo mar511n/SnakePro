@@ -74,7 +74,8 @@ enum hit_causes {
 	BOT,       # infos: {"caused_by_id":int}
 	FART,      # infos: {"caused_by_id":int}
 }
-const hit_cause_names = ["collision", "apple damage", "bullet", "bot"]
+const hit_cause_list = [hit_causes.COLLISION, hit_causes.APPLE_DMG, hit_causes.BULLET, hit_causes.BOT, hit_causes.FART]
+const hit_cause_names = ["collision", "apple damage", "bullet", "bot", "fart"]
 
 enum collision {
 	NO,
@@ -82,6 +83,7 @@ enum collision {
 	PLAYERBODY,
 	PLAYERHEAD
 }
+const collision_list = [collision.NO, collision.WALL, collision.PLAYERBODY, collision.PLAYERHEAD]
 const collision_names = ["", "wall", "playerbody", "playerhead"]
 
 enum scl {
@@ -173,23 +175,37 @@ const res_path_func_name:StringName = "get_res_path"
 const get_data_func_name:StringName = "get_data"
 const set_data_func_name:StringName = "set_data"
 
-# peer_id -> {}
-var player_stats = {}
+# stats for the current session (are reset on new connection)
+# game_idx -> {peer_id -> {} (except for local player, which has id -1)}
+var player_stats = []
+# accumulated playerstats over multiple sessions
+var own_player_stats = {}
 
 func player_stats_on_game_finished():
+	Global.Print("updating stats on game finish")
 	#player_stats[-1] = player_stats.get(multiplayer.get_unique_id(), {})
+	own_player_stats = merge_player_stats(own_player_stats,player_stats[-1].get(-1,{}))
 	save_own_player_stats()
 
 func player_stats_on_game_start():
-	# TODO: at game start every client tells every other client the stats of the local player
-	pass
+	Global.Print("updating stats on game start")
+	player_stats.append({})
+
+func merge_player_stats(pls1:Dictionary,pls2:Dictionary) -> Dictionary:
+	var pls = {"kills":[],"deaths":[],"wins":pls1.get("wins",0)+pls2.get("wins",0)}
+	pls["kills"].append_array(pls1.get("kills",[]))
+	pls["kills"].append_array(pls2.get("kills",[]))
+	pls["deaths"].append_array(pls1.get("deaths",[]))
+	pls["deaths"].append_array(pls2.get("deaths",[]))
+	return pls
 
 func save_own_player_stats():
-	set_section_dict(stats,stats_sec,player_stats.get(-1,{}))
+	set_section_dict(stats,stats_sec,own_player_stats)#player_stats.get(-1,{}))
 	stats.save(stats_path)
 
 func load_own_player_stats():
-	player_stats[-1] = Global.get_section_dict(stats,stats_sec,player_stats.get(-1,{}))
+	#player_stats[-1] = Global.get_section_dict(stats,stats_sec,player_stats.get(-1,{}))
+	own_player_stats = Global.get_section_dict(stats,stats_sec,own_player_stats)
 
 # the static gamestate at the start
 var static_gamestate:Dictionary

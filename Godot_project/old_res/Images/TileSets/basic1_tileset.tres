@@ -1,11 +1,11 @@
 [gd_resource type="TileSet" load_steps=13 format=3 uid="uid://bwq0e8erubnxw"]
 
-[ext_resource type="Texture2D" uid="uid://d3wnql8834rt0" path="res://old_res/Images/TileSets/Basic1/TX Tileset Grass.png" id="1_od4r8"]
-[ext_resource type="Texture2D" uid="uid://chf3wnimhgqee" path="res://old_res/Images/TileSets/Basic1/TX Tileset Stone Ground.png" id="2_d6lw0"]
-[ext_resource type="Texture2D" uid="uid://bhfah2mrdphr7" path="res://old_res/Images/TileSets/Basic1/TX Props.png" id="3_paxln"]
-[ext_resource type="Texture2D" uid="uid://xypsi3bhpd6r" path="res://old_res/Images/TileSets/Basic1/TX Tileset Wall.png" id="4_qs8vl"]
-[ext_resource type="Texture2D" uid="uid://qo07ud3whv2m" path="res://old_res/Images/TileSets/Basic1/TX Shadow.png" id="5_e74lp"]
-[ext_resource type="Texture2D" uid="uid://d2s6q2rdv3xkk" path="res://old_res/Images/TileSets/Basic1/TX Struct.png" id="6_nnvxl"]
+[ext_resource type="Texture2D" uid="uid://d3wnql8834rt0" path="res://assets/Images/TileSets/Basic1/TX Tileset Grass.png" id="1_od4r8"]
+[ext_resource type="Texture2D" uid="uid://chf3wnimhgqee" path="res://assets/Images/TileSets/Basic1/TX Tileset Stone Ground.png" id="2_d6lw0"]
+[ext_resource type="Texture2D" uid="uid://bhfah2mrdphr7" path="res://assets/Images/TileSets/Basic1/TX Props.png" id="3_paxln"]
+[ext_resource type="Texture2D" uid="uid://xypsi3bhpd6r" path="res://assets/Images/TileSets/Basic1/TX Tileset Wall.png" id="4_qs8vl"]
+[ext_resource type="Texture2D" uid="uid://qo07ud3whv2m" path="res://assets/Images/TileSets/Basic1/TX Shadow.png" id="5_e74lp"]
+[ext_resource type="Texture2D" uid="uid://d2s6q2rdv3xkk" path="res://assets/Images/TileSets/Basic1/TX Struct.png" id="6_nnvxl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ixc3c"]
 texture = ExtResource("1_od4r8")

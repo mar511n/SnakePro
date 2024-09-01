@@ -51,6 +51,7 @@ enabled=PackedStringArray("res://addons/multirun/plugin.cfg", "res://addons/toas
 
 VariableGraphical=""
 StaticGraphical=""
+Particles=""
 
 [importer_defaults]
 

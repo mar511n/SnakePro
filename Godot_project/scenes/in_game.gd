@@ -72,7 +72,7 @@ func check_snake_collisions()->void:
 			if colld[0] == Global.collision.PLAYERHEAD:
 				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERHEAD,"caused_by_id":colld[1]}])
 			elif colld[0] == Global.collision.WALL:
-				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.WALL,"wall_v":colld[1],"caused_by_id":multiplayer.get_unique_id()}])
+				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.WALL,"wall_v":colld[1],"caused_by_id":peer_id}])
 			elif colld[0] == Global.collision.PLAYERBODY:
 				playerlist[peer_id].hit.rpc([Global.hit_causes.COLLISION, {"type":Global.collision.PLAYERBODY,"caused_by_id":colld[1]}])
 
@@ -309,6 +309,11 @@ func pause_game(pause, set_gui=true):
 	for node in get_tree().get_nodes_in_group("gameobj"):
 		node.call_deferred("set_physics_process", !pause)
 		node.call_deferred("set_process", !pause)
+		if node is GPUParticles2D:
+			if pause:
+				node.speed_scale = 0
+			else:
+				node.speed_scale = 1
 	#if is_instance_valid(get_tree().current_scene):
 	#	Global.Print(get_tree().current_scene.name)
 	#for child in module_node.get_children():

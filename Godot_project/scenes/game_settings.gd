@@ -15,6 +15,7 @@ const g_set_mbg:StringName = "GameModuleSettingCheckBtn"
 @onready var vflow:VFlowContainer = $ScrollContainer/VFlowContainer
 @onready var startSnakeLength:LabeledHSlider = $ScrollContainer/VFlowContainer/startSnakeLength
 @onready var snakeSpeed:LabeledHSlider = $ScrollContainer/VFlowContainer/snakeSpeed
+@onready var snakeTraceLength:LabeledHSlider = $ScrollContainer/VFlowContainer/snakeTraceLength
 @onready var mapPaths_b:OptionButton = $ScrollContainer/VFlowContainer/mapPaths_b
 #@onready var mainMulScreen_b:CheckButton = $ScrollContainer/VFlowContainer/MainMultiplayerscreenBtn
 
@@ -22,22 +23,26 @@ var playerModuleProps:Dictionary = {}
 var gameModuleProps:Dictionary = {}
 
 func show_popup()->void:
+	#print("show_popup 0: %s" % Time.get_time_string_from_system())
 	var gs:Dictionary = Global.config_get_section_dict(Global.config_game_params_sec)
 	startSnakeLength.set_prop_value(gs.get("startSnakeLength", 3))
 	snakeSpeed.set_prop_value(gs.get("snakeSpeed", 4))
+	snakeTraceLength.set_prop_value(gs.get("snakeTraceLength", 15))
 	#mainMulScreen_b.set_pressed_no_signal(gs.get("isMainMulScreen", false))
-	
+	#print("show_popup 1: %s" % Time.get_time_string_from_system())
 	update_map_list(gs)
+	#print("show_popup 2: %s" % Time.get_time_string_from_system())
 	make_game_module_settings()
 	set_game_module_settings()
+	#print("show_popup 3: %s" % Time.get_time_string_from_system())
 	make_player_module_settings()
 	set_player_module_settings()
-	
+	#print("show_popup 4: %s" % Time.get_time_string_from_system())
 	visible = true
 
 func make_game_module_settings()->void:
 	clear_game_modules()
-	
+
 	var hsep:HSeparator = HSeparator.new()
 	hsep.add_to_group(g_set_g)
 	vflow.add_child(hsep)
@@ -47,9 +52,9 @@ func make_game_module_settings()->void:
 	hsep = HSeparator.new()
 	hsep.add_to_group(g_set_g)
 	vflow.add_child(hsep)
-	
+
 	var dir:DirAccess = DirAccess.open(Global.game_modules_dir)
-	#print(dir.get_files())
+
 	for g_mod_f:String in dir.get_files():
 		g_mod_f = g_mod_f.trim_suffix(".remap")
 		if g_mod_f.ends_with(".gd"):
@@ -65,18 +70,18 @@ func make_game_module_settings()->void:
 						props[prop] = g_mod.get_meta(prop)
 				if g_mod_name != "":
 					add_game_module(g_mod_f, g_mod_name, props)
+
 	gm_label.text = "Gamemodules ("+str(gameModuleProps.size())+")"
 	gm_label.label_settings = LabelSettings.new()
 	gm_label.label_settings.font_size = 32
 	gm_label.label_settings.outline_size = 10
 	gm_label.label_settings.outline_color = Color.RED
-	
+
 	var applyBtn:Button = Button.new()
 	applyBtn.text = "Save gamemodule properties"
 	applyBtn.pressed.connect(self.on_save_gamemodule_properties)
 	applyBtn.add_to_group(g_set_g)
 	vflow.add_child(applyBtn)
-	
 	#hsep = HSeparator.new()
 	#hsep.add_to_group(g_set_g)
 	#vflow.add_child(hsep)
@@ -288,6 +293,7 @@ func make_settings_dict() -> Dictionary:
 	var gs:Dictionary = {}
 	gs["startSnakeLength"] = startSnakeLength.value
 	gs["snakeSpeed"] = snakeSpeed.value
+	gs["snakeTraceLength"] = snakeTraceLength.value
 	gs["mapPath"] = Global.maps_dir+mapPaths_b.get_item_text(mapPaths_b.get_selected_id())
 	#gs["isMainMulScreen"] = mainMulScreen_b.button_pressed
 	return gs
@@ -331,4 +337,8 @@ func _on_scroll_container_resized()->void:
 
 
 func _on_main_multiplayerscreen_btn_toggled(_toggled_on: bool) -> void:
+	_on_settings_changed()
+
+
+func _on_snake_trace_length_drag_ended(_value_changed: bool) -> void:
 	_on_settings_changed()

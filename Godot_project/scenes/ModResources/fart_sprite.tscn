@@ -1,14 +1,94 @@
-[gd_scene load_steps=3 format=3 uid="uid://di32gc16xjasi"]
+[gd_scene load_steps=14 format=3 uid="uid://di32gc16xjasi"]
 
-[ext_resource type="Texture2D" uid="uid://j44bnsusq460" path="res://assets/Images/Items/fart_A.png" id="1_4egev"]
-[ext_resource type="Texture2D" uid="uid://dej81mjg7bllf" path="res://assets/Images/Items/fart_A_G.png" id="2_uoidr"]
+[ext_resource type="Texture2D" uid="uid://j44bnsusq460" path="res://assets/Images/Items/fart_A.png" id="1_hke2s"]
+[ext_resource type="Texture2D" uid="uid://dq6cged7oywrw" path="res://assets/Images/images.svg" id="3_am81o"]
+[ext_resource type="Texture2D" uid="uid://dej81mjg7bllf" path="res://assets/Images/Items/fart_A_G.png" id="3_fhj1d"]
+
+[sub_resource type="Curve" id="Curve_eqc4d"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.501832, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_of7qm"]
+curve = SubResource("Curve_eqc4d")
+
+[sub_resource type="Curve" id="Curve_s3h1k"]
+_data = [Vector2(0, 0.198496), 0.0, 0.0, 0, 0, Vector2(0.498169, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.198496), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_11n8p"]
+curve = SubResource("Curve_s3h1k")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cemx1"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(140, 140, 1)
+orbit_velocity_min = -0.0599999
+orbit_velocity_max = 0.0600001
+radial_velocity_min = -25.0
+radial_velocity_max = -2.23517e-05
+gravity = Vector3(0, 0, 0)
+scale_min = 0.3
+scale_max = 0.6
+scale_curve = SubResource("CurveTexture_11n8p")
+alpha_curve = SubResource("CurveTexture_of7qm")
+turbulence_noise_strength = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mcgqn"]
+atlas = ExtResource("3_am81o")
+region = Rect2(750, 990, 60, 60)
+
+[sub_resource type="Gradient" id="Gradient_7u7mg"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.110204)
+colors = PackedColorArray(4, 4, 4, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uc4hx"]
+gradient = SubResource("Gradient_7u7mg")
+use_hdr = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_githm"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(140, 140, 1)
+orbit_velocity_min = -0.0599999
+orbit_velocity_max = 0.0600001
+radial_velocity_min = -25.0
+radial_velocity_max = -2.23517e-05
+gravity = Vector3(0, 0, 0)
+scale_min = 0.3
+scale_max = 0.6
+scale_curve = SubResource("CurveTexture_11n8p")
+color_initial_ramp = SubResource("GradientTexture1D_uc4hx")
+alpha_curve = SubResource("CurveTexture_of7qm")
+turbulence_noise_strength = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ndod"]
+atlas = ExtResource("3_am81o")
+region = Rect2(870, 990, 60, 60)
 
 [node name="FartSprite" type="Node2D"]
-visible = false
 
 [node name="SpriteN" type="Sprite2D" parent="."]
-texture = ExtResource("1_4egev")
+texture = ExtResource("1_hke2s")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="SpriteN" groups=["Particles"]]
+amount = 80
+process_material = SubResource("ParticleProcessMaterial_cemx1")
+texture = SubResource("AtlasTexture_mcgqn")
+lifetime = 5.0
+explosiveness = 0.27
+visibility_rect = Rect2(-150, -150, 300, 300)
+local_coords = true
 
 [node name="SpriteG" type="Sprite2D" parent="."]
 visible = false
-texture = ExtResource("2_uoidr")
+texture = ExtResource("3_fhj1d")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="SpriteG" groups=["Particles"]]
+amount = 80
+process_material = SubResource("ParticleProcessMaterial_githm")
+texture = SubResource("AtlasTexture_5ndod")
+lifetime = 5.0
+explosiveness = 0.27
+visibility_rect = Rect2(-150, -150, 300, 300)
+local_coords = true

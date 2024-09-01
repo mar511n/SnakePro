@@ -105,7 +105,7 @@ func make_tileset()->void:
 		var tex : Texture2D = load(Global.snake_imgs_path+Global.snake_tile_files[source_id])
 		if tex.get_width() != expected_image_width or tex.get_height() != expected_image_height:
 			var tex_img : Image = tex.get_image()
-			tex_img.resize(expected_image_width,expected_image_height,Image.INTERPOLATE_LANCZOS)
+			tex_img.resize(expected_image_width,expected_image_height,Image.INTERPOLATE_NEAREST)
 			tex = ImageTexture.create_from_image(tex_img)
 		tss.texture = tex
 		var sid = tile_set.add_source(tss)

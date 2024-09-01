@@ -1,7 +1,5 @@
 extends GameModBase
 
-const bds = preload("res://scenes/ModResources/bot_drawer.tscn")
-
 var bot_drawer : TileMap
 
 var owner_peer_id : int
@@ -32,6 +30,7 @@ func on_game_ready(g:InGame, g_is_server:bool):
 			bot_drawer = child
 			#Global.Print("found BotDrawer")
 	if not is_instance_valid(bot_drawer):
+		var bds = load("res://scenes/ModResources/bot_drawer.tscn")
 		bot_drawer = bds.instantiate()
 		game.add_child(bot_drawer)
 		#Global.Print("instantiated BotDrawer")

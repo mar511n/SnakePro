@@ -12,12 +12,17 @@ const o_tile_rad = 2.5
 func _ready() -> void:
 	var fart_scene = fartSpriteScene.instantiate()
 	o_tile_size = fart_scene.get_node("SpriteG").texture.get_size().x/(2*o_tile_rad)
+	fart_scene.queue_free()
 
 func scale_to_tile_size(ts:Vector2)->void:
 	scale *= ts/(Vector2.ONE*o_tile_size)
 
 func add_fart()->int:
 	var fart_scene = fartSpriteScene.instantiate()
+	if not Global.config.get_value(Global.config_user_settings_sec,"useParticles", true):
+		fart_scene.get_node("SpriteG/GPUParticles2D").visible = false
+		fart_scene.get_node("SpriteN/GPUParticles2D").visible = false
+		#get_tree().call_deferred("set_group","Particles","visible",false)
 	fart_id += 1
 	fart_scene.name = "Fart"+str(fart_id)
 	add_child(fart_scene)
@@ -62,6 +67,8 @@ func set_data(dic:Dictionary):
 		if not f_id_f is String:
 			var f_id = int(f_id_f)
 			var fart_scene = fartSpriteScene.instantiate()
+			fart_scene.get_node("SpriteG/GPUParticles2D").visible = false
+			fart_scene.get_node("SpriteN/GPUParticles2D").visible = false
 			fart_scene.name = "Fart"+str(f_id)
 			add_child(fart_scene)
 			fart_scene.visible = true
@@ -70,3 +77,5 @@ func set_data(dic:Dictionary):
 			farts[f_id].position = dic[f_id][1]
 			farts[f_id].get_node("SpriteG").visible = dic[f_id][2]
 			farts[f_id].get_node("SpriteN").visible = dic[f_id][2]
+	#if farts.size() > 0 and not Global.config.get_value(Global.config_user_settings_sec,"useParticles", true):
+	#	get_tree().call_deferred("set_group","Particles","visible",false)

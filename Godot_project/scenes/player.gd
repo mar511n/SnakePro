@@ -10,6 +10,8 @@ enum input_dir {
 	NONE
 }
 
+var trace_length = 10
+
 # static stuff
 var pl_idx = 0
 var peer_id = 0
@@ -24,6 +26,7 @@ var peer_id = 0
 @onready var SpeedSound = $SpeedSound
 @onready var ShootingSound = $ShootingSound
 @onready var FartSound = $FartSound
+@onready var TraceLine = $Trace
 var sn_drawer_path : NodePath
 var sn_drawer : TileMap
 var startPos : Vector2
@@ -64,7 +67,7 @@ func _process(delta):
 	if is_owner:
 		if !Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true):
 			global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
-		else:
+		elif snake_path.point_count > 1:
 			#var pos_frac = sn_drawer.map_to_local(tiles[-2]).lerp(sn_drawer.map_to_local(tiles[-1]), time_since_last_movement_update/movement_update_period)
 			#global_position = sn_drawer.to_global(pos_frac)
 			#global_position = sn_drawer.to_global(sn_drawer.to_local(global_position).lerp(pos_frac, 0.01))
@@ -228,6 +231,12 @@ func redraw_snake():
 	sn_drawer.clear_layer(pl_idx)
 	sn_drawer.draw_snake(Lobby.players[peer_id].get("snake_tile_idx", pl_idx+1),pl_idx,tiles)
 	last_drawn_tiles = [tiles[0],tiles[-1]]
+	# draw trace:
+	TraceLine.clear_points()
+	for i in range(trace_length+1):
+		var idx = snake_path.point_count+i-tiles.size()-trace_length
+		if idx >= 0 and idx < snake_path.point_count:
+			TraceLine.add_point(snake_path.get_point_position(idx))
 
 # on server/client (mostly used for the active player (tiles are then synced to other peers)):
 # moves the snake by one tile in dir, tracking the path if is active player
@@ -255,7 +264,9 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 		fett = gparams["startSnakeLength"]-1
 	if gparams.has("snakeSpeed"):
 		set_speed(float(gparams["snakeSpeed"]))
-		
+	if gparams.has("snakeTraceLength"):
+		trace_length = gparams["snakeTraceLength"]
+	
 	startPos = marker.global_position
 	startDir = Vector2i.RIGHT
 	var rot = fmod(marker.rotation_degrees + 360, 360)
@@ -336,6 +347,7 @@ func reset_snake_tiles():
 	tiles = [spos]
 	fett = Lobby.game_settings.get(Global.config_game_params_sec).get("startSnakeLength", Global.default_game_params["startSnakeLength"]) -1
 	set_speed(Lobby.game_settings.get(Global.config_game_params_sec).get("snakeSpeed", Global.default_game_params["snakeSpeed"]))
+	snake_path.clear_points()
 	if is_owner:
 		snake_path.add_point(startPos)
 	for i in range(1):

@@ -150,6 +150,14 @@ text = "Use shader"
 [node name="HSeparator8" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 
+[node name="Particles" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Use particles"
+
+[node name="HSeparator10" type="HSeparator" parent="ScrollContainer/VFlowContainer"]
+layout_mode = 2
+
 [node name="CaptureReplay" type="CheckButton" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
 button_pressed = true
@@ -172,5 +180,6 @@ player screen"
 [connection signal="item_selected" from="ScrollContainer/VFlowContainer/SplitScreenOpt" to="." method="_on_split_screen_opt_item_selected"]
 [connection signal="drag_ended" from="ScrollContainer/VFlowContainer/MusicVolume" to="." method="_on_music_volume_drag_ended"]
 [connection signal="toggled" from="ScrollContainer/VFlowContainer/Shader" to="." method="_on_shader_toggled"]
+[connection signal="toggled" from="ScrollContainer/VFlowContainer/Particles" to="." method="_on_particles_toggled"]
 [connection signal="toggled" from="ScrollContainer/VFlowContainer/CaptureReplay" to="." method="_on_capture_replay_toggled"]
 [connection signal="toggled" from="ScrollContainer/VFlowContainer/MultiMainScreen" to="." method="_on_multi_main_screen_toggled"]
