@@ -1,1 +1,0 @@
-./SnakePro.x86_64 -- config=user://config_1.txt inputconfig=user://inputconfig_1.txt & ./SnakePro.x86_64 -- config=user://config_2.txt inputconfig=user://inputconfig_2.txt & ./SnakePro.x86_64 -- config=user://config_3.txt inputconfig=user://inputconfig_3.txt & ./SnakePro.x86_64 -- config=user://config_4.txt inputconfig=user://inputconfig_4.txt && fg
