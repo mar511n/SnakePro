@@ -81,7 +81,7 @@ func network_reset()->void:
 func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->void:
 	#Global.Print("show_hide_buttons_and_popups is_hosting %s, disconnected %s")
 	if disconnected:
-		StartG_b.disabled = false
+		StartG_b.disabled = true
 		ConnSet_b.disabled = false
 		Disconn_b.disabled = true
 		GameSet_b.disabled = false
