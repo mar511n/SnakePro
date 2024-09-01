@@ -25,3 +25,22 @@ SnakePro is supposed to be a multiplayer game. It can be played with devices on 
 It's also possible to play on the same device with multiple Players, by opening multiple SnakePro-windows/applications.
 
 To test the game alone, press the "join/host" button and host a game. Now the "play" button will appear.
+
+## Screenshots
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-54-05.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-54-17.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-54-26.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-54-34.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-54-47.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-54-59.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-55-12.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-55-23.png"/>
+
+<img src="https://github.com/mar511n/SnakePro/blob/main/screenshots/Screenshot%20from%202024-09-01%2016-55-37.png"/>
