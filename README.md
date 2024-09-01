@@ -21,4 +21,7 @@ On Android only "SnakePro.apk" is needed.
 
 ## First Steps
 SnakePro is supposed to be a multiplayer game. It can be played with devices on the same LAN or over the internet (this is more complicated).
+
 It's also possible to play on the same device with multiple Players, by opening multiple SnakePro-windows/applications.
+
+To test the game alone, press the "join/host" button and host a game. Now the "play" button will appear.
