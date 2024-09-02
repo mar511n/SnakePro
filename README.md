@@ -16,8 +16,11 @@ The game includes the following features:
 
 ## Installation
 To run the game simply download SnakePro_linux.x86_64/SnakePro_win.exe and SnakePro_linux.pck/SnakePro_win.pck for Linux/Windows from the executables folder.
+
 You can place them anywhere, but both files must be in the same folder.
+
 On Android only SnakePro.apk is needed.
+
 To run a dedicated server, download SnakePro_server.x86_64 and SnakePro_server.pck and run it on the server.
 
 ## First Steps
