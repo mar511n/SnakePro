@@ -90,6 +90,19 @@ bbcode_enabled = true
 scroll_active = false
 autowrap_mode = 2
 
+[node name="StartGame" type="TextureButton" parent="TabContainer/Main"]
+layout_mode = 2
+offset_left = 175.0
+offset_top = 226.0
+offset_right = 404.0
+offset_bottom = 442.0
+tooltip_text = "start game"
+texture_normal = ExtResource("22_xkx7m")
+texture_pressed = ExtResource("22_c1p28")
+texture_disabled = ExtResource("22_xkx7m")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="User Settings" type="Control" parent="TabContainer"]
 visible = false
 layout_mode = 2
@@ -278,19 +291,6 @@ texture_pressed = ExtResource("11_sscp0")
 texture_disabled = SubResource("ImageTexture_1gkq2")
 stretch_mode = 3
 
-[node name="StartGame" type="TextureButton" parent="."]
-layout_mode = 2
-offset_left = 175.0
-offset_top = 362.0
-offset_right = 404.0
-offset_bottom = 578.0
-tooltip_text = "start game"
-texture_normal = ExtResource("22_xkx7m")
-texture_pressed = ExtResource("22_c1p28")
-texture_disabled = ExtResource("22_xkx7m")
-ignore_texture_size = true
-stretch_mode = 5
-
 [node name="ConnectionSettings" type="TextureButton" parent="."]
 layout_mode = 2
 offset_left = 1592.0
@@ -337,6 +337,7 @@ offset_bottom = 578.0
 grow_horizontal = 1
 grow_vertical = 1
 
+[connection signal="pressed" from="TabContainer/Main/StartGame" to="." method="_on_start_game_pressed"]
 [connection signal="on_settings_changed" from="TabContainer/User Settings/UserSettings" to="." method="_on_user_settings_on_settings_changed"]
 [connection signal="on_settings_changed" from="TabContainer/Game Settings/GameSettings" to="." method="_on_game_settings_on_settings_changed"]
 [connection signal="remap_done" from="TabContainer/Control Settings/ActionRemapper" to="." method="_on_action_remapper_remap_done"]
@@ -347,7 +348,6 @@ grow_vertical = 1
 [connection signal="pressed" from="Buttons/VBoxContainer/WatchReplay" to="." method="_on_watch_replay_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Stats" to="." method="_on_stats_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
-[connection signal="pressed" from="StartGame" to="." method="_on_start_game_pressed"]
 [connection signal="pressed" from="ConnectionSettings" to="." method="_on_connection_settings_pressed"]
 [connection signal="pressed" from="Disconnect" to="." method="_on_disconnect_pressed"]
 [connection signal="host" from="ConnectionPopup" to="." method="_on_connection_popup_host"]

@@ -6,7 +6,7 @@ extends Control
 # 2d menu nodes
 @onready var ConPopup:ConnectionPopupPanel = $ConnectionPopup
 @onready var PlList:RichTextLabel = $TabContainer/Main/Background/PlayerList
-@onready var StartG_b:TextureButton = $StartGame
+@onready var StartG_b:TextureButton = $TabContainer/Main/StartGame
 @onready var ConnSet_b:TextureButton = $ConnectionSettings
 @onready var GameSet_b:TextureButton = $Buttons/VBoxContainer/GameSettings
 @onready var Disconn_b:TextureButton = $Disconnect
