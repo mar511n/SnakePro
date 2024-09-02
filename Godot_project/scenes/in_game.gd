@@ -172,7 +172,7 @@ func _ready()->void:
 	Lobby.server_disconnected.connect(self.connection_failed)
 	Lobby.player_disconnected.connect(self.player_disconnected)
 	Lobby.all_players_loaded.connect(self.all_players_loaded)
-	$GUI/Panel/VBoxContainer/Return.disabled = !multiplayer.is_server()
+	$GUI/Panel/VBoxContainer/Return.disabled = not multiplayer.is_server() and not Global.has_server_privileges
 	
 	pause_game(true, false)
 	
@@ -323,6 +323,7 @@ func pause_game(pause, set_gui=true):
 
 # on server/client:
 # -> loads the main menu (locally or for all peers) and resets networking if requested
+@rpc("any_peer","call_local","reliable")
 func return_to_main_menu(reset_net=false, all_peers=false):
 	#Global.Print("loading main_menu: %s" % Global.main_menu_path)
 	
@@ -374,3 +375,5 @@ func _on_continue_pressed():
 func _on_return_pressed():
 	if multiplayer.is_server():
 		return_to_main_menu(false,true)
+	elif Global.has_server_privileges:
+		return_to_main_menu.rpc_id(1,false,true)

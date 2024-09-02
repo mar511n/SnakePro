@@ -11,7 +11,7 @@ anchor_bottom = 0.5
 offset_left = -162.0
 offset_top = -90.0
 offset_right = 163.0
-offset_bottom = 140.0
+offset_bottom = 186.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ofjbj")
@@ -32,6 +32,13 @@ text = "Hosting"
 alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Privilege" type="CheckButton" parent="VBoxContainer"]
+layout_mode = 2
+text = "request privileges"
+
+[node name="HSeparator4" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
 
 [node name="IP_Label" type="Label" parent="VBoxContainer"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://dffji00mprodh"]
+[gd_scene load_steps=45 format=3 uid="uid://dffji00mprodh"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_gv0ea"]
 [ext_resource type="Texture2D" uid="uid://bj1hqxypsq80v" path="res://assets/MatIcons/add_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="2_ure4r"]
@@ -76,8 +76,15 @@ properties/5/replication_mode = 2
 properties/6/path = NodePath("SpeedSound:playing")
 properties/6/spawn = true
 properties/6/replication_mode = 2
-
-[sub_resource type="Curve2D" id="Curve2D_3f3bv"]
+properties/7/path = NodePath("DeadSound:playing")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath("ShootingSound:playing")
+properties/8/spawn = true
+properties/8/replication_mode = 2
+properties/9/path = NodePath("FartSound:playing")
+properties/9/spawn = true
+properties/9/replication_mode = 2
 
 [sub_resource type="Gradient" id="Gradient_3x5wc"]
 
@@ -171,7 +178,6 @@ texture = ExtResource("2_ure4r")
 
 [node name="Path2D" type="Path2D" parent="."]
 top_level = true
-curve = SubResource("Curve2D_3f3bv")
 
 [node name="Line2D" type="Line2D" parent="."]
 top_level = true

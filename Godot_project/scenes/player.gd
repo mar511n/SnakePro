@@ -43,7 +43,7 @@ var modules : Array[PlModBase]
 @export var tiles = []
 var last_drawn_tiles : Array[Vector2i] = []
 var fett : int = 3
-@onready var snake_path : Curve2D = $Path2D.curve
+var snake_path : Curve2D
 var movement_update_period : float = 1.0 # seconds
 # helper variables
 var path_pos : float = 0.0 # in px
@@ -230,6 +230,16 @@ func update_snake(delta):
 func redraw_snake():
 	sn_drawer.clear_layer(pl_idx)
 	sn_drawer.draw_snake(Lobby.players[peer_id].get("snake_tile_idx", pl_idx+1),pl_idx,tiles)
+	
+	if last_drawn_tiles.size() != 2 or (last_drawn_tiles[-1] != tiles[-1]):
+		snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
+		while snake_path.point_count > Global.max_snake_path_length:
+			snake_path.remove_point(0)
+			if is_owner:
+				path_pos -= IG.tile_size_px
+		if Global.debugging_on:
+			$Line2D.points = snake_path.get_baked_points()
+	
 	last_drawn_tiles = [tiles[0],tiles[-1]]
 	# draw trace:
 	TraceLine.clear_points()
@@ -246,14 +256,6 @@ func move_in_dir(dir:Vector2i):
 		fett -= 1
 	else:
 		tiles.remove_at(0)
-	if is_owner:
-		snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
-		while snake_path.point_count > Global.max_snake_path_length:
-			#pass
-			snake_path.remove_point(0)
-			path_pos -= IG.tile_size_px
-		if Global.debugging_on:
-			$Line2D.points = snake_path.get_baked_points()
 
 # on server/client:
 # -> called before _ready
@@ -301,6 +303,8 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 func _ready():
 	set_physics_process(false)
 	set_process(false)
+	snake_path = Curve2D.new()
+	$Path2D.curve = snake_path
 	is_owner = peer_id == multiplayer.get_unique_id()
 	if !Global.debugging_on:
 		remove_child($Sprite2D)

@@ -2,10 +2,13 @@ extends Panel
 class_name ConnectionPopupPanel
 
 signal host(port:int)
-signal join(ip:String,port:int)
+signal join(ip:String,port:int,priv:bool)
 
 @onready var ip_l:Label = $VBoxContainer/IP_Label
 @onready var ip_e:LineEdit = $VBoxContainer/IP
+@onready var ip_sep:HSeparator = $VBoxContainer/HSeparator
+@onready var priv_b:CheckButton = $VBoxContainer/Privilege
+@onready var priv_sep:HSeparator = $VBoxContainer/HSeparator4
 @onready var port_l:Label = $VBoxContainer/Port_Label
 @onready var port_e:SpinBox = $VBoxContainer/Port
 @onready var hj_b:CheckButton = $VBoxContainer/HostJoin
@@ -31,6 +34,9 @@ func show_popup(ip:String="",p:int=0)->void:
 func set_ip_vis()->void:
 	ip_l.visible = not hj_b.button_pressed
 	ip_e.visible = not hj_b.button_pressed
+	ip_sep.visible = not hj_b.button_pressed
+	priv_b.visible = not hj_b.button_pressed
+	priv_sep.visible = not hj_b.button_pressed
 	if hj_b.button_pressed:
 		conf_b.text = "Host"
 	else:
@@ -57,7 +63,7 @@ func _on_ok_pressed()->void:
 	if hj_b.button_pressed:
 		host.emit(port)
 	else:
-		join.emit(ip_addr,port)
+		join.emit(ip_addr,port,priv_b.button_pressed)
 	visible = false
 
 func _on_cancel_pressed()->void:

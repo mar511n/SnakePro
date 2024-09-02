@@ -67,6 +67,8 @@ var config:ConfigFile = ConfigFile.new()
 var inputconfig:ConfigFile = ConfigFile.new()
 var stats:ConfigFile = ConfigFile.new()
 
+var has_server_privileges = false
+
 enum hit_causes {
 	COLLISION, # infos: {"type":collision, "caused_by_id":int / "wall_v":int}
 	APPLE_DMG, # infos: {"caused_by_id":int}
@@ -208,7 +210,7 @@ func load_own_player_stats():
 	own_player_stats = Global.get_section_dict(stats,stats_sec,own_player_stats)
 
 # the static gamestate at the start
-var static_gamestate:Dictionary
+var static_gamestate:Array
 # capture start time
 var capture_start_time:float
 # [time in seconds since start, gamestate]
@@ -222,26 +224,36 @@ func start_game_state_capture():
 
 func save_variable_gamestate_if_needed():
 	var vgs = save_game_state(variable_graphic_group)
-	if len(variable_gamestates) == 0 or not vgs.recursive_equal(variable_gamestates[-1][1],20):
+	if len(variable_gamestates) == 0 or not compare_gamestates(vgs, variable_gamestates[-1][1]):
 		variable_gamestates.append([Time.get_unix_time_from_system()-capture_start_time, vgs])
 
-func save_game_state(groupName:StringName)->Dictionary:
+func compare_gamestates(gs1:Array,gs2:Array)->bool:
+	if len(gs1) != len(gs2):
+		return false
+	var eq = true
+	for i in range(gs1.size()):
+		if (gs1[i][0] != gs2[i][0]) or not gs1[i][1].recursive_equal(gs2[i][1],20):
+			eq = false
+			break
+	return eq
+
+func save_game_state(groupName:StringName)->Array:
 	var nodes = get_tree().get_nodes_in_group(groupName)
-	var dic = {}
+	var gs = []
 	for node in nodes:
 		if node.has_method(res_path_func_name) and node.has_method(get_data_func_name):
 			var resPath = node.call(res_path_func_name)
 			var data = node.call(get_data_func_name)
-			dic[resPath] = data
+			gs.append([resPath,data])
 		else:
 			Print("ERROR in save_game_state: node %s misses function %s or %s" % [node.name, res_path_func_name, get_data_func_name])
-	return dic
+	return gs
 
-func load_game_state(parentNode:Node, gs:Dictionary):
-	for resPath in gs:
-		var node:Node = load(resPath).instantiate()
+func load_game_state(parentNode:Node, gs:Array):
+	for vis in gs:
+		var node:Node = load(vis[0]).instantiate()
 		if node.has_method(set_data_func_name):
-			node.call(set_data_func_name, gs[resPath])
+			node.call(set_data_func_name, vis[1])
 			parentNode.add_child(node)
 		else:
 			Print("ERROR in load_game_state: node %s misses function %s" % [node.name, set_data_func_name])

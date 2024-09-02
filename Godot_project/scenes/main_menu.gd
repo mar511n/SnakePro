@@ -35,6 +35,7 @@ func initialize()->void:
 	Lobby.server_disconnected.connect(self.server_disconnected)
 	Lobby.player_disconnected.connect(self.player_disconnected)
 	Lobby.player_info_updated.connect(self.player_info_updated)
+	Lobby.on_priv_granted.connect(self.on_priv_granted)
 	#load_con_settings()
 	load_playerinfo()
 	ConPopup.visible = false
@@ -67,15 +68,22 @@ func reset()->void:
 		Global.Print("WARNING: no stats found at %s" % Global.stats_path, 7)
 	if Global.stats.has_section(Global.stats_sec):
 		Global.load_own_player_stats()
+	if arguments.has("port"):
+		Global.config.set_value("conn","port",int(arguments["port"]))
 	
 	call_next_process_frame.append([update_stuff_from_usetts , [Global.config_get_section_dict(Global.config_user_settings_sec),true]])
 	randomize()
 	initialize()
 	network_reset()
 	update_playernames_list()
+	
+	if OS.has_feature("dedicated_server"):
+		Global.Print("running as dedicated server...")
+		_on_connection_popup_host(Global.config.get_value("conn","port",8080))
 
 func network_reset()->void:
 	Lobby.reset_network()
+	Global.has_server_privileges = false
 	show_hide_buttons_and_popups(false,true)
 
 func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->void:
@@ -99,13 +107,13 @@ func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->voi
 		TabCont.set_tab_disabled(2, false)
 		ConnStat.set_hosting()
 	else:
-		StartG_b.disabled = true
 		ConnSet_b.disabled = true
 		Disconn_b.disabled = false
-		GameSet_b.disabled = true
 		
 		TabCont.current_tab = 0
-		TabCont.set_tab_disabled(2, true)
+		TabCont.set_tab_disabled(2, not Global.has_server_privileges)
+		StartG_b.disabled = not Global.has_server_privileges
+		GameSet_b.disabled = not Global.has_server_privileges
 		#GameSetPopup.visible = false
 		ConnStat.set_connected_to_server()
 
@@ -141,12 +149,22 @@ func _on_start_game_pressed()->void:
 		return
 	if multiplayer.is_server():
 		#Global.Print("loading game_scene: %s" % game_scene_path)
-		Lobby.reset_game_stats.rpc()
-		Lobby.load_scene.rpc(game_scene_path)
+		start_game()
 		#Lobby.scene_spawner.spawn(game_scene_path)
+	elif Global.has_server_privileges:
+		start_game.rpc_id(1)
+
+@rpc("any_peer","call_local","reliable")
+func start_game()->void:
+	Lobby.reset_game_stats.rpc()
+	Lobby.load_scene.rpc(game_scene_path)
 
 func _on_quit_game_pressed()->void:
 	get_tree().quit()
+
+func on_priv_granted()->void:
+	Global.has_server_privileges = true
+	show_hide_buttons_and_popups(false,false)
 
 func _on_connection_popup_host(port:int)->void:
 	Global.Print("hosting on %s:%s" % [IP.get_local_addresses()[0],port], 6)
@@ -158,8 +176,11 @@ func _on_connection_popup_host(port:int)->void:
 	save_con_settings(false)
 	show_hide_buttons_and_popups(true)
 
-func _on_connection_popup_join(ip:String, port:int)->void:
+func _on_connection_popup_join(ip:String, port:int, priv:bool)->void:
 	Global.Print("joining on %s:%s" % [ip,port],6)
+	if priv:
+		Lobby.player_info["priv"] = 1
+		Global.Print("requesting privileges")
 	var err:Error = Lobby.join_game(ip,port)
 	if err != OK:
 		Global.Print("ERROR while connection to server: %s" % err, 7)
@@ -175,7 +196,7 @@ func update_playernames_list()->void:
 		if Lobby.players[peer_id]["snake_tile_idx"] < len(Global.snake_colors):
 			pl_col = Global.snake_colors[Lobby.players[peer_id]["snake_tile_idx"]].to_html()
 		if peer_id == multiplayer.get_unique_id():
-			PlList.append_text("[center][b][color=%s]%s[/color][/b][/center]" % [pl_col,pl_name])
+			PlList.append_text("[center][u][color=%s]%s[/color][/u][/center]" % [pl_col,pl_name])
 		else:
 			PlList.append_text("[center][color=%s]%s[/color][/center]" % [pl_col,pl_name])
 		if Lobby.game_stats.has("Winner") and Lobby.game_stats["Winner"] == peer_id:
@@ -305,7 +326,7 @@ func _on_user_settings_pressed()->void:
 	#	UserSetPopup.visible = false
 
 func _on_game_settings_on_settings_changed()->void:
-	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
+	if multiplayer.has_multiplayer_peer() and (multiplayer.is_server() or Global.has_server_privileges):
 		Lobby.update_game_settings_on_server()
 
 func _on_game_settings_pressed()->void:
