@@ -59,7 +59,7 @@ func _ready()->void:
 
 var time_since_last_ping = 0.0
 func _process(delta: float) -> void:
-	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status()==MultiplayerPeer.ConnectionStatus.CONNECTION_CONNECTED and not multiplayer.is_server():
 		time_since_last_ping += delta
 		if time_since_last_ping > 1.0:
 			time_since_last_ping = 0.0
