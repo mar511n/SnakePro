@@ -57,7 +57,11 @@ func reset()->void:
 		Global.stats_path = arguments["stats"]
 	Global.Print("loading config from %s" % Global.config_path, 6)
 	if Global.config.load(Global.config_path) != OK:
-		Global.Print("WARNING: no config found at %s" % Global.config_path, 7)
+		Global.save_resource("res://assets/default_config.txt",Global.config_path)
+		if Global.config.load(Global.config_path) != OK:
+			Global.Print("WARNING: no config found at %s" % Global.config_path, 7)
+		else:
+			Global.Print("WARNING: no config found at %s, using default config" % Global.config_path, 7)
 	Global.Print("loading inputconfig from %s" % Global.inputconfig_path, 6)
 	if Global.inputconfig.load(Global.inputconfig_path) != OK:
 		Global.Print("WARNING: no inputconfig found at %s" % Global.inputconfig_path, 7)

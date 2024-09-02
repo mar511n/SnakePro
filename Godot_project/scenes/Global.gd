@@ -209,6 +209,14 @@ func load_own_player_stats():
 	#player_stats[-1] = Global.get_section_dict(stats,stats_sec,player_stats.get(-1,{}))
 	own_player_stats = Global.get_section_dict(stats,stats_sec,own_player_stats)
 
+func save_resource(from:String, to:String) -> void:
+	var file = FileAccess.open(from,FileAccess.READ)
+	var txt = file.get_as_text()
+	file.close()
+	file = FileAccess.open(to,FileAccess.WRITE)
+	file.store_string(txt)
+	file.close()
+
 # the static gamestate at the start
 var static_gamestate:Array
 # capture start time
