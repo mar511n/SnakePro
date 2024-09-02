@@ -232,13 +232,16 @@ func redraw_snake():
 	sn_drawer.draw_snake(Lobby.players[peer_id].get("snake_tile_idx", pl_idx+1),pl_idx,tiles)
 	
 	if last_drawn_tiles.size() != 2 or (last_drawn_tiles[-1] != tiles[-1]):
-		snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
-		while snake_path.point_count > Global.max_snake_path_length:
-			snake_path.remove_point(0)
-			if is_owner:
-				path_pos -= IG.tile_size_px
-		if Global.debugging_on:
-			$Line2D.points = snake_path.get_baked_points()
+		if last_drawn_tiles[-1].distance_squared_to(tiles[-1]) > 4:
+			snake_path.clear_points()
+		else:
+			snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
+			while snake_path.point_count > Global.max_snake_path_length:
+				snake_path.remove_point(0)
+				if is_owner:
+					path_pos -= IG.tile_size_px
+			if Global.debugging_on:
+				$Line2D.points = snake_path.get_baked_points()
 	
 	last_drawn_tiles = [tiles[0],tiles[-1]]
 	# draw trace:

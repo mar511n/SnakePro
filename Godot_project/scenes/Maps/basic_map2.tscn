@@ -46,16 +46,16 @@ position = Vector2(713, 704)
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="0" type="Marker2D" parent="Spawns" groups=["PlayerSpawnPoint"]]
-position = Vector2(64.3333, 61)
+position = Vector2(80, 80)
 rotation = 1.57079
 
 [node name="1" type="Marker2D" parent="Spawns" groups=["PlayerSpawnPoint"]]
-position = Vector2(669.667, 64.3333)
+position = Vector2(656, 80)
 rotation = 3.14159
 
 [node name="2" type="Marker2D" parent="Spawns" groups=["PlayerSpawnPoint"]]
-position = Vector2(69, 609.667)
+position = Vector2(80, 592)
 
 [node name="3" type="Marker2D" parent="Spawns" groups=["PlayerSpawnPoint"]]
-position = Vector2(666, 605.667)
+position = Vector2(656, 592)
 rotation = -1.57079

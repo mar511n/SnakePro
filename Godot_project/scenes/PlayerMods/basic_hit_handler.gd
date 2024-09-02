@@ -23,19 +23,20 @@ func on_player_ready():
 
 # this is called on every client if any player dies
 func on_player_hit(cause:Array):
-	var p_id = pl.peer_id
-	if p_id == multiplayer.get_unique_id():
-		p_id = -1
-	var cp_id = cause[1].get("caused_by_id",-1)
-	if cp_id == multiplayer.get_unique_id():
-		cp_id = -1
-		cause[1]["caused_by_id"] = -1
-	if not Global.player_stats[-1].has(p_id):
-		Global.player_stats[-1][p_id] = {"kills":[],"deaths":[],"wins":0}
-	Global.player_stats[-1][p_id]["deaths"].append(cause)
-	if not Global.player_stats[-1].has(cp_id):
-		Global.player_stats[-1][cp_id] = {"kills":[],"deaths":[],"wins":0}
-	Global.player_stats[-1][cp_id]["kills"].append([p_id,cause[0],cause[1]])
+	if pl.module_vars["PlayerIsAlive"]:
+		var p_id = pl.peer_id
+		if p_id == multiplayer.get_unique_id():
+			p_id = -1
+		var cp_id = cause[1].get("caused_by_id",-1)
+		if cp_id == multiplayer.get_unique_id():
+			cp_id = -1
+			cause[1]["caused_by_id"] = -1
+		if not Global.player_stats[-1].has(p_id):
+			Global.player_stats[-1][p_id] = {"kills":[],"deaths":[],"wins":0}
+		Global.player_stats[-1][p_id]["deaths"].append(cause)
+		if not Global.player_stats[-1].has(cp_id):
+			Global.player_stats[-1][cp_id] = {"kills":[],"deaths":[],"wins":0}
+		Global.player_stats[-1][cp_id]["kills"].append([p_id,cause[0],cause[1]])
 	#queued_for_dying = true
 	set_player_dead(true)
 	pl.reset_snake_tiles()
