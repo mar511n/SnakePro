@@ -10,6 +10,7 @@ signal connecting_failed
 signal all_players_loaded
 signal player_info_updated(peer_id:int, pl_info:Dictionary)
 signal on_priv_granted()
+signal on_pong(rtt:float)
 #signal on_spawn_scene(scene)
 
 const DEFAULT_PORT:int = 8080
@@ -46,6 +47,8 @@ var players:Dictionary = {}
 var players_loaded:int = 0
 
 var privileges_granted_to = -1
+var last_rtt = 0.0
+var ping_time = 0.0
 
 func _ready()->void:
 	multiplayer.peer_connected.connect(_on_player_connected)
@@ -53,6 +56,14 @@ func _ready()->void:
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
+
+var time_since_last_ping = 0.0
+func _process(delta: float) -> void:
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		time_since_last_ping += delta
+		if time_since_last_ping > 1.0:
+			time_since_last_ping = 0.0
+			make_server_ping()
 
 func join_game(address:String = "", port:int = 0)->Error:
 	if address.is_empty():
@@ -89,6 +100,19 @@ func reset_network()->void:
 	multiplayer.multiplayer_peer = null
 	players = {}
 	players_loaded = 0
+
+func make_server_ping():
+	ping_time = Time.get_unix_time_from_system()
+	server_ping.rpc_id(1)
+
+@rpc("any_peer","reliable")
+func server_ping():
+	client_pong.rpc_id(multiplayer.get_remote_sender_id())
+
+@rpc("authority","reliable")
+func client_pong():
+	last_rtt = Time.get_unix_time_from_system()-ping_time
+	on_pong.emit(last_rtt)
 
 @rpc("any_peer", "call_local", "reliable")
 func player_info_update(peer_id:int, pl_info:Dictionary)->void:

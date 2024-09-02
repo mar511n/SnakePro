@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkc33ue33bnrj"]
+
+[ext_resource type="Script" path="res://scenes/top_gui.gd" id="1_hc4yl"]
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_luo1i"]
+
+[node name="TopGUI" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_hc4yl")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_luo1i")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -79.0
+offset_top = -82.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 2
+
+[node name="RTT_l" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+
+[node name="FPS_l" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "60 fps"
+horizontal_alignment = 2

@@ -48,6 +48,7 @@ func _physics_process(delta:float)->void:
 			mod.on_game_physics_process(delta)
 		if capture_replay_on:
 			Global.save_variable_gamestate_if_needed()
+		TopGui.set_fps(Engine.get_frames_per_second())
 
 # on server:
 # -> note movement of player (to check collision on next physics frame)

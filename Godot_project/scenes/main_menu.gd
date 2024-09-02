@@ -36,6 +36,7 @@ func initialize()->void:
 	Lobby.player_disconnected.connect(self.player_disconnected)
 	Lobby.player_info_updated.connect(self.player_info_updated)
 	Lobby.on_priv_granted.connect(self.on_priv_granted)
+	Lobby.on_pong.connect(self.on_lobby_pong)
 	#load_con_settings()
 	load_playerinfo()
 	ConPopup.visible = false
@@ -364,7 +365,15 @@ func _process(delta:float)->void:
 		else:
 			call_next_process_frame[0][0].callv(call_next_process_frame[0][1])
 			call_next_process_frame.remove_at(0)
+	TopGui.set_fps(Engine.get_frames_per_second())
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.keycode == KEY_0:
+			Lobby.make_server_ping()
+
+func on_lobby_pong(rtt:float):
+	TopGui.set_rtt(rtt)
 
 func _on_watch_replay_pressed() -> void:
 	Lobby.load_scene(Global.gameviewer_path)

@@ -99,7 +99,7 @@ func _physics_process(delta):
 	if is_owner:
 		process_input()
 		update_snake(delta)
-		$GUI/FPS_L.text = str(int(Engine.get_frames_per_second()))
+		#$GUI/FPS_L.text = str(int(Engine.get_frames_per_second()))
 	for mod in module_node.get_children():
 		mod.on_player_physics_process(delta)
 

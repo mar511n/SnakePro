@@ -27,6 +27,7 @@ Lobby="*res://scenes/lobby.gd"
 MainThemePlayer="*res://scenes/main_theme_player.tscn"
 ToastParty="*res://addons/toastparty/toast-autoload.gd"
 Global="*res://scenes/Global.gd"
+TopGui="*res://scenes/top_gui.tscn"
 
 [debug]
 
