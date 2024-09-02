@@ -128,9 +128,9 @@ func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->voi
 		#GameSetPopup.visible = false
 		ConnStat.set_connected_to_server()
 	if StartG_b.disabled:
-		StartG_b.self_modulate = Color(0.5,0.5,0.5,0.5)
+		StartG_b.modulate = Color(0.5,0.5,0.5,0.5)
 	else:
-		StartG_b.self_modulate = Color.WHITE
+		StartG_b.modulate = Color.WHITE
 
 func _on_disconnect_pressed()->void:
 	network_reset()

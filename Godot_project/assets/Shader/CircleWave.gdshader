@@ -27,7 +27,7 @@ void fragment() {
 	h = clamp(h, 0.0, 1.0);
 	float r = length(vec2(UV.x-0.5,UV.y-0.5))*2.0;
 	if (r < h && h-r < line_tickness) {
-		COLOR = col;
+		COLOR = vec4(col.r,col.g,col.b,COLOR.a);
 	}else{
 		COLOR = vec4(0.0,0.0,0.0,0.0);
 	}
