@@ -11,14 +11,17 @@ func _ready()->void:
 func set_disconnected()->void:
 	texture = disconnected
 	tooltip_text = "disconnected"
+	self_modulate = Color.WHITE
 
 func set_connected_to_server()->void:
 	texture = connected
 	tooltip_text = "connected to server"
+	self_modulate = Color.WEB_GREEN
 
 func set_hosting()->void:
 	texture = hosting
 	tooltip_text = "hosting"
+	self_modulate = Color.WEB_GREEN
 
 func network_connected()->bool:
 	return texture != disconnected

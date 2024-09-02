@@ -76,6 +76,6 @@ func set_data(dic:Dictionary):
 			farts[f_id].scale = dic[f_id][0]
 			farts[f_id].position = dic[f_id][1]
 			farts[f_id].get_node("SpriteG").visible = dic[f_id][2]
-			farts[f_id].get_node("SpriteN").visible = dic[f_id][2]
+			farts[f_id].get_node("SpriteN").visible = not dic[f_id][2]
 	#if farts.size() > 0 and not Global.config.get_value(Global.config_user_settings_sec,"useParticles", true):
 	#	get_tree().call_deferred("set_group","Particles","visible",false)

@@ -6,10 +6,10 @@ extends Control
 # 2d menu nodes
 @onready var ConPopup:ConnectionPopupPanel = $ConnectionPopup
 @onready var PlList:RichTextLabel = $TabContainer/Main/Background/PlayerList
-@onready var StartG_b:TextureButton = $Buttons/VBoxContainer/StartGame
-@onready var ConnSet_b:TextureButton = $Buttons/VBoxContainer/ConnectionSettings
+@onready var StartG_b:TextureButton = $StartGame
+@onready var ConnSet_b:TextureButton = $ConnectionSettings
 @onready var GameSet_b:TextureButton = $Buttons/VBoxContainer/GameSettings
-@onready var Disconn_b:TextureButton = $Buttons/VBoxContainer/Disconnect
+@onready var Disconn_b:TextureButton = $Disconnect
 @onready var UserSettings:UserSettingsPanel = $"TabContainer/User Settings/UserSettings"
 @onready var GameSettings:GameSettingsPanel = $"TabContainer/Game Settings/GameSettings"
 @onready var InputSettings:ControllSettingsPanel = $"TabContainer/Control Settings/ActionRemapper"
@@ -56,6 +56,12 @@ func reset()->void:
 		Global.inputconfig_path = arguments["inputconfig"]
 	if arguments.has("stats"):
 		Global.stats_path = arguments["stats"]
+	
+	if not DirAccess.dir_exists_absolute(Global.replay_dir_path):
+		var err = DirAccess.make_dir_absolute(Global.replay_dir_path)
+		if err != OK:
+			Global.Print("ERROR: %s: could not create replay dir in %s"%[error_string(err),Global.replay_dir_path],7)
+	
 	Global.Print("loading config from %s" % Global.config_path, 6)
 	if Global.config.load(Global.config_path) != OK:
 		Global.save_resource("res://assets/default_config.txt",Global.config_path)
@@ -121,6 +127,10 @@ func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->voi
 		GameSet_b.disabled = not Global.has_server_privileges
 		#GameSetPopup.visible = false
 		ConnStat.set_connected_to_server()
+	if StartG_b.disabled:
+		StartG_b.self_modulate = Color(0.5,0.5,0.5,0.5)
+	else:
+		StartG_b.self_modulate = Color.WHITE
 
 func _on_disconnect_pressed()->void:
 	network_reset()

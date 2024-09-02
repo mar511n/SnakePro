@@ -42,10 +42,11 @@ func on_game_ready(g:InGame, g_is_server:bool):
 
 func on_game_post_ready():
 	var local_pl:SnakePlayer = game.playerlist.get(multiplayer.get_unique_id(), null)
-	Global.Print("Loading ItemGUI for player %s" % local_pl.peer_id)
-	var lp_ui = local_player_ui.instantiate()
-	lp_ui.name = "ItemGUI"
-	local_pl.gui_node.add_child(lp_ui)
+	if is_instance_valid(local_pl):
+		Global.Print("Loading ItemGUI for player %s" % local_pl.peer_id)
+		var lp_ui = local_player_ui.instantiate()
+		lp_ui.name = "ItemGUI"
+		local_pl.gui_node.add_child(lp_ui)
 	
 	if is_server:
 		Global.Print("spawning items")
