@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://6mp7bp17ft6w"]
+[gd_scene load_steps=41 format=3 uid="uid://6mp7bp17ft6w"]
 
 [ext_resource type="Texture2D" uid="uid://cvdwlujqq8r81" path="res://assets/Images/UI/WinBack.png" id="1_biflu"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_i16v8"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://y5w8tqjrse7n" path="res://assets/MatIcons/login_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="5_qybkx"]
 [ext_resource type="Texture2D" uid="uid://dhismigy7jjcv" path="res://assets/MatIcons/home_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_8cisp"]
 [ext_resource type="PackedScene" uid="uid://dxobh2gxukmej" path="res://scenes/action_remapper.tscn" id="6_dxjc5"]
+[ext_resource type="Shader" path="res://assets/Shader/CircleWave.gdshader" id="6_otxuj"]
 [ext_resource type="Texture2D" uid="uid://c0rgficet05i6" path="res://assets/MatIcons/settings_applications_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_sfhnf"]
 [ext_resource type="Texture2D" uid="uid://c7k8nkeora5ht" path="res://assets/MatIcons/logout_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="6_yvnxy"]
 [ext_resource type="PackedScene" uid="uid://bc2wn8f5my0q0" path="res://scenes/statistics.tscn" id="7_dmrd2"]
@@ -29,6 +30,29 @@
 [ext_resource type="Texture2D" uid="uid://b525xtmrhel2s" path="res://assets/Images/UI/play.png" id="22_c1p28"]
 [ext_resource type="Texture2D" uid="uid://ddyginewiylul" path="res://assets/MatIcons/analytics_24dp_E8EAED_FILL0_wght700_GRAD200_opsz24.svg" id="22_d30u4"]
 [ext_resource type="Texture2D" uid="uid://5wxtsmhyfroa" path="res://assets/Images/UI/play_small.png" id="22_xkx7m"]
+
+[sub_resource type="Curve" id="Curve_flpfj"]
+_data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.125, 1), 0.0, 0.0, 0, 0, Vector2(0.25, 0.75), 0.0, 0.0, 0, 0, Vector2(0.375, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0.75), 0.0, 0.0, 0, 0, Vector2(0.625, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.75), 0.0, 0.0, 0, 0, Vector2(0.875, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="CurveTexture" id="CurveTexture_jny4n"]
+texture_mode = 1
+curve = SubResource("Curve_flpfj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_buon6"]
+shader = ExtResource("6_otxuj")
+shader_parameter/line_tickness = 1.0
+shader_parameter/offset_mul = 2.0
+shader_parameter/amp1 = 0.125
+shader_parameter/freq1 = 4.0
+shader_parameter/speed1 = 5.0
+shader_parameter/amp2 = 0.125
+shader_parameter/freq2 = 9.0
+shader_parameter/speed2 = 1.46
+shader_parameter/col = Color(0, 0, 0, 1)
+shader_parameter/base_offset = SubResource("CurveTexture_jny4n")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_5x43k"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_ggknu"]
 
@@ -102,6 +126,23 @@ texture_pressed = ExtResource("22_c1p28")
 texture_disabled = ExtResource("22_xkx7m")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Main/StartGame"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_buon6")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_5x43k")
 
 [node name="User Settings" type="Control" parent="TabContainer"]
 visible = false
@@ -243,6 +284,7 @@ texture_disabled = SubResource("ImageTexture_ggknu")
 stretch_mode = 3
 
 [node name="UserSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
+self_modulate = Color(0.255, 0.412, 0.882, 1)
 layout_mode = 2
 tooltip_text = "user settings"
 texture_normal = ExtResource("4_s78qd")
@@ -251,6 +293,7 @@ texture_disabled = SubResource("ImageTexture_ggknu")
 stretch_mode = 3
 
 [node name="GameSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
+self_modulate = Color(0.254902, 0.411765, 0.882353, 1)
 layout_mode = 2
 tooltip_text = "game settings"
 texture_normal = ExtResource("6_sfhnf")
@@ -259,6 +302,7 @@ texture_disabled = SubResource("ImageTexture_lpa1i")
 stretch_mode = 3
 
 [node name="ControlSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
+self_modulate = Color(0.254902, 0.411765, 0.882353, 1)
 layout_mode = 2
 tooltip_text = "control settings"
 texture_normal = ExtResource("13_b5lhp")
@@ -267,6 +311,7 @@ texture_disabled = SubResource("ImageTexture_lpa1i")
 stretch_mode = 3
 
 [node name="WatchReplay" type="TextureButton" parent="Buttons/VBoxContainer"]
+self_modulate = Color(1, 0.843, 0, 1)
 layout_mode = 2
 tooltip_text = "watch replay"
 texture_normal = ExtResource("16_0ubv4")
@@ -275,6 +320,7 @@ texture_disabled = SubResource("ImageTexture_cg561")
 stretch_mode = 3
 
 [node name="Stats" type="TextureButton" parent="Buttons/VBoxContainer"]
+self_modulate = Color(1, 0.843, 0, 1)
 layout_mode = 2
 tooltip_text = "statistics"
 texture_normal = ExtResource("21_2w5kh")
@@ -292,6 +338,7 @@ texture_disabled = SubResource("ImageTexture_1gkq2")
 stretch_mode = 3
 
 [node name="ConnectionSettings" type="TextureButton" parent="."]
+self_modulate = Color(0, 0.502, 0, 1)
 layout_mode = 2
 offset_left = 1592.0
 offset_top = 20.0

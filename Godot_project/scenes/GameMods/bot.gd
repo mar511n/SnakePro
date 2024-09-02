@@ -152,6 +152,11 @@ func remove_bot():
 	#Global.Print("2 removing bot of player %s with name %s"%[owner_peer_id,name])
 	remove_module()
 
+func on_game_checked_collisions(colls)->Array:
+	if is_server:
+		check_collision(get_coll_map(), get_tiles())
+	return super(colls)
+
 func check_collision(cmap:CollisionMap, tiles:Array):
 	if len(tiles) < 2:
 		return

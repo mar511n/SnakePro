@@ -68,6 +68,11 @@ func on_game_physics_process(delta):
 			check_collision()
 		# handle collision only on server
 
+func on_game_checked_collisions(colls)->Array:
+	if is_server:
+		check_collision()
+	return super(colls)
+
 func check_collision():
 	if game.coll_map.collides_at(pos.x,pos.y) != 0:
 		#remove_bullet()

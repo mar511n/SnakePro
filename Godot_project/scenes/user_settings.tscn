@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://106bjfe7jhy2"]
+[gd_scene load_steps=5 format=3 uid="uid://106bjfe7jhy2"]
 
+[ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_51ktm"]
 [ext_resource type="Script" path="res://scenes/user_settings.gd" id="1_fr42r"]
 [ext_resource type="Texture2D" uid="uid://m3vbiomqc2pe" path="res://assets/Images/Snakes/blue_preview.png" id="2_vihr5"]
 [ext_resource type="PackedScene" uid="uid://bdcc0njvy50mt" path="res://scenes/labeled_h_slider.tscn" id="3_d0h0d"]
 
 [node name="UserSettings" type="Panel"]
-offset_right = 366.0
-offset_bottom = 379.0
+offset_right = 1252.0
+offset_bottom = 880.0
+theme = ExtResource("1_51ktm")
 script = ExtResource("1_fr42r")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -25,6 +27,9 @@ grow_vertical = 2
 custom_minimum_size = Vector2(313, 322)
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+alignment = 1
 
 [node name="PlayerName_L" type="Label" parent="ScrollContainer/VFlowContainer"]
 layout_mode = 2
