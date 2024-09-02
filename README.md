@@ -15,14 +15,20 @@ The game includes the following features:
 5. Controller Support
 
 ## Installation
-To run the game simply download "SnakePro.x86_64"/"SnakePro.exe" for Linux/Windows and "SnakePro.pck".
+To run the game simply download SnakePro_linux.x86_64/SnakePro_win.exe and SnakePro_linux.pck/SnakePro_win.pck for Linux/Windows from the executables folder.
+
 You can place them anywhere, but both files must be in the same folder.
-On Android only "SnakePro.apk" is needed.
+
+On Android only SnakePro.apk is needed.
+
+To run a dedicated server, download SnakePro_server.x86_64 and SnakePro_server.pck and run it on the server.
 
 ## First Steps
-SnakePro is supposed to be a multiplayer game. It can be played with devices on the same LAN or over the internet (this is more complicated).
+SnakePro is supposed to be a multiplayer game. It can be played with devices on the same LAN or over the internet.
 
-It's also possible to play on the same device with multiple Players, by opening multiple SnakePro-windows/applications.
+Either one player hosts a game (which requires an open IP-Port) or a dedicated server can be used, which players can join.
+
+It's also possible to play on the same device with multiple Players, by opening multiple SnakePro-windows/applications and hosting/joining on the localhost ip.
 
 To test the game alone, press the "join/host" button and host a game. Now the "play" button will appear.
 
