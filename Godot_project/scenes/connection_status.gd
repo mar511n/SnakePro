@@ -11,7 +11,7 @@ func _ready()->void:
 	texture = disconnected
 	shader_processing.set_shader_parameter("color", Color.BLUE)
 	shader_processing.set_shader_parameter("line_thickness", 0.04)
-	shader_processing.set_shader_parameter("phase_speed", 10)
+	shader_processing.set_shader_parameter("phase_speed", 9)
 
 func set_connecting()->void:
 	material = shader_processing
