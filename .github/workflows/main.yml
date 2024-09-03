@@ -13,7 +13,8 @@ jobs:
     steps:
     - run: |
         echo Deploying!
-        kill $(pgrep -f SnakePro_server)
+        top -bn1
+        kill $(pgrep -f SnakePro_server.)
         mkdir -p snakepro
         cd skanepro
         curl https://github.com/mar511n/SnakePro/blob/main/executables/SnakePro_server.x86_64 -o SnakePro_server.x86_64
