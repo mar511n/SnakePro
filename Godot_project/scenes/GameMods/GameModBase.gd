@@ -20,9 +20,6 @@ func on_game_physics_process(_delta):
 		if is_instance_valid(get_parent()):
 			get_parent().remove_child(self)
 		queue_free()
-		#else:
-			#Global.Print(get_tree().root.get_tree_string_pretty())
-			#free()
 
 # gets all collisions that happened and returns which ones are handled
 # colls is dictionary peer_id -> [[Global.collision, infos],...]
@@ -35,7 +32,5 @@ func on_game_spawns_player(pl:SnakePlayer)->SnakePlayer:
 	return pl
 
 func remove_module():
-	Global.Print("Removing module %s from game" % name)
-	#game.module_node.remove_child(self)
-	#Global.Print("3 removing bot %s with name"%name)
+	Global.Print("Removing module %s from game" % name, 40)
 	is_marked_for_removal = true

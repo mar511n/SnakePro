@@ -32,7 +32,7 @@ func on_player_physics_process(_delta:float):
 		is_used = true
 		local_player_gui.set_item_ready(local_player_gui_id,false)
 		pl.FartSound.play()
-		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
+		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
 		pl.IG.start_module.rpc("fart.gd", [pl.peer_id,is_ghost,ItemFartDuration,ItemFartRadius,ItemFartDamage,pl.tiles[0],local_player_gui_id], "Fart_"+str(pl.peer_id)+"_"+str(fart_num))
 		fart_num += 1
 		mark_for_removal()

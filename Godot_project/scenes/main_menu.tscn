@@ -375,10 +375,14 @@ stretch_mode = 3
 
 [node name="ConnectionStatus" parent="." instance=ExtResource("8_lu7j6")]
 layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
 offset_left = -116.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = 116.0
+grow_horizontal = 0
 
 [node name="ConnectionPopup" parent="." instance=ExtResource("8_q25uu")]
 layout_mode = 1

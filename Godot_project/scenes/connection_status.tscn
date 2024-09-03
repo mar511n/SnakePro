@@ -4,11 +4,7 @@
 [ext_resource type="Script" path="res://scenes/connection_status.gd" id="2_83b6o"]
 
 [node name="ConnectionStatus" type="TextureRect"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -96.0
+offset_right = 96.0
 offset_bottom = 96.0
-grow_horizontal = 0
 texture = ExtResource("1_vnefk")
 script = ExtResource("2_83b6o")

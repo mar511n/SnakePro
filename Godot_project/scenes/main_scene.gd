@@ -10,7 +10,7 @@ func _ready() -> void:
 
 func lobby_on_spawn_scene(scene_path):
 	if multiplayer.is_server():
-		Global.Print("spawning scene: %s" % scene_path)
+		Global.Print("spawning scene: %s (from server)" % scene_path, 40)
 		spawn_scene.call_deferred(scene_path)
 
 func spawn_scene(scene_path):

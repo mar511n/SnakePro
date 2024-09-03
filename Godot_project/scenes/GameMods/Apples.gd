@@ -39,7 +39,7 @@ func on_game_ready(g:InGame, g_is_server:bool):
 # spawn apples here
 func on_game_post_ready():
 	if is_server:
-		Global.Print("spawning apples")
+		Global.Print("spawning apples (from server)", 40)
 		for ai in range(game.module_vars["AppleCount"]):
 			spawn_apple()
 
@@ -98,7 +98,6 @@ func check_apple_collision_for_local_player():
 		if head in game.module_vars["ApplePositions"]:
 			if player.module_vars["PlayerIsAlive"]:
 				player.EatingSound.play()
-				#Global.Print("fett += %s" % AppleNutrition, 7)
 				player.fett += AppleNutrition
 				remove_apple.rpc_id(1,head)
 			else:
@@ -106,8 +105,6 @@ func check_apple_collision_for_local_player():
 		elif game.module_vars["GhostApplePositions"].has(head):
 			if player.module_vars["PlayerIsAlive"]:
 				player.EatingRottenSound.play()
-				#Global.Print("fett -= %s" % GhostAppleDamage, 7)
-				#Global.Print("tiles = %s" % len(player.tiles), 7)
 				var survives = player.has_enough_tiles(GhostAppleDamage)
 				if survives:
 					player.remove_tiles_from_tail(GhostAppleDamage)

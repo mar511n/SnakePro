@@ -60,8 +60,15 @@ const snake_tile_files:Dictionary = {
 }
 const snake_colors:Array = [Color.BLUE_VIOLET, Color.BLUE, Color.RED, Color("ffff00"), Color.DEEP_PINK,Color.BLACK]
 
-var min_prio_debug_print:int = 2
-var min_prio_toast:int = 5
+# 0-10 useless print
+# 10-30 lots of info, not relevant for player
+# 30-50 relevant for developer, but not player
+# 50-70 interesting for player
+# 70-80 important for player
+# 80-90 errors & warnings (game can still work)
+# 90-100 critical errors
+var min_prio_debug_print:int = 10
+var min_prio_toast:int = 50
 var first_game_reset:bool = false
 var config:ConfigFile = ConfigFile.new()
 var inputconfig:ConfigFile = ConfigFile.new()
@@ -95,11 +102,10 @@ enum scl {
 }
 
 func _ready()->void:
-	
 	if debugging_on:
-		min_prio_toast = 5
+		min_prio_toast = 40
 	else:
-		min_prio_toast = 6
+		min_prio_toast = 50
 
 func convert_tilemap_coords(pos1:Vector2i, t1:TileMap, t2:TileMap) -> Vector2i:
 	var gp:Vector2 = t1.to_global(t1.map_to_local(pos1))
@@ -159,9 +165,9 @@ func rotate_direction(dir:Vector2i, clockwise:bool)->Vector2i:
 		return Vector2i(dir.y,-dir.x)
 	return Vector2i(-dir.y,dir.x)
 
-func Print(v:Variant, prio:int=4)->void:
+func Print(v:Variant, prio:int=25)->void:
 	if prio >= min_prio_debug_print:
-		print(Time.get_time_string_from_system()+": "+str(v))
+		print("%s, %s: %s" % [Time.get_time_string_from_system(), prio, str(v)])
 	if prio >= min_prio_toast:
 		ToastParty.show({
 			"text": str(v),                     # Text (emojis can be used)
@@ -184,13 +190,13 @@ var player_stats = []
 var own_player_stats = {}
 
 func player_stats_on_game_finished():
-	Global.Print("updating stats on game finish")
+	Print("updating/merging player stats on game finish", 40)
 	#player_stats[-1] = player_stats.get(multiplayer.get_unique_id(), {})
 	own_player_stats = merge_player_stats(own_player_stats,player_stats[-1].get(-1,{}))
 	save_own_player_stats()
 
 func player_stats_on_game_start():
-	Global.Print("updating stats on game start")
+	Print("initializing player stats on game start", 40)
 	player_stats.append({})
 
 func merge_player_stats(pls1:Dictionary,pls2:Dictionary) -> Dictionary:
@@ -254,7 +260,7 @@ func save_game_state(groupName:StringName)->Array:
 			var data = node.call(get_data_func_name)
 			gs.append([resPath,data])
 		else:
-			Print("ERROR in save_game_state: node %s misses function %s or %s" % [node.name, res_path_func_name, get_data_func_name])
+			Print("ERROR in save_game_state: node %s misses function %s or %s" % [node.name, res_path_func_name, get_data_func_name], 85)
 	return gs
 
 func load_game_state(parentNode:Node, gs:Array):
@@ -264,4 +270,4 @@ func load_game_state(parentNode:Node, gs:Array):
 			node.call(set_data_func_name, vis[1])
 			parentNode.add_child(node)
 		else:
-			Print("ERROR in load_game_state: node %s misses function %s" % [node.name, set_data_func_name])
+			Print("ERROR in load_game_state: node %s misses function %s" % [node.name, set_data_func_name], 85)

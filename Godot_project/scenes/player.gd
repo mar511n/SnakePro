@@ -113,7 +113,7 @@ func find_module(modName:String):
 # cause is array[2] with first entry of hit_causes and second entry additional infos 
 @rpc("any_peer","call_local","reliable")
 func hit(cause:Array):
-	Global.Print("player %s is hit by cause %s" % [peer_id, cause])
+	Global.Print("player %s is hit by cause %s" % [peer_id, cause], 40)
 	for mod in module_node.get_children():
 		mod.on_player_hit(cause)
 
@@ -126,38 +126,33 @@ func  _input(event: InputEvent) -> void:
 	if is_owner:
 		if event is InputEventScreenTouch:
 			if event.pressed:
-				#Global.Print("touch down at %s" % event.position)
+				Global.Print("InputEventScreenTouch down at %s" % event.position, 25)
 				touch_down_point = event.position
 				touch_action_emitted = false
 				var t = Time.get_unix_time_from_system()
 				if t-touch_down_time < max_double_tap_time:
-					#Global.Print("using item")
 					emit_action_pressed("use_item")
 				touch_down_time = t
 		elif event is InputEventScreenDrag:
 			if not touch_action_emitted and (touch_down_point-event.position).length_squared() > minimum_moved_pixels*minimum_moved_pixels:
-				#Global.Print("move in dir %s" % [event.position-touch_down_point])
+				Global.Print("InputEventScreenDrag in dir %s" % [event.position-touch_down_point],15)
 				touch_action_emitted = true
 				emit_action_in_direction(event.position-touch_down_point)
 
 func emit_action_in_direction(dir:Vector2):
 	var angle = dir.angle()+PI
-	#Global.Print("angle = %s Pi"%[angle/PI])
 	if angle < 0.25*PI or angle > 1.75*PI:
-		#Global.Print("left")
 		emit_action_pressed("rel_left")
 		emit_action_pressed("abs_left")
 	elif angle >= 0.25*PI and angle <= 0.75*PI:
 		emit_action_pressed("abs_up")
 	elif angle > 0.75*PI and angle < 1.25*PI:
-		#Global.Print("right")
 		emit_action_pressed("rel_right")
 		emit_action_pressed("abs_right")
 	elif angle >= 1.25*PI and angle <= 1.75*PI:
 		emit_action_pressed("abs_down")
 
 func emit_action_pressed(an:String):
-	#Global.Print("emitting action %s"%an)
 	Input.action_press(an)
 	Input.action_release(an)
 
@@ -289,14 +284,14 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 			var mi = mod.new()
 			if mi.autoload:
 				modules.append(mi)
-				Global.Print("loading player module %s: success" % mod_path)
+				Global.Print("loading player module %s: success" % mod_path, 40)
 			else:
-				Global.Print("Autoload disabled for player module %s" % mod_path)
+				Global.Print("autoload disabled for player module %s" % mod_path, 40)
 		else:
-			Global.Print("loading player module %s: ERROR" % mod_path, 7)
+			Global.Print("ERROR while loading player module %s" % mod_path, 90)
 	for mod in modules:
 		mod.on_player_pre_ready(self,enabled_mods)
-	Global.Print("%s with idx %s at %s starting in direction %s" % [peer_id, pl_idx, startPos, startDir])
+	Global.Print("player %s with idx %s at %s starting in direction %s" % [peer_id, pl_idx, startPos, startDir], 40)
 
 
 # on server/client:
@@ -324,10 +319,10 @@ func _ready():
 	for mod in module_node.get_children():
 		mod.on_player_ready()
 	reset_snake_tiles()
-	is_main_mul_screen = Global.config_get_section_dict(Global.config_user_settings_sec, {}).get("mainMultiplayerScreen", false)
+	is_main_mul_screen = Lobby.player_info.get("mainMultiplayerScreen", false)
 	if is_main_mul_screen:
 		cam_node.set_as_top_level(true)
-		gui_node.visible = false
+		#gui_node.visible = false
 	if cam_node.enabled:
 		cam_node.position_smoothing_speed = 6
 		cam_node.position_smoothing_enabled = Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true)

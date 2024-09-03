@@ -25,7 +25,7 @@ func _init() -> void:
 	#name = "Bullet"
 
 func on_module_start(owner_id:int, ghost:bool, duration:float, rad:float, damage:float, pos:Vector2i, local_player_gui_id:int):
-	Global.Print("spawning fart of player %s"%owner_id)
+	Global.Print("spawning fart of player %s"%owner_id, 40)
 	owner_peer_id = owner_id
 	is_ghost = ghost
 	update_period = 1.0/damage
@@ -46,11 +46,9 @@ func on_game_ready(g:InGame, g_is_server:bool):
 	for child in game.get_children():
 		if child.name == "FartDrawer":
 			fart_drawer = child
-			#Global.Print("found BulletDrawer")
 	if not is_instance_valid(fart_drawer):
 		fart_drawer = fd.instantiate()
 		game.add_child(fart_drawer)
-		#Global.Print("instantiated BulletDrawer")
 		fart_drawer.scale_to_tile_size(game.tile_size_px*Vector2.ONE)
 
 func on_game_physics_process(delta):
@@ -87,6 +85,6 @@ func remove_fart():
 		if local_player_gui != null:
 			local_player_gui.remove_item(gui_id)
 		else:
-			Global.Print("ERROR: ItemGUI node not found in player", 7)
+			Global.Print("ERROR: ItemGUI node not found in player", 85)
 	fart_drawer.remove_fart(fart_id)
 	remove_module()

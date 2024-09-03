@@ -20,6 +20,8 @@ const input_options:Dictionary = {0:["rel","relative"],1:["abs","absolute"]}
 @onready var particlesBtn:CheckButton = $ScrollContainer/VFlowContainer/Particles
 @onready var captureReplayBtn:CheckButton = $ScrollContainer/VFlowContainer/CaptureReplay
 @onready var mainMultiScreenBtn:CheckButton = $ScrollContainer/VFlowContainer/MultiMainScreen
+@onready var ConsolePrio:LabeledHSlider = $ScrollContainer/VFlowContainer/ConsolPrio
+@onready var ToastPrio:LabeledHSlider = $ScrollContainer/VFlowContainer/ToastPrio
 
 #@export var min_width:int = -1
 
@@ -44,6 +46,7 @@ func _ready()->void:
 func show_popup()->void:
 	PlayerName.text = Lobby.player_info.get("name", "")
 	SnakeOpt.select(SnakeOpt.get_item_index(Lobby.player_info.get("snake_tile_idx",0)))
+	mainMultiScreenBtn.set_pressed_no_signal(Lobby.player_info.get("mainMultiplayerScreen", false))
 	var id:int = 0
 	for ioi:int in input_options:
 		if input_options[ioi][0] == Global.config.get_value(Global.config_user_settings_sec,"inputmethod","rel"):
@@ -56,7 +59,9 @@ func show_popup()->void:
 	shaderBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"useShader", true))
 	particlesBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"useParticles", true))
 	captureReplayBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"captureReplay", true))
-	mainMultiScreenBtn.set_pressed_no_signal(Global.config.get_value(Global.config_user_settings_sec,"mainMultiplayerScreen", false))
+	ConsolePrio.set_prop_value(Global.config.get_value(Global.config_user_settings_sec,"consolePrio", 35))
+	ToastPrio.set_prop_value(Global.config.get_value(Global.config_user_settings_sec,"toastPrio", 50))
+	
 	visible = true
 
 func make_user_settings_dict() -> Dictionary:
@@ -71,12 +76,15 @@ func make_user_settings_dict() -> Dictionary:
 	us["useShader"] = shaderBtn.button_pressed
 	us["useParticles"] = particlesBtn.button_pressed
 	us["captureReplay"] = captureReplayBtn.button_pressed
-	us["mainMultiplayerScreen"] = mainMultiScreenBtn.button_pressed
+	#us["mainMultiplayerScreen"] = mainMultiScreenBtn.button_pressed
+	us["consolePrio"] = ConsolePrio.value
+	us["toastPrio"] = ToastPrio.value
 	return us
 func make_player_info_dict() -> Dictionary:
 	var pli:Dictionary = {}
 	pli["name"] = PlayerName.text
 	pli["snake_tile_idx"] = SnakeOpt.get_selected_id()
+	pli["mainMultiplayerScreen"] = mainMultiScreenBtn.button_pressed
 	return pli
 
 func set_smoothcam(off:bool)->void:
@@ -130,4 +138,12 @@ func _on_multi_main_screen_toggled(_toggled_on: bool) -> void:
 
 
 func _on_particles_toggled(_toggled_on: bool) -> void:
+	_on_settings_changed()
+
+
+func _on_consol_prio_drag_ended(_value_changed: bool) -> void:
+	_on_settings_changed()
+
+
+func _on_toast_prio_drag_ended(_value_changed: bool) -> void:
 	_on_settings_changed()

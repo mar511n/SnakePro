@@ -108,8 +108,8 @@ func on_save_gamemodule_properties()->void:
 			properties[prop] = gameModuleProps[mod]["props"][prop].get_prop_value()
 	Global.config_set_section_dict(Global.config_game_mods_sec, mods)
 	Global.config_set_section_dict(Global.config_game_mod_props_sec, properties)
-	Global.Print("saving Gamemodifications and properties to config",6)
-	Global.Print("saving config to %s" % Global.config_path)
+	Global.Print("saving Gamemodifications and properties to config",40)
+	Global.Print("saving config to %s" % Global.config_path,35)
 	Global.config.save(Global.config_path)
 	on_settings_changed.emit()
 
@@ -235,8 +235,8 @@ func on_save_playermodule_properties()->void:
 			properties[prop] = playerModuleProps[mod]["props"][prop].get_prop_value()
 	Global.config_set_section_dict(Global.config_player_mods_sec, mods)
 	Global.config_set_section_dict(Global.config_player_mod_props_sec, properties)
-	Global.Print("saving Playermodifications and properties to config",6)
-	Global.Print("saving config to %s" % Global.config_path)
+	Global.Print("saving Playermodifications and properties to config",40)
+	Global.Print("saving config to %s" % Global.config_path,35)
 	Global.config.save(Global.config_path)
 	on_settings_changed.emit()
 
@@ -322,8 +322,8 @@ func _on_settings_changed()->void:
 	var gs:Dictionary = make_settings_dict()
 	Global.config_set_section_dict(Global.config_game_params_sec, gs)
 	Global.config.save(Global.config_path)
-	Global.Print("saving GameParams %s to config" % gs,6)
-	Global.Print("saving config to %s" % Global.config_path)
+	Global.Print("saving GameParams %s to config" % gs,40)
+	Global.Print("saving config to %s" % Global.config_path,35)
 	on_settings_changed.emit()
 
 func _on_snake_speed_drag_ended(_value_changed:float)->void:
@@ -338,14 +338,14 @@ func _on_map_paths_b_item_selected(_index:int)->void:
 func _on_file_dialog_file_selected(path:String)->void:
 	var success:bool = ProjectSettings.load_resource_pack(path, true)
 	if success:
-		Global.Print("loading Mod successful",6)
+		Global.Print("mod loaded from %s with success"%path,60)
 		update_map_list(Global.config_get_section_dict(Global.config_game_params_sec))
 		make_game_module_settings()
 		set_game_module_settings()
 		make_player_module_settings()
 		set_player_module_settings()
 	else:
-		Global.Print("loading Mod unsuccessful",6)
+		Global.Print("ERROR while loading mod from %s"%path,6)
 
 func _on_button_pressed()->void:
 	$FileDialog.show()

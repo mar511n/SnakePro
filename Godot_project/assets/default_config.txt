@@ -2,29 +2,27 @@
 
 name="playername"
 snake_tile_idx=1
+mainMultiplayerScreen=false
 
 [UserSettings]
 
-inputmethod="rel"
+inputmethod="abs"
 smoothCam=true
 vsyncMode=0
 splitscreenMode=5
 musicvolume=0.0
 useShader=true
-captureReplay=true
-mainMultiplayerScreen=false
 useParticles=true
-
-[conn]
-
-port=8080
+captureReplay=true
+consolePrio=35.0
+toastPrio=50.0
 
 [GameParams]
 
 startSnakeLength=3.0
 snakeSpeed=6.0
 mapPath="res://scenes/Maps/empty_map.tscn"
-snakeTraceLength=30.0
+snakeTraceLength=15.0
 
 [GameModules]
 
@@ -34,40 +32,45 @@ Items=["Items.gd", true]
 [GameModuleProperties]
 
 AppleCount=10.0
-AppleNutrition=3.0
+AppleNutrition=2.0
 AppleRottTime=10.0
-GhostAppleDamage=3.0
-ItemCount=10.0
+GhostAppleDamage=4.0
+ItemCount=6.0
 
 [PlayerModules]
 
-Bot=["BotItem.gd", true]
 Revive=["ReviveItem.gd", true]
 Shooting=["ShootingtItem.gd", true]
 "Speed Boost"=["SpeedItem.gd", true]
 "Basic hit handler"=["basic_hit_handler.gd", true]
+Bot=["BotItem.gd", true]
 Fart=["FartItem.gd", true]
 
 [PlayerModuleProperties]
 
-ItemBotProbability=1.0
-ItemBotSpeed=4.0
-ItemBotLength=7.0
-ItemBotUseAstar=true
-ItemReviveProbability=0.3
+ItemReviveProbability=0.5
 ItemShootingProbability=1.0
 ItemShootingSpeed=20.0
 ItemShootingRange=10.0
 ItemSpeedProbability=1.0
-ItemSpeedNewSpeed=20.0
-ItemSpeedDuration=2.0
-ItemBotDuration=4.0
-MaxTimeBeforeGameover=2.0
-ItemBotDurMul=4.0
-ItemShootingSurvLen=10.0
+ItemSpeedNewSpeed=14.0
+ItemSpeedDuration=1.5
+ItemBotProbability=1.0
+ItemBotSpeed=7.0
+ItemBotLength=6.0
+ItemBotDuration=10.0
+ItemBotDurMul=3.0
+ItemBotUseAstar=true
 ItemFartProbability=1.0
-ItemFartDuration=16.0
-ItemFartRadius=2.5
-ItemFartDamage=4.0
+ItemFartDuration=8.0
+ItemFartRadius=4.5
+ItemFartDamage=5.0
+ItemShootingSurvLen=10.0
 ItemSpeedRandNum=1.0
-ItemSpeedRandDiff=0.8
+ItemSpeedRandDiff=0.9
+MaxTimeBeforeGameover=2.0
+
+[conn]
+
+ip="127.0.0.1"
+port=8080

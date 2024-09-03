@@ -41,7 +41,7 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and !is_used and !pl.module_vars.get("ItemSpeeding",false) and Input.is_action_just_pressed("use_item"):
 		pl.SpeedSound.play()
-		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
+		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
 		pl.module_vars["ItemSpeeding"] = true
 		is_used = true
 		duration = ItemSpeedDuration

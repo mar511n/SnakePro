@@ -10,7 +10,6 @@ signal connecting_failed
 signal all_players_loaded
 signal player_info_updated(peer_id:int, pl_info:Dictionary)
 signal on_priv_granted()
-signal on_pong(rtt:float)
 #signal on_spawn_scene(scene)
 
 const DEFAULT_PORT:int = 8080
@@ -37,6 +36,7 @@ func set_game_stats(key:Variant, value:Variant):
 # name
 # snake_tile_idx
 # priv
+# mainMultiplayerScreen
 var player_info:Dictionary = {}
 
 # set by server contains infos about the game
@@ -47,8 +47,7 @@ var players:Dictionary = {}
 var players_loaded:int = 0
 
 var privileges_granted_to = -1
-var last_rtt = 0.0
-var ping_time = 0.0
+var enetpacketpeer:ENetPacketPeer
 
 func _ready()->void:
 	multiplayer.peer_connected.connect(_on_player_connected)
@@ -57,13 +56,11 @@ func _ready()->void:
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
-var time_since_last_ping = 0.0
-func _process(delta: float) -> void:
-	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status()==MultiplayerPeer.ConnectionStatus.CONNECTION_CONNECTED and not multiplayer.is_server():
-		time_since_last_ping += delta
-		if time_since_last_ping > 1.0:
-			time_since_last_ping = 0.0
-			make_server_ping()
+func _physics_process(delta: float) -> void:
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		TopGui.set_rtt(enetpacketpeer.get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)/1000.0)
+	else:
+		TopGui.unset_rtt()
 
 func join_game(address:String = "", port:int = 0)->Error:
 	if address.is_empty():
@@ -71,10 +68,10 @@ func join_game(address:String = "", port:int = 0)->Error:
 	if port == 0:
 		port = DEFAULT_PORT
 	var peer:ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	#Global.Print("join_game(%s, %s)"%[address, port])
 	var error:Error = peer.create_client(address, port)
 	if error:
 		return error
+	enetpacketpeer = peer.get_peer(1)
 	multiplayer.multiplayer_peer = peer
 	Global.player_stats = [{}]
 	return OK
@@ -101,19 +98,6 @@ func reset_network()->void:
 	players = {}
 	players_loaded = 0
 
-func make_server_ping():
-	ping_time = Time.get_unix_time_from_system()
-	server_ping.rpc_id(1)
-
-@rpc("any_peer","reliable")
-func server_ping():
-	client_pong.rpc_id(multiplayer.get_remote_sender_id())
-
-@rpc("authority","reliable")
-func client_pong():
-	last_rtt = Time.get_unix_time_from_system()-ping_time
-	on_pong.emit(last_rtt)
-
 @rpc("any_peer", "call_local", "reliable")
 func player_info_update(peer_id:int, pl_info:Dictionary)->void:
 	players[peer_id] = pl_info
@@ -121,7 +105,6 @@ func player_info_update(peer_id:int, pl_info:Dictionary)->void:
 
 @rpc("authority","call_local", "reliable")
 func load_scene(scene_path:String,game_finished=false)->void:
-	#Global.Print("loading scene: %s" % scene_path)
 	#on_spawn_scene.emit(scene_path)
 	if game_finished:
 		Global.player_stats_on_game_finished()
@@ -145,11 +128,11 @@ func _register_player(new_player_info:Dictionary)->void:
 		if new_player_info.get("priv",0) == 1 and privileges_granted_to == -1:
 			privileges_granted_to = new_player_id
 			on_privileges_granted.rpc_id(new_player_id)
-			Global.Print("privileges granted to %s"%new_player_id)
+			Global.Print("privileges are granted to player %s"%new_player_id, 45)
 
 @rpc("authority", "reliable")
 func on_privileges_granted():
-	Global.Print("privileges have been granted")
+	Global.Print("privileges have been granted", 55)
 	on_priv_granted.emit()
 
 func update_game_settings_on_server()->void:

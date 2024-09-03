@@ -28,16 +28,14 @@ func on_game_ready(g:InGame, g_is_server:bool):
 	for child in game.get_children():
 		if child.name == "BotDrawer":
 			bot_drawer = child
-			#Global.Print("found BotDrawer")
 	if not is_instance_valid(bot_drawer):
 		var bds = load("res://scenes/ModResources/bot_drawer.tscn")
 		bot_drawer = bds.instantiate()
 		game.add_child(bot_drawer)
-		#Global.Print("instantiated BotDrawer")
 	bot_drawer.scale_to_tile_size(game.tile_size_px*Vector2.ONE)
 
 func on_module_start(owner_id:int, ghost:bool, speed:float, length:int, astar:bool, time:float, local_player_gui_id:int):
-	Global.Print("spawning bot of player %s"%owner_id)
+	Global.Print("spawning bot of player %s"%owner_id, 40)
 	owner_peer_id = owner_id
 	is_ghost = ghost
 	update_period = 1.0/speed
@@ -138,18 +136,16 @@ func get_coll_map()->CollisionMap:
 
 @rpc("authority", "call_local", "reliable")
 func remove_bot():
-	#Global.Print("1 removing bot of player %s with name %s"%[owner_peer_id,name])
 	active = false
 	if owner_peer_id == multiplayer.get_unique_id():
 		var local_player_gui = game.playerlist[owner_peer_id].gui_node.get_node("ItemGUI")
 		if local_player_gui != null:
 			local_player_gui.remove_item(gui_id)
 		else:
-			Global.Print("ERROR: ItemGUI node not found in player", 7)
+			Global.Print("ERROR: ItemGUI node not found in player", 85)
 	if is_server:
 		game.module_vars_rapid.erase("BotSnake"+str(bot_id))
 	bot_drawer.remove_bot(bot_id)
-	#Global.Print("2 removing bot of player %s with name %s"%[owner_peer_id,name])
 	remove_module()
 
 func on_game_checked_collisions(colls)->Array:

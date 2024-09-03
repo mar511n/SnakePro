@@ -28,11 +28,10 @@ func Astar(start:Vector2i,goal:Vector2i)->Array:
 			fScore[Vector2i(x,y)] = INF
 	fScore[start] = (start-goal).length_squared()
 	
-	#Global.Print("starting Astar with start=%s, goal=%s and map: %s"%[start,goal,_to_string()])
+	Global.Print("starting Astar with start=%s, goal=%s and map: %s"%[start,goal,_to_string()],10)
 	
 	var current:Vector2i = start
 	while len(openSet) > 0:
-		#Global.Print("searching from current=%s"%current)
 		if current == goal:
 			return reconstruct_path(cameFrom,current)
 		openSet.erase(current)
@@ -92,8 +91,8 @@ func load_from_Tilemap(tmap:TileMap, sn_drawer:TileMap)->TileMap:
 				if len(colls) > 0:
 					#print("%s collisions at %s" % [len(colls), query.position])
 					set_at(gc.x*scaleF+dx, gc.y*scaleF+dy,1)
-	Global.Print("Collision map:")
-	Global.Print(_to_string()+"\n")
+	Global.Print("loaded collision map:", 30)
+	Global.Print(_to_string()+"\n", 30)
 	#var prop_cells = tmap.get_used_cells(1)
 	#print(_to_string()+"\n")
 	#for pc in prop_cells:

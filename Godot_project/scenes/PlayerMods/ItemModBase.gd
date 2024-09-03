@@ -28,7 +28,7 @@ func mark_for_removal():
 	is_marked_for_removal = true
 
 func remove_item(keep_ui=false):
-	Global.Print("Removing item %s from player %s" % [item_name, pl.peer_id])
+	Global.Print("Removing item %s from player %s" % [item_name, pl.peer_id], 40)
 	if local_player_gui != null and not keep_ui:
 		local_player_gui.remove_item(local_player_gui_id)
 	pl.module_node.remove_child(self)
@@ -45,13 +45,13 @@ func on_player_ready():
 	super()
 	if is_ghost:
 		item_code += "_g"
-	Global.Print("Player %s collected item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
+	Global.Print("Player %s collected item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 40)
 	
 	local_player_gui = pl.gui_node.get_node("ItemGUI")
 	if local_player_gui != null:
 		local_player_gui_id = local_player_gui.add_item(item_code,true)
 	else:
-		Global.Print("ERROR: ItemGUI node not found in player", 7)
+		Global.Print("ERROR: ItemGUI node not found in player", 85)
 	
 	if item_code == "baseitem" or item_code == "baseitem_g":
 		remove_item()

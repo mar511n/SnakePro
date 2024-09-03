@@ -16,10 +16,7 @@ var time_since_last_update = 0.0
 var pos : Vector2i
 var trace : Array
 var traveled = 0
-
-func _init() -> void:
-	pass
-	#name = "Bullet"
+var players_hit = []
 
 func on_game_ready(g:InGame, g_is_server:bool):
 	super(g,g_is_server)
@@ -27,15 +24,13 @@ func on_game_ready(g:InGame, g_is_server:bool):
 	for child in game.get_children():
 		if child.name == "BulletDrawer":
 			bullet_drawer = child
-			#Global.Print("found BulletDrawer")
 	if not is_instance_valid(bullet_drawer):
 		bullet_drawer = bds.instantiate()
 		game.add_child(bullet_drawer)
-		#Global.Print("instantiated BulletDrawer")
 	bullet_drawer.scale_to_tile_size(game.tile_size_px*Vector2.ONE)
 
 func on_module_start(start:Vector2i,dir:Vector2i,speed:float,maxrange:int,owner_id:int,survive_length:int):
-	Global.Print("spawning bullet at %s"%start)
+	Global.Print("spawning bullet at %s in dir %s"%[start,dir],40)
 	pos = start
 	travelingDir = dir
 	maxRange = maxrange
@@ -88,8 +83,9 @@ func check_collision():
 				var sn_len = len(game.playerlist[peer_id].tiles)
 				if sn_len >= headshot_survive_length:
 					game.playerlist[peer_id].remove_tiles_from_tail.rpc_id(peer_id,sn_len-2)
-				else:
+				elif not peer_id in players_hit:
 					game.playerlist[peer_id].hit.rpc([Global.hit_causes.BULLET, {"caused_by_id":owner_peer_id}])
+				players_hit.append(peer_id)
 
 @rpc("authority", "call_local", "reliable")
 func remove_bullet():

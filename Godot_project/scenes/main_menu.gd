@@ -36,7 +36,6 @@ func initialize()->void:
 	Lobby.player_disconnected.connect(self.player_disconnected)
 	Lobby.player_info_updated.connect(self.player_info_updated)
 	Lobby.on_priv_granted.connect(self.on_priv_granted)
-	Lobby.on_pong.connect(self.on_lobby_pong)
 	#load_con_settings()
 	load_playerinfo()
 	ConPopup.visible = false
@@ -60,23 +59,31 @@ func reset()->void:
 	if not DirAccess.dir_exists_absolute(Global.replay_dir_path):
 		var err = DirAccess.make_dir_absolute(Global.replay_dir_path)
 		if err != OK:
-			Global.Print("ERROR: %s: could not create replay dir in %s"%[error_string(err),Global.replay_dir_path],7)
+			Global.Print("ERROR: %s: could not create replay dir at %s"%[error_string(err),Global.replay_dir_path],85)
 	
-	Global.Print("loading config from %s" % Global.config_path, 6)
+	Global.Print("loading config from %s" % Global.config_path, 52)
 	if Global.config.load(Global.config_path) != OK:
 		Global.save_resource("res://assets/default_config.txt",Global.config_path)
 		if Global.config.load(Global.config_path) != OK:
-			Global.Print("WARNING: no config found at %s" % Global.config_path, 7)
+			Global.Print("ERROR: no config found at %s and unable to write default" % Global.config_path, 85)
 		else:
-			Global.Print("WARNING: no config found at %s, using default config" % Global.config_path, 7)
-	Global.Print("loading inputconfig from %s" % Global.inputconfig_path, 6)
+			var username = "playername"
+			if OS.has_environment("USER"):
+				username = OS.get_environment("USER")
+			elif OS.has_environment("USERNAME"):
+				username = OS.get_environment("USERNAME")
+			else:
+				Global.Print("no OS username found, using default", 35)
+			Global.config.set_value(Global.config_player_info_sec,"name",username)
+			Global.Print("WARNING: no config found at %s, using default" % Global.config_path, 80)
+	Global.Print("loading inputconfig from %s" % Global.inputconfig_path, 50)
 	if Global.inputconfig.load(Global.inputconfig_path) != OK:
-		Global.Print("WARNING: no inputconfig found at %s" % Global.inputconfig_path, 7)
+		Global.Print("WARNING: no inputconfig found at %s, using default" % Global.inputconfig_path, 80)
 	if Global.inputconfig.has_section(Global.config_inputmap_sec):
 		Global.set_inputmap_dict(Global.get_section_dict(Global.inputconfig,Global.config_inputmap_sec))
-	Global.Print("loading stats from %s" % Global.stats_path, 6)
+	Global.Print("loading stats from %s" % Global.stats_path, 50)
 	if Global.stats.load(Global.stats_path) != OK:
-		Global.Print("WARNING: no stats found at %s" % Global.stats_path, 7)
+		Global.Print("no stats found at %s" % Global.stats_path, 45)
 	if Global.stats.has_section(Global.stats_sec):
 		Global.load_own_player_stats()
 	if arguments.has("port"):
@@ -89,7 +96,7 @@ func reset()->void:
 	update_playernames_list()
 	
 	if OS.has_feature("dedicated_server"):
-		Global.Print("running as dedicated server...")
+		Global.Print("running as dedicated server...", 40)
 		_on_connection_popup_host(Global.config.get_value("conn","port",8080))
 
 func network_reset()->void:
@@ -98,7 +105,6 @@ func network_reset()->void:
 	show_hide_buttons_and_popups(false,true)
 
 func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->void:
-	#Global.Print("show_hide_buttons_and_popups is_hosting %s, disconnected %s")
 	if disconnected:
 		StartG_b.disabled = true
 		ConnSet_b.disabled = false
@@ -142,19 +148,22 @@ func player_info_updated(_peer_id:int, _pl_info:Dictionary)->void:
 	update_playernames_list()
 
 func connection_failed()->void:
-	Global.Print("ERROR: connection failed", 7)
+	Global.Print("ERROR: connection failed", 90)
 	network_reset()
 
 func player_disconnected(peer_id:int)->void:
-	Global.Print("Player with id %s disconnected" % peer_id, 6)
+	Global.Print("Player %s disconnected" % peer_id, 60)
 	update_playernames_list()
 
 func server_disconnected()->void:
-	Global.Print("ERROR: Server disconnected", 7)
+	Global.Print("ERROR: Server disconnected", 95)
 	network_reset()
+	update_playernames_list()
 
-func a_player_connected(peer_id:int, _player_info:Dictionary)->void:
-	Global.Print("player joined with id %s and info %s" % [peer_id, _player_info],6)
+func a_player_connected(peer_id:int, player_info:Dictionary)->void:
+	Global.Print("player %s joined with name %s" % [peer_id, player_info.get("name","?")],60)
+	if peer_id == multiplayer.get_unique_id():
+		on_connection_successful()
 	update_playernames_list()
 	if multiplayer.is_server():
 		ConnStat.set_hosting()
@@ -165,9 +174,7 @@ func _on_start_game_pressed()->void:
 	if multiplayer.multiplayer_peer == null:
 		return
 	if multiplayer.is_server():
-		#Global.Print("loading game_scene: %s" % game_scene_path)
 		start_game()
-		#Lobby.scene_spawner.spawn(game_scene_path)
 	elif Global.has_server_privileges:
 		start_game.rpc_id(1)
 
@@ -184,24 +191,29 @@ func on_priv_granted()->void:
 	show_hide_buttons_and_popups(false,false)
 
 func _on_connection_popup_host(port:int)->void:
-	Global.Print("hosting on %s:%s" % [IP.get_local_addresses()[0],port], 6)
+	Global.Print("hosting on %s:%s" % [IP.get_local_addresses()[0],port], 55)
 	DisplayServer.clipboard_set("%s:%s"%[IP.get_local_addresses()[0],port])
 	var err:Error = Lobby.create_game()
 	if err != OK:
-		Global.Print("ERROR while hosting server: %s" % err, 7)
+		Global.Print("ERROR while hosting server: %s" % error_string(err), 90)
 		return
 	save_con_settings(false)
 	show_hide_buttons_and_popups(true)
 
 func _on_connection_popup_join(ip:String, port:int, priv:bool)->void:
-	Global.Print("joining on %s:%s" % [ip,port],6)
+	Global.Print("joining on %s:%s ..." % [ip,port],55)
 	if priv:
 		Lobby.player_info["priv"] = 1
-		Global.Print("requesting privileges")
+		Global.Print("requesting privileges", 54)
 	var err:Error = Lobby.join_game(ip,port)
 	if err != OK:
-		Global.Print("ERROR while connection to server: %s" % err, 7)
+		Global.Print("ERROR while connecting to server: %s" % error_string(err), 90)
 		return
+	ConPopup.visible = false
+	ConnSet_b.disabled = true
+	ConnStat.set_connecting()
+
+func on_connection_successful():
 	save_con_settings()
 	show_hide_buttons_and_popups(false)
 
@@ -228,8 +240,8 @@ func _on_connection_settings_pressed()->void:
 func save_playerinfo()->void:
 	Global.config_set_section_dict(Global.config_player_info_sec, Lobby.player_info)
 	Global.config.save(Global.config_path)
-	Global.Print("saving PlayerInfo %s to config" % Lobby.player_info,6)
-	Global.Print("saving config to %s" % Global.config_path)
+	Global.Print("saving PlayerInfo %s to config" % Lobby.player_info, 48)
+	Global.Print("saving config to %s" % Global.config_path, 45)
 func load_playerinfo()->void:
 	if Global.config.has_section(Global.config_player_info_sec):
 		Lobby.player_info = Global.config_get_section_dict(Global.config_player_info_sec)
@@ -239,8 +251,8 @@ func save_con_settings(save_ip=true)->void:
 	Global.config.set_value("conn", "port", ConPopup.port)
 	Global.config.save(Global.config_path)
 	if save_ip:
-		Global.Print("saving IP %s:%s to config" % [ConPopup.ip_addr,ConPopup.port],6)
-	Global.Print("saving config to %s" % Global.config_path)
+		Global.Print("saving IP %s:%s to config" % [ConPopup.ip_addr,ConPopup.port],46)
+	Global.Print("saving config to %s" % Global.config_path,45)
 #func load_con_settings()->void:
 #	if Global.config.has_section_key("conn", "ip"):
 #		ConPopup.ip_addr = Global.config.get_value("conn","ip")
@@ -249,8 +261,8 @@ func save_con_settings(save_ip=true)->void:
 func save_usersettings(us:Dictionary)->void:
 	Global.config_set_section_dict(Global.config_user_settings_sec, us)
 	Global.config.save(Global.config_path)
-	Global.Print("saving UserSettings %s to config" % us,6)
-	Global.Print("saving config to %s" % Global.config_path)
+	Global.Print("saving UserSettings %s to config" % us,46)
+	Global.Print("saving config to %s" % Global.config_path,45)
 
 func _on_user_settings_on_settings_changed(plinfo:Dictionary, usetts:Dictionary)->void:
 	Lobby.player_info = plinfo
@@ -270,6 +282,10 @@ func update_stuff_from_usetts(usetts:Dictionary,force_screen_update=false)->void
 			MainThemePlayer.volume_db = -100
 		else:
 			MainThemePlayer.volume_db = (usetts["musicvolume"]-100.0)*0.4
+	if usetts.has("consolePrio"):
+		Global.min_prio_debug_print = usetts["consolePrio"]
+	if usetts.has("toastPrio"):
+		Global.min_prio_toast = usetts["toastPrio"]
 
 func dummy_func():
 	pass
@@ -318,20 +334,20 @@ func set_splitscreen_mode(spm:int)->void:
 		
 
 func window_set_borderless_ontop(bt:bool,wci:int)->void:
-	Global.Print("window_set_borderless_ontop: %s" % bt)
+	Global.Print("window_set_borderless_ontop: %s" % bt,40)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, bt,wci)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, bt,wci)
 
 func window_set_mode(mode:DisplayServer.WindowMode,wci:int)->void:
-	Global.Print("window_set_mode: %s" % mode)
+	Global.Print("window_set_mode: %s" % mode,40)
 	DisplayServer.window_set_mode(mode,wci)
 
 func window_set_position(pos:Vector2i,wci:int)->void:
-	Global.Print("window_set_position: %s" % pos)
+	Global.Print("window_set_position: %s" % pos,40)
 	DisplayServer.window_set_position(pos,wci)
 
 func window_set_size(s:Vector2i,wci:int)->void:
-	Global.Print("window_set_size: %s" % s)
+	Global.Print("window_set_size: %s" % s,40)
 	DisplayServer.window_set_size(s,wci)
 
 func _on_user_settings_pressed()->void:
@@ -365,8 +381,7 @@ func _on_control_settings_pressed()->void:
 func _on_action_remapper_remap_done()->void:
 	Global.set_section_dict(Global.inputconfig,Global.config_inputmap_sec, Global.get_inputmap_dict())
 	Global.inputconfig.save(Global.inputconfig_path)
-	Global.Print("saving InputMap to inputconfig",6)
-	Global.Print("saving inputconfig to %s" % Global.inputconfig_path)
+	Global.Print("saving inputconfig to %s" % Global.inputconfig_path,45)
 
 func _process(delta:float)->void:
 	if len(call_next_process_frame) > 0:
@@ -378,14 +393,6 @@ func _process(delta:float)->void:
 			call_next_process_frame[0][0].callv(call_next_process_frame[0][1])
 			call_next_process_frame.remove_at(0)
 	TopGui.set_fps(Engine.get_frames_per_second())
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if event.keycode == KEY_0:
-			Lobby.make_server_ping()
-
-func on_lobby_pong(rtt:float):
-	TopGui.set_rtt(rtt)
 
 func _on_watch_replay_pressed() -> void:
 	Lobby.load_scene(Global.gameviewer_path)

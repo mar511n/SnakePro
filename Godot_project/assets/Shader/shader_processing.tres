@@ -4,6 +4,6 @@
 
 [resource]
 shader = ExtResource("1_wx35b")
-shader_parameter/color = Vector4(1, 1, 1, 1)
+shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/frequency = 10.0
 shader_parameter/phase_speed = 17.0

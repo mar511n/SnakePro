@@ -19,7 +19,7 @@ func _init(ghost=false):
 	set_meta("name", item_name)
 	set_meta("description", "spawns a bot snake, which will try to kill other players.\n")
 	set_meta("ItemBotProbability", [1,0,4,0.1])
-	set_meta("ItemBotSpeed",[ItemBotSpeed,0,40,1,"speed of the bot snake in tiles/second"])
+	set_meta("ItemBotSpeed",[ItemBotSpeed,0,20,0.5,"speed of the bot snake in tiles/second"])
 	set_meta("ItemBotLength",[ItemBotLength,0,60,1,"length of the bot snake in tiles"])
 	set_meta("ItemBotDuration",[ItemBotDuration,0,60,1,"time until the bot despawns"])
 	set_meta("ItemBotDurMul",[ItemBotDurMul,0,10,0.5,"multiplier for ItemBotDuration in case the bot is corrupted"])
@@ -38,7 +38,7 @@ func on_player_physics_process(_delta:float):
 		is_used = true
 		local_player_gui.set_item_ready(local_player_gui_id,false)
 		#pl.ShootingSound.play()
-		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
+		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
 		var dur = ItemBotDuration
 		if is_ghost:
 			dur *= ItemBotDurMul

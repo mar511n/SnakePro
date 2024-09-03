@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-uniform vec4 line_color = vec4(1);
+uniform vec4 color : source_color = vec4(1);
 uniform float line_thickness = 0.05;
 uniform float frequency = 10.0;
 uniform float phase_speed = 1.0;
@@ -28,6 +28,6 @@ void fragment() {
 		angle += 2.0 * PI;
 		}
 		float ring = step(0.0, sin(frequency * angle + TIME * phase_speed));
-		COLOR = vec4(line_color.rgb, ring * line_color.a);
+		COLOR = vec4(color.rgb, ring * color.a);
 	}
 }

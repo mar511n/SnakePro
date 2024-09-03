@@ -27,7 +27,7 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 func on_player_physics_process(_delta:float):
 	if !is_marked_for_removal and Input.is_action_just_pressed("use_item"):
 		pl.ShootingSound.play()
-		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost])
+		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
 		var dir = pl.get_direction_facing()
 		if is_ghost:
 			var rn = randf()

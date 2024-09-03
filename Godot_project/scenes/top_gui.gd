@@ -8,3 +8,6 @@ func set_fps(fps:float)->void:
 
 func set_rtt(rtt:float)->void:
 	RTT_l.text = "%.2d ms" % [rtt*1000.0]
+
+func unset_rtt()->void:
+	RTT_l.text = ""

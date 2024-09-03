@@ -32,7 +32,7 @@ func _physics_process(delta:float)->void:
 	if finished_loading_players and waitframes > 0:
 		waitframes -= 1
 		if waitframes == 0:
-			Global.Print("starting game")
+			Global.Print("starting the game", 40)
 			pause_game(false,false)
 	if ready_phase == 2 and finished_loading_players and waitframes <= 0:
 		post_ready()
@@ -114,7 +114,7 @@ func tile_check_collisions(pos:Vector2i,CollLayer:Array,max_colls:int=1)->Array:
 # -> process input
 func _input(event:InputEvent)->void:
 	if event.is_action_pressed("ui_cancel"):
-		Global.Print(get_tree().root.get_tree_string_pretty())
+		Global.Print(get_tree().root.get_tree_string_pretty(), 30)
 		pause_game.rpc(!$GUI.visible)
 	elif event is InputEventKey:
 		if event.keycode == KEY_0 and event.pressed:
@@ -163,9 +163,9 @@ func _ready()->void:
 		var mod:Resource = module_scripts.get(mod_path, null)
 		if mod != null:
 			module_node.add_child(mod.new())
-			Global.Print("loading game module %s: success" % mod_path)
+			Global.Print("loading game module %s: success" % mod_path, 40)
 		else:
-			Global.Print("loading game module %s: ERROR" % mod_path, 7)
+			Global.Print("ERROR while loading game module %s" % mod_path, 90)
 	
 	ready_phase = 1
 	pl_spawner.spawn_function = self.spawn_player
@@ -196,7 +196,7 @@ func _ready()->void:
 	ready_phase = 2
 
 func post_ready()->void:
-	Global.Print("post_ready")
+	Global.Print("in_game is in post_ready stage", 35)
 	coll_map.load_from_Tilemap(tmap, sn_drawer)
 	for mod:Node in module_node.get_children():
 		mod.on_game_post_ready()
@@ -229,10 +229,10 @@ func format_module_list()->void:
 @rpc("authority","call_local", "reliable")
 func load_map(path:String):
 	coll_map = CollisionMap.new()
-	Global.Print("loading map %s" % path, 6)
+	Global.Print("loading map from %s" % path, 40)
 	var tmap_packed = load(path)
 	if tmap_packed == null:
-		Global.Print("ERROR while loading tilemap as collision map from path %s" % path, 7)
+		Global.Print("ERROR while loading tilemap as collision map from path %s" % path, 95)
 		return_to_main_menu(true,false)
 		return
 	tmap = tmap_packed.instantiate()
@@ -243,9 +243,9 @@ func load_map(path:String):
 # on server: (is only called here)
 # unpause all gameobj and start the game
 func all_players_loaded():
-	Global.Print("all players loaded")
+	Global.Print("all players have loaded", 40)
 	if ready_phase >= 2:
-		Global.Print("starting game")
+		Global.Print("starting the game", 40)
 		waitframes = 0
 		pause_game(false, false) # set game to play since all players loaded
 	else:
@@ -266,7 +266,7 @@ func spawn_player(data) -> Node:
 	pl.peer_id = peer_id
 	pl.pl_idx = index
 	pl.IG = self
-	Global.Print("spawning player %s with id %s" % [index, peer_id])
+	Global.Print("spawning player %s with id %s" % [index, peer_id], 40)
 
 	pl.on_movement.connect(self._on_player_movement)
 	
@@ -274,12 +274,11 @@ func spawn_player(data) -> Node:
 	var spawn_found = false
 	for spawn in get_tree().get_nodes_in_group("PlayerSpawnPoint"):
 		if spawn.name == str(index):
-			#Global.Print("sn_drawer_path %s, spawn %s" % [currentPlayer.sn_drawer_path, spawn])
 			pl.pre_ready(spawn,Global.get_enabled_mod_paths(Global.config_player_mods_sec))
 			spawn_found = true
 			break
 	if !spawn_found:
-		Global.Print("ERROR: no spawnpoint found for player %s with id %s" % [index, peer_id], 7)
+		Global.Print("ERROR: no spawnpoint found for player %s with id %s" % [index, peer_id], 95)
 	
 	# set camera bounds
 	for node in tmap.get_children():
@@ -306,7 +305,7 @@ func get_alive_players()->Array:
 # can be called remotely to pause the game for all gameobj
 @rpc("any_peer","call_local", "reliable")
 func pause_game(pause, set_gui=true):
-	Global.Print("pause_game %s" % pause)
+	Global.Print("pause_game %s" % pause, 40)
 	for node in get_tree().get_nodes_in_group("gameobj"):
 		node.call_deferred("set_physics_process", !pause)
 		node.call_deferred("set_process", !pause)
@@ -315,10 +314,6 @@ func pause_game(pause, set_gui=true):
 				node.speed_scale = 0
 			else:
 				node.speed_scale = 1
-	#if is_instance_valid(get_tree().current_scene):
-	#	Global.Print(get_tree().current_scene.name)
-	#for child in module_node.get_children():
-	#	Global.Print(child)
 	if set_gui:
 		$GUI.visible = pause
 
@@ -326,8 +321,6 @@ func pause_game(pause, set_gui=true):
 # -> loads the main menu (locally or for all peers) and resets networking if requested
 @rpc("any_peer","call_local","reliable")
 func return_to_main_menu(reset_net=false, all_peers=false):
-	#Global.Print("loading main_menu: %s" % Global.main_menu_path)
-	
 	if all_peers:
 		#get_tree().call_group("Synchronizer", "free")
 		#Lobby.scene_spawner.spawn(Global.main_menu_path)
@@ -340,20 +333,18 @@ func return_to_main_menu(reset_net=false, all_peers=false):
 # on server/client:
 # -> remove player from SceneTree and playerlist
 func player_disconnected(peer_id):
-	Global.Print("Player disconnected: %s" % peer_id, 6)
+	Global.Print("Player %s disconnected" % peer_id, 60)
 	playerlist[peer_id].queue_free()
 	playerlist.erase(peer_id)
 
 # on server/client:
 # -> connection failed: return to main menu
 func connection_failed():
-	Global.Print("ERROR: connection failed", 7)
+	Global.Print("ERROR: connection failed", 90)
 	return_to_main_menu(true,false)
 
 @rpc("any_peer","call_local", "reliable")
 func start_module(mod_path:String, args:Array, nodename:String):
-	#Global.Print("trying to start %s with arguments %s"%[mod_path,args])
-	#Global.Print(module_scripts)
 	if module_scripts.has(mod_path):
 		var mod:GameModBase = module_scripts[mod_path].new()
 		mod.name = nodename
@@ -361,7 +352,7 @@ func start_module(mod_path:String, args:Array, nodename:String):
 		mod.on_game_ready(self,multiplayer.is_server())
 		mod.on_game_post_ready()
 		mod.callv("on_module_start", args)
-		Global.Print("started Gamemodule %s" % mod_path)
+		Global.Print("started Gamemodule %s with nodename %s and %s args" % [mod_path,nodename,args.size()], 40)
 
 func _on_tree_entered():
 	$MultiplayerSynchronizer.set_multiplayer_authority(1)

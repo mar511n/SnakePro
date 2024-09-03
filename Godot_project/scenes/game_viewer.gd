@@ -99,7 +99,7 @@ func _on_save_btn_pressed() -> void:
 	var file = FileAccess.open(Global.replay_dir_path+fname,FileAccess.WRITE)
 	file.store_var([Global.static_gamestate, Global.variable_gamestates])
 	file.close()
-	Global.Print("replay saved as %s" % fname, 6)
+	Global.Print("replay saved as %s" % fname, 60)
 	time_slider.call_deferred("grab_focus")
 
 func create_replay_dir_if_needed():
@@ -117,7 +117,7 @@ func _on_file_dialog_file_selected(path: String) -> void:
 	load_replay(path)
 
 func load_replay(path:String):
-	Global.Print("loading replay %s ..." % path.trim_prefix(Global.replay_dir_path), 6)
+	Global.Print("loading replay %s ..." % path.trim_prefix(Global.replay_dir_path), 60)
 	var file = FileAccess.open(path,FileAccess.READ)
 	var gs = file.get_var()
 	file.close()

@@ -63,7 +63,7 @@ func on_player_physics_process(delta):
 
 @rpc("any_peer", "call_local", "reliable")
 func set_player_dead(dead:bool)->void:
-	Global.Print("setting player %s to dead=%s" % [pl.peer_id,dead])
+	Global.Print("setting player %s to dead=%s" % [pl.peer_id,dead], 40)
 	pl.module_vars["PlayerIsAlive"] = !dead
 	if dead:
 		for mod in pl.modules:
