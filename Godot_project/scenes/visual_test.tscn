@@ -1,32 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://btrdu3mw4p7px"]
+[gd_scene load_steps=5 format=3 uid="uid://btrdu3mw4p7px"]
 
 [ext_resource type="Environment" uid="uid://cso3v2rbcamxu" path="res://assets/environment.tres" id="1_incyf"]
 [ext_resource type="Texture2D" uid="uid://dq6cged7oywrw" path="res://assets/Images/images.svg" id="1_x27si"]
 [ext_resource type="PackedScene" uid="uid://di32gc16xjasi" path="res://scenes/ModResources/fart_sprite.tscn" id="3_ov76l"]
-[ext_resource type="Shader" path="res://assets/Shader/CircleWave.gdshader" id="4_gv842"]
-[ext_resource type="Texture2D" uid="uid://boko78bgy43b0" path="res://assets/Icons/256.png" id="5_ido7q"]
-[ext_resource type="Texture2D" uid="uid://5wxtsmhyfroa" path="res://assets/Images/UI/play_small.png" id="6_w48x6"]
-
-[sub_resource type="Curve" id="Curve_flpfj"]
-_data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.125, 1), 0.0, 0.0, 0, 0, Vector2(0.25, 0.75), 0.0, 0.0, 0, 0, Vector2(0.375, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0.75), 0.0, 0.0, 0, 0, Vector2(0.625, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.75), 0.0, 0.0, 0, 0, Vector2(0.875, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), 0.0, 0.0, 0, 0]
-point_count = 9
-
-[sub_resource type="CurveTexture" id="CurveTexture_bh0mj"]
-texture_mode = 1
-curve = SubResource("Curve_flpfj")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_su24g"]
-shader = ExtResource("4_gv842")
-shader_parameter/line_tickness = 0.1
-shader_parameter/offset_mul = 2.0
-shader_parameter/amp1 = 0.125
-shader_parameter/freq1 = 4.0
-shader_parameter/speed1 = 5.0
-shader_parameter/amp2 = 0.125
-shader_parameter/freq2 = 9.0
-shader_parameter/speed2 = 1.46
-shader_parameter/col = Color(1, 1, 1, 1)
-shader_parameter/base_offset = SubResource("CurveTexture_bh0mj")
+[ext_resource type="PackedScene" uid="uid://c6eo7v5456hg" path="res://scenes/wobbly_texture.tscn" id="5_rrsa3"]
 
 [node name="VisualTest" type="Node2D"]
 
@@ -52,19 +29,10 @@ visible = true
 [node name="GPUParticles2D" parent="FartSprite/SpriteG" index="0"]
 amount_ratio = 0.5
 
-[node name="TextureRect" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_su24g")
-offset_left = -992.0
-offset_top = 2.0
-offset_right = -406.0
-offset_bottom = 549.0
-texture = ExtResource("5_ido7q")
-
-[node name="TextureRect2" type="TextureRect" parent="."]
-offset_left = -898.0
-offset_top = 75.0
-offset_right = -498.0
-offset_bottom = 475.0
-texture = ExtResource("6_w48x6")
+[node name="TextureRect" parent="." instance=ExtResource("5_rrsa3")]
+offset_left = -914.0
+offset_top = -102.0
+offset_right = -314.0
+offset_bottom = 498.0
 
 [editable path="FartSprite"]

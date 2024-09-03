@@ -232,7 +232,7 @@ func redraw_snake():
 	sn_drawer.draw_snake(Lobby.players[peer_id].get("snake_tile_idx", pl_idx+1),pl_idx,tiles)
 	
 	if last_drawn_tiles.size() != 2 or (last_drawn_tiles[-1] != tiles[-1]):
-		if last_drawn_tiles[-1].distance_squared_to(tiles[-1]) > 4:
+		if last_drawn_tiles.size() == 2 and last_drawn_tiles[-1].distance_squared_to(tiles[-1]) > 4:
 			snake_path.clear_points()
 		else:
 			snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
@@ -355,8 +355,7 @@ func reset_snake_tiles():
 	fett = Lobby.game_settings.get(Global.config_game_params_sec).get("startSnakeLength", Global.default_game_params["startSnakeLength"]) -1
 	set_speed(Lobby.game_settings.get(Global.config_game_params_sec).get("snakeSpeed", Global.default_game_params["snakeSpeed"]))
 	snake_path.clear_points()
-	if is_owner:
-		snake_path.add_point(startPos)
+	snake_path.add_point(startPos)
 	for i in range(1):
 		move_in_dir(startDir)
 	redraw_snake()

@@ -1,0 +1,44 @@
+[gd_scene load_steps=9 format=3 uid="uid://c6eo7v5456hg"]
+
+[ext_resource type="Shader" path="res://assets/Shader/CircleWave.gdshader" id="1_nd11b"]
+[ext_resource type="Texture2D" uid="uid://b525xtmrhel2s" path="res://assets/Images/UI/play.png" id="2_ffdt4"]
+[ext_resource type="Script" path="res://scenes/wobbly_texture.gd" id="3_68bkx"]
+
+[sub_resource type="Curve" id="Curve_flpfj"]
+_data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.125, 1), 0.0, 0.0, 0, 0, Vector2(0.25, 0.75), 0.0, 0.0, 0, 0, Vector2(0.375, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0.75), 0.0, 0.0, 0, 0, Vector2(0.625, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.75), 0.0, 0.0, 0, 0, Vector2(0.875, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), 0.0, 0.0, 0, 0]
+point_count = 9
+
+[sub_resource type="CurveTexture" id="CurveTexture_bh0mj"]
+texture_mode = 1
+curve = SubResource("Curve_flpfj")
+
+[sub_resource type="Gradient" id="Gradient_5gmc0"]
+offsets = PackedFloat32Array(0.812245, 0.861224, 0.910204, 0.955102, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 0.780392, 0, 1, 0, 0.521569, 0, 0, 1, 0.258824, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1p0eh"]
+gradient = SubResource("Gradient_5gmc0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_su24g"]
+shader = ExtResource("1_nd11b")
+shader_parameter/alpha_tresh = 0.8
+shader_parameter/shrink = 2.0
+shader_parameter/offset_mul = 2.0
+shader_parameter/coff_angle = 0.0
+shader_parameter/coff_mul = 0.5
+shader_parameter/coff_std = 0.2
+shader_parameter/amp1 = 0.125
+shader_parameter/freq1 = 4.0
+shader_parameter/speed1 = 5.0
+shader_parameter/amp2 = 0.125
+shader_parameter/freq2 = 9.0
+shader_parameter/speed2 = 1.46
+shader_parameter/cols = SubResource("GradientTexture1D_1p0eh")
+shader_parameter/base_offset = SubResource("CurveTexture_bh0mj")
+
+[node name="WobblyTextureRect" type="TextureRect"]
+material = SubResource("ShaderMaterial_su24g")
+offset_right = 600.0
+offset_bottom = 600.0
+texture = ExtResource("2_ffdt4")
+script = ExtResource("3_68bkx")
