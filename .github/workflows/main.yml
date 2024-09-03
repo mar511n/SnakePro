@@ -14,13 +14,10 @@ jobs:
     - run: |
         echo Deploying!
         kill $(pgrep -f SnakePro_server.) || true
-        echo 1
+        cd /home/docker/
         mkdir -p snakepro
-        echo 2
         cd snakepro
         curl https://github.com/mar511n/SnakePro/blob/main/executables/SnakePro_server.x86_64 -o SnakePro_server.x86_64
-        echo 3
         curl https://github.com/mar511n/SnakePro/blob/main/executables/SnakePro_server.pck -o SnakePro_server.pck
-        echo 4
         ./SnakePro_server.x86_64 </dev/null &>/dev/null &
         echo Finished deploying!
