@@ -1,5 +1,5 @@
 shader_type canvas_item;
-uniform vec4 color : source_color = vec4(1.0);
+uniform vec4 color = vec4(1.0);
 uniform float frequency = 10.0;
 uniform float phase_speed = 17.0;
 
