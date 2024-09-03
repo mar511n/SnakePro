@@ -15,7 +15,7 @@ jobs:
         echo Deploying!
         kill $(pgrep -f SnakePro_server.) 2>/dev/null
         mkdir -p snakepro
-        cd skanepro
+        cd snakepro
         curl https://github.com/mar511n/SnakePro/blob/main/executables/SnakePro_server.x86_64 -o SnakePro_server.x86_64
         curl https://github.com/mar511n/SnakePro/blob/main/executables/SnakePro_server.pck -o SnakePro_server.pck
         ./SnakePro_server.x86_64 </dev/null &>/dev/null &
