@@ -13,7 +13,7 @@ jobs:
     steps:
     - run: |
         echo Deploying!
-        kill $(pgrep -f SnakePro_server.) 2>/dev/null
+        kill $(pgrep -f SnakePro_server.) || true
         echo 1
         mkdir -p snakepro
         echo 2
