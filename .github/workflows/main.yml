@@ -17,7 +17,7 @@ jobs:
         cd /home/docker/
         mkdir -p snakepro
         cd snakepro
-        curl https://github.com/mar511n/SnakePro/raw/main/executables/SnakePro_server.x86_64 -o SnakePro_server.x86_64
-        curl https://github.com/mar511n/SnakePro/raw/main/executables/SnakePro_server.pck -o SnakePro_server.pck
+        curl -L https://github.com/mar511n/SnakePro/raw/main/executables/SnakePro_server.x86_64 -o SnakePro_server.x86_64
+        curl -L https://github.com/mar511n/SnakePro/raw/main/executables/SnakePro_server.pck -o SnakePro_server.pck
         ./SnakePro_server.x86_64 </dev/null &>/dev/null &
         echo Finished deploying!
