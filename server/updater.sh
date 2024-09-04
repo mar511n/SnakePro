@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sync_interval=10
+sync_interval=600
 pid=-1
 
 while [[ 1 ]] ; do
