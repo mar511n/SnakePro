@@ -53,7 +53,7 @@ func on_game_post_ready():
 		var spl_ids = []
 		for peer_id in Lobby.players:
 			player_colors[peer_id] = Global.snake_colors[Lobby.players[peer_id]["snake_tile_idx"]]
-			if peer_id != multiplayer.get_unique_id() and Lobby.players[peer_id]["mainMultiplayerScreen"]:
+			if peer_id != multiplayer.get_unique_id() and Lobby.players[peer_id].get("mainMultiplayerScreen", false):
 				spl_ids.append(peer_id)
 		lp_ui.init_stuff(local_pl.is_main_mul_screen,spl_ids,self,player_colors)
 
