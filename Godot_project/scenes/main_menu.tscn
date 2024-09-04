@@ -286,6 +286,7 @@ grow_horizontal = 2
 alignment = 1
 
 [node name="Home" type="TextureButton" parent="Buttons/VBoxContainer"]
+self_modulate = Color(0.81973, 0.478248, 0.286259, 1)
 layout_mode = 2
 tooltip_text = "home"
 texture_normal = ExtResource("6_8cisp")
