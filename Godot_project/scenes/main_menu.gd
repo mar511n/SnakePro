@@ -44,6 +44,7 @@ func initialize()->void:
 	#GameSetPopup.visible = false
 
 func reset()->void:
+	Global.Print("version %s" % ProjectSettings.get_setting("application/config/version"))
 	var arguments = {}
 	for argument in OS.get_cmdline_user_args():
 		if argument.find("=") > -1:
