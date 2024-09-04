@@ -19,5 +19,6 @@ jobs:
         cd snakepro
         curl -L https://github.com/mar511n/SnakePro/raw/main/executables/SnakePro_server.x86_64 -o SnakePro_server.x86_64
         curl -L https://github.com/mar511n/SnakePro/raw/main/executables/SnakePro_server.pck -o SnakePro_server.pck
+        chmod +x ./SnakePro_server.x86_64
         ./SnakePro_server.x86_64 </dev/null &>/dev/null &
         echo Finished deploying!
