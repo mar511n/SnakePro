@@ -102,6 +102,7 @@ func reset()->void:
 
 func network_reset()->void:
 	Lobby.reset_network()
+	chat_rtl.clear()
 	Global.has_server_privileges = false
 	show_hide_buttons_and_popups(false,true)
 
@@ -402,3 +403,15 @@ func _on_stats_pressed() -> void:
 	TabCont.current_tab = 4
 	Statistics.update_stats()
 	#InputSettings.button_update()
+
+@onready var chat_rtl = $TabContainer/Main/Chat/RichTextLabel
+@onready var chat_line = $TabContainer/Main/Chat/LineEdit
+func _on_line_edit_text_submitted(new_text: String) -> void:
+	chat_line.text = ""
+	if multiplayer.has_multiplayer_peer():
+		add_text_to_chat.rpc(Lobby.player_info.get("name","unknown")+": "+new_text)
+
+@rpc("any_peer","call_local","reliable")
+func add_text_to_chat(text:String):
+	Global.Print("new chat entry: "+text,35)
+	chat_rtl.add_text(text+"\n")

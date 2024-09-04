@@ -154,6 +154,34 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 
+[node name="Chat" type="Panel" parent="TabContainer/Main"]
+layout_mode = 0
+offset_left = 1551.0
+offset_top = 532.0
+offset_right = 1897.0
+offset_bottom = 918.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Main/Chat"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.863
+offset_bottom = -0.118011
+grow_horizontal = 2
+grow_vertical = 2
+scroll_following = true
+shortcut_keys_enabled = false
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Main/Chat"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.863
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.118011
+grow_horizontal = 2
+grow_vertical = 0
+
 [node name="User Settings" type="Control" parent="TabContainer"]
 visible = false
 layout_mode = 2
@@ -400,6 +428,7 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [connection signal="pressed" from="TabContainer/Main/StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="text_submitted" from="TabContainer/Main/Chat/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="on_settings_changed" from="TabContainer/User Settings/UserSettings" to="." method="_on_user_settings_on_settings_changed"]
 [connection signal="on_settings_changed" from="TabContainer/Game Settings/GameSettings" to="." method="_on_game_settings_on_settings_changed"]
 [connection signal="remap_done" from="TabContainer/Control Settings/ActionRemapper" to="." method="_on_action_remapper_remap_done"]
