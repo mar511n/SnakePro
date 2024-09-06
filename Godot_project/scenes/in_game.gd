@@ -116,25 +116,6 @@ func _input(event:InputEvent)->void:
 	if event.is_action_pressed("ui_cancel"):
 		Global.Print(get_tree().root.get_tree_string_pretty(), 30)
 		pause_game.rpc(!$GUI.visible)
-	elif event is InputEventKey:
-		if event.keycode == KEY_0 and event.pressed:
-			print("capturing gamestate")
-			var save_file:FileAccess = FileAccess.open("user://savegame.save", FileAccess.WRITE)
-			var sns:Array = get_tree().get_nodes_in_group("VariableGraphical")
-			if len(sns) == 0:
-				print("error: no objects")
-				return
-			var node : Node = sns[0]
-			if node.scene_file_path.is_empty():
-				print("error: no scene")
-				return
-			save_file.store_var(node,true)
-		elif event.keycode == KEY_9 and event.pressed:
-			print("loading gamestate")
-			var save_file:FileAccess = FileAccess.open("user://savegame.save", FileAccess.READ)
-			var node:Node = save_file.get_var(true)
-			print(node)
-			add_child(node)
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
