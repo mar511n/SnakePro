@@ -1,9 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://dxobh2gxukmej"]
+[gd_scene load_steps=7 format=3 uid="uid://dxobh2gxukmej"]
 
 [ext_resource type="Script" path="res://scenes/action_remapper.gd" id="1_3sdyi"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_usp0t"]
 [ext_resource type="Texture2D" uid="uid://bcrt03jay8sfy" path="res://assets/MatIcons/reset_settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" id="3_y1cd1"]
 [ext_resource type="Texture2D" uid="uid://dlymyrec58avp" path="res://assets/MatIcons/reset_settings_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="4_5wdu3"]
+
+[sub_resource type="Gradient" id="Gradient_mi7bs"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 0.196078)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_64qpm"]
+gradient = SubResource("Gradient_mi7bs")
+width = 1
 
 [node name="ActionRemapper" type="Panel"]
 offset_left = 130.0
@@ -77,6 +85,7 @@ custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 texture_normal = ExtResource("3_y1cd1")
 texture_pressed = ExtResource("4_5wdu3")
+texture_focused = SubResource("GradientTexture1D_64qpm")
 ignore_texture_size = true
 stretch_mode = 5
 

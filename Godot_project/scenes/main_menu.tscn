@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://6mp7bp17ft6w"]
+[gd_scene load_steps=45 format=3 uid="uid://6mp7bp17ft6w"]
 
 [ext_resource type="Texture2D" uid="uid://cvdwlujqq8r81" path="res://assets/Images/UI/WinBack.png" id="1_biflu"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="1_i16v8"]
@@ -66,6 +66,14 @@ shader_parameter/base_offset = SubResource("CurveTexture_wxnay")
 
 [sub_resource type="ImageTexture" id="ImageTexture_ggknu"]
 
+[sub_resource type="Gradient" id="Gradient_mi7bs"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 0.196078)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8xcue"]
+gradient = SubResource("Gradient_mi7bs")
+width = 1
+
 [sub_resource type="ImageTexture" id="ImageTexture_lpa1i"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_cg561"]
@@ -131,9 +139,11 @@ offset_top = 224.0
 offset_right = 395.0
 offset_bottom = 411.0
 tooltip_text = "start game"
+focus_neighbor_top = NodePath("../../../Buttons/VBoxContainer/Home")
 texture_normal = ExtResource("22_xkx7m")
 texture_pressed = ExtResource("22_c1p28")
 texture_disabled = ExtResource("22_xkx7m")
+texture_focused = ExtResource("22_c1p28")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -181,6 +191,8 @@ anchor_bottom = 1.0
 offset_top = -0.118011
 grow_horizontal = 2
 grow_vertical = 0
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
 
 [node name="User Settings" type="Control" parent="TabContainer"]
 visible = false
@@ -320,6 +332,7 @@ tooltip_text = "home"
 texture_normal = ExtResource("6_8cisp")
 texture_pressed = ExtResource("7_fl2qb")
 texture_disabled = SubResource("ImageTexture_ggknu")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="UserSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -329,6 +342,7 @@ tooltip_text = "user settings"
 texture_normal = ExtResource("4_s78qd")
 texture_pressed = ExtResource("5_a48s5")
 texture_disabled = SubResource("ImageTexture_ggknu")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="GameSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -338,6 +352,7 @@ tooltip_text = "game settings"
 texture_normal = ExtResource("6_sfhnf")
 texture_pressed = ExtResource("7_sbrbm")
 texture_disabled = SubResource("ImageTexture_lpa1i")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="ControlSettings" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -347,6 +362,7 @@ tooltip_text = "control settings"
 texture_normal = ExtResource("13_b5lhp")
 texture_pressed = ExtResource("14_rd4jv")
 texture_disabled = SubResource("ImageTexture_lpa1i")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="WatchReplay" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -356,6 +372,7 @@ tooltip_text = "watch replay"
 texture_normal = ExtResource("16_0ubv4")
 texture_pressed = ExtResource("17_4y0v0")
 texture_disabled = SubResource("ImageTexture_cg561")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="Stats" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -365,6 +382,7 @@ tooltip_text = "statistics"
 texture_normal = ExtResource("21_2w5kh")
 texture_pressed = ExtResource("22_d30u4")
 texture_disabled = SubResource("ImageTexture_cg561")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="QuitGame" type="TextureButton" parent="Buttons/VBoxContainer"]
@@ -374,6 +392,7 @@ tooltip_text = "quit"
 texture_normal = ExtResource("10_usqbb")
 texture_pressed = ExtResource("11_sscp0")
 texture_disabled = SubResource("ImageTexture_1gkq2")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="ConnectionSettings" type="TextureButton" parent="."]
@@ -387,6 +406,7 @@ tooltip_text = "join/host"
 texture_normal = ExtResource("4_1aehp")
 texture_pressed = ExtResource("5_qybkx")
 texture_disabled = SubResource("ImageTexture_cfn6u")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="Disconnect" type="TextureButton" parent="."]
@@ -400,6 +420,7 @@ tooltip_text = "leave"
 texture_normal = ExtResource("6_yvnxy")
 texture_pressed = ExtResource("7_q6i58")
 texture_disabled = SubResource("ImageTexture_5b0h3")
+texture_focused = SubResource("GradientTexture1D_8xcue")
 stretch_mode = 3
 
 [node name="ConnectionStatus" parent="." instance=ExtResource("8_lu7j6")]

@@ -67,7 +67,7 @@ ItemFartRadius=4.5
 ItemFartDamage=5.0
 ItemShootingSurvLen=10.0
 ItemSpeedRandNum=1.0
-ItemSpeedRandDiff=0.9
+ItemSpeedRandDiff=0.95
 MaxTimeBeforeGameover=2.0
 
 [conn]

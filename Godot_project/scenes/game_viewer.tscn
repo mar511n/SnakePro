@@ -48,28 +48,33 @@ offset_bottom = 40.0
 
 [node name="BackBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 texture_normal = ExtResource("4_ckvet")
 texture_pressed = ExtResource("5_ekpnd")
 
 [node name="PlayBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 toggle_mode = true
 texture_normal = ExtResource("3_4xs6o")
 texture_pressed = ExtResource("2_8iap7")
 
 [node name="SaveBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 texture_normal = ExtResource("6_twlmd")
 texture_pressed = ExtResource("7_uqml2")
 
 [node name="LoadBtn" type="TextureButton" parent="GUI/Control/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 texture_normal = ExtResource("8_x5i7a")
 texture_pressed = ExtResource("9_y8eug")
 
 [node name="ReplaysBtn" type="OptionButton" parent="GUI/Control/HBoxContainer"]
 visible = false
 layout_mode = 2
+focus_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("2_8ur7l")

@@ -16,6 +16,7 @@ extends Control
 @onready var Statistics:Panel = $TabContainer/Statistics/Statistics
 @onready var TabCont:TabContainer = $TabContainer
 @onready var ConnStat:ConnectionStatusTexture = $ConnectionStatus
+@onready var homeBtn = $Buttons/VBoxContainer/Home
 
 var call_next_process_frame:Array = []
 
@@ -415,3 +416,9 @@ func _on_line_edit_text_submitted(new_text: String) -> void:
 func add_text_to_chat(text:String):
 	Global.Print("new chat entry: "+text,35)
 	chat_rtl.add_text(text+"\n")
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action("ui_focus_next") or event.is_action("ui_focus_prev"):
+		if event.is_pressed():
+			homeBtn.grab_focus()

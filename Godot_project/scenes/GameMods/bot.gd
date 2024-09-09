@@ -48,7 +48,11 @@ func on_module_start(owner_id:int, ghost:bool, speed:float, length:int, astar:bo
 	
 	var start = game.playerlist[owner_peer_id].get_head_tile()
 	var dir = game.playerlist[owner_peer_id].get_direction_facing()
-	game.module_vars_rapid["BotSnake"+str(bot_id)] = [start+2*dir,start+3*dir]
+	game.module_vars_rapid["BotSnake"+str(bot_id)] = [start-2*dir,start-dir]
+	var tiles = get_tiles()
+	var cmap_snakes = get_coll_map()
+	get_next_dir(tiles,cmap_snakes)
+	move_in_dir(tiles,cmap_snakes)
 
 func on_game_physics_process(delta):
 	super(delta)
@@ -64,37 +68,43 @@ func on_game_physics_process(delta):
 			time_since_last_update = fmod(time_since_last_update,update_period)
 			
 			var tiles = get_tiles()
-			if len(tiles) > 1:
-				var cmap_snakes = get_coll_map()
-				var target:Vector2i
-				if is_ghost:
-					target = get_next_apple_pos(tiles[-1])
-					if target == tiles[-1]:
-						for child in game.module_node.get_children():
-							if child.name == "AppleMod":
-								child.remove_apple(target)
-				else:
-					target = get_next_target_pos(tiles[-1])
-				if use_astar:
-					var cmap = cmap_snakes.duplicate_map()
-					cmap.set_at_multiple(tiles, 1)
-					#cmap.set_at_multiple(game.playerlist[owner_peer_id].tiles, 1)
-					cmap.set_atv(tiles[-1], 0)
-					cmap.set_atv(target,0)
-					var path = cmap.Astar(tiles[-1], target)
-					if len(path) > 1:
-						next_dir = path[1]-path[0]
-					else:
-						next_dir = dir_from_to(tiles[-1],target)
-				else:
-					next_dir = dir_from_to(tiles[-1],target)
-				if next_dir != Vector2i.ZERO:
-					game.module_vars_rapid["BotSnake"+str(bot_id)].append(tiles[-1]+next_dir)
-					while len(game.module_vars_rapid["BotSnake"+str(bot_id)]) > max_length:
-						game.module_vars_rapid["BotSnake"+str(bot_id)].pop_front()
-					check_collision(cmap_snakes, get_tiles())
+			var cmap_snakes = get_coll_map()
+			get_next_dir(tiles,cmap_snakes)
+			move_in_dir(tiles,cmap_snakes)
 			
 	check_redraw()
+
+func get_next_dir(tiles,cmap_snakes):
+	if len(tiles) > 1:
+		var target:Vector2i
+		if is_ghost:
+			target = get_next_apple_pos(tiles[-1])
+			if target == tiles[-1]:
+				for child in game.module_node.get_children():
+					if child.name == "AppleMod":
+						child.remove_apple(target)
+		else:
+			target = get_next_target_pos(tiles[-1])
+		if use_astar:
+			var cmap = cmap_snakes.duplicate_map()
+			cmap.set_at_multiple(tiles, 1)
+			#cmap.set_at_multiple(game.playerlist[owner_peer_id].tiles, 1)
+			cmap.set_atv(tiles[-1], 0)
+			cmap.set_atv(target,0)
+			var path = cmap.Astar(tiles[-1], target)
+			if len(path) > 1:
+				next_dir = path[1]-path[0]
+			else:
+				next_dir = dir_from_to(tiles[-1],target)
+		else:
+			next_dir = dir_from_to(tiles[-1],target)
+
+func move_in_dir(tiles,cmap_snakes):
+		if next_dir != Vector2i.ZERO:
+			game.module_vars_rapid["BotSnake"+str(bot_id)].append(tiles[-1]+next_dir)
+			while len(game.module_vars_rapid["BotSnake"+str(bot_id)]) > max_length:
+				game.module_vars_rapid["BotSnake"+str(bot_id)].pop_front()
+			check_collision(cmap_snakes, get_tiles())
 
 func dir_from_to(start:Vector2i, end:Vector2i)->Vector2i:
 	var dir = end-start

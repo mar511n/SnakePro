@@ -174,6 +174,7 @@ begin_cap_mode = 2
 end_cap_mode = 2
 
 [node name="Trace" parent="." instance=ExtResource("3_guybs")]
+default_color = Color(0, 0, 0, 0.0980392)
 
 [node name="Modules" type="Node" parent="."]
 
