@@ -305,6 +305,10 @@ func update_map_list(gs:Dictionary)->void:
 		if map.ends_with(".tscn") and not map in files:
 			files.append(map)
 			mapPaths_b.add_item(map, id)
+			var plnum = 0
+			var map_s = load(Global.maps_dir+map).instantiate()
+			plnum = map_s.get_node("Spawns").get_child_count()
+			mapPaths_b.set_item_tooltip(mapPaths_b.get_item_index(id), "for %s players"%plnum)
 			if map == gs.get("mapPath", Global.default_game_params["mapPath"]).split("/")[-1]:
 				mapPaths_b.selected = id
 			id += 1
