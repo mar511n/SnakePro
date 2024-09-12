@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://scenes/in_game.gd" id="1_dbxlh"]
 [ext_resource type="PackedScene" uid="uid://dffji00mprodh" path="res://scenes/player.tscn" id="2_qpixn"]
-[ext_resource type="PackedScene" uid="uid://d3n4088c2wis1" path="res://scenes/Maps/basic_map1.tscn" id="3_8ed4a"]
 [ext_resource type="Environment" uid="uid://cso3v2rbcamxu" path="res://assets/environment.tres" id="3_bebg0"]
 [ext_resource type="Theme" uid="uid://cmbo3c7rnoun7" path="res://assets/theme.tres" id="4_ru1c1"]
 [ext_resource type="PackedScene" uid="uid://bs45lflxfyy3i" path="res://scenes/snake_drawer.tscn" id="4_s1yiu"]
+[ext_resource type="PackedScene" uid="uid://k7pw2mc1u8i1" path="res://scenes/Maps/grassland.tscn" id="6_fxbsv"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_52sk8"]
 properties/0/path = NodePath("GUI/Panel2/RichTextLabel:text")
@@ -97,7 +97,7 @@ autowrap_mode = 1
 [node name="Map" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="BasicMap1" parent="Map" instance=ExtResource("3_8ed4a")]
+[node name="Grassland" parent="Map" instance=ExtResource("6_fxbsv")]
 
 [node name="Modules" type="Node" parent="."]
 

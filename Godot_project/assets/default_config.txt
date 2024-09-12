@@ -21,7 +21,7 @@ toastPrio=50.0
 
 startSnakeLength=3.0
 snakeSpeed=6.0
-mapPath="res://scenes/Maps/empty_map.tscn"
+mapPath="res://scenes/Maps/grassland.tscn"
 snakeTraceLength=15.0
 
 [GameModules]
