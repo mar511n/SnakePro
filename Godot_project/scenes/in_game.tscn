@@ -19,6 +19,7 @@ properties/2/spawn = true
 properties/2/replication_mode = 1
 
 [node name="InGame" type="Node2D" groups=["gameobj"]]
+y_sort_enabled = true
 script = ExtResource("1_dbxlh")
 PlayerScene = ExtResource("2_qpixn")
 
@@ -94,6 +95,7 @@ autowrap_mode = 1
 [node name="SnakeDrawer" parent="." instance=ExtResource("4_s1yiu")]
 
 [node name="Map" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="BasicMap1" parent="Map" instance=ExtResource("3_8ed4a")]
 

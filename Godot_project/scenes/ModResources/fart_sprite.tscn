@@ -69,22 +69,25 @@ region = Rect2(870, 990, 60, 60)
 [node name="FartSprite" type="Node2D"]
 
 [node name="SpriteN" type="Sprite2D" parent="."]
+z_index = -1
 texture = ExtResource("1_hke2s")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="SpriteN" groups=["Particles"]]
+z_index = 3
 amount = 80
 process_material = SubResource("ParticleProcessMaterial_cemx1")
 texture = SubResource("AtlasTexture_mcgqn")
 lifetime = 5.0
 explosiveness = 0.27
 visibility_rect = Rect2(-150, -150, 300, 300)
-local_coords = true
 
 [node name="SpriteG" type="Sprite2D" parent="."]
 visible = false
+z_index = -1
 texture = ExtResource("3_fhj1d")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="SpriteG" groups=["Particles"]]
+z_index = 3
 amount = 80
 process_material = SubResource("ParticleProcessMaterial_githm")
 texture = SubResource("AtlasTexture_5ndod")

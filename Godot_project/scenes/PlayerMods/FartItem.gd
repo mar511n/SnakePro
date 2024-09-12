@@ -27,14 +27,13 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	ItemFartRadius = Global.get_property(Global.config_player_mod_props_sec, "ItemFartRadius", ItemFartRadius)
 	ItemFartDamage = Global.get_property(Global.config_player_mod_props_sec, "ItemFartDamage", ItemFartDamage)
 
-func on_player_physics_process(_delta:float):
+func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and !is_used and Input.is_action_just_pressed("use_item"):
 		is_used = true
-		local_player_gui.set_item_ready(local_player_gui_id,false)
+		local_player_gui.set_item_ready(local_player_gui_id,false, item_code)
 		pl.FartSound.play()
 		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
 		pl.IG.start_module.rpc("fart.gd", [pl.peer_id,is_ghost,ItemFartDuration,ItemFartRadius,ItemFartDamage,pl.tiles[0],local_player_gui_id], "Fart_"+str(pl.peer_id)+"_"+str(fart_num))
 		fart_num += 1
-		mark_for_removal()
-	if is_marked_for_removal:
-		remove_item(is_used)
+		mark_for_removal(true)
+	super(delta)

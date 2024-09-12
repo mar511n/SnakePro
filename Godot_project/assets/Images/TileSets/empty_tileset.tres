@@ -1,14 +1,27 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cufdxfwijihfi"]
+[gd_resource type="TileSet" load_steps=4 format=3 uid="uid://cufdxfwijihfi"]
 
-[ext_resource type="Texture2D" uid="uid://xfqo1d3dl0jk" path="res://assets/Images/TileSets/Empty/tile.png" id="1_l1wgp"]
+[ext_resource type="Texture2D" uid="uid://n1tbxi4oxrvn" path="res://assets/Images/TileSets/grassland_tiles.svg" id="1_ak2lu"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xhh05"]
-texture = ExtResource("1_l1wgp")
-texture_region_size = Vector2i(48, 48)
-0:0/next_alternative_id = 2
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5d4nf"]
+texture = ExtResource("1_ak2lu")
+margins = Vector2i(24, 72)
+texture_region_size = Vector2i(96, 96)
 0:0/0 = 0
-0:0/1 = 1
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ixjvw"]
+texture = ExtResource("1_ak2lu")
+texture_region_size = Vector2i(48, 48)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
 
 [resource]
 tile_size = Vector2i(48, 48)
-sources/0 = SubResource("TileSetAtlasSource_xhh05")
+sources/3 = SubResource("TileSetAtlasSource_5d4nf")
+sources/4 = SubResource("TileSetAtlasSource_ixjvw")

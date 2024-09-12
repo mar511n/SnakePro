@@ -48,7 +48,7 @@ func on_player_physics_process(delta:float):
 		old_speed = pl.get_speed()
 		pl.set_speed(ItemSpeedNewSpeed)
 		if local_player_gui != null:
-			local_player_gui.set_item_ready(local_player_gui_id, false)
+			local_player_gui.set_item_ready(local_player_gui_id, false, item_code)
 	elif is_used:
 		duration -= delta
 		if is_ghost and len(randTimes) > 0:
@@ -63,5 +63,11 @@ func on_player_physics_process(delta:float):
 			pl.set_speed(old_speed)
 			pl.module_vars["ItemSpeeding"] = false
 			remove_item()
-	elif is_marked_for_removal:
-		remove_item()
+	else:
+		super(delta)
+
+func mark_for_removal(keep_ui=false):
+	if not is_used:
+		is_marked_for_removal = true
+		if local_player_gui != null and not keep_ui:
+			local_player_gui.remove_item(local_player_gui_id, item_code)

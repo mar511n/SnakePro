@@ -120,7 +120,7 @@ func get_death_of_type(pls:Dictionary, type:Global.hit_causes, coll_type:Global.
 				num += 1
 	return num
 
-func get_kill_types(pls:Dictionary,pl:int, wo_self=true)->Dictionary:
+func get_kill_types(pls:Dictionary,_pl:int, wo_self=true)->Dictionary:
 	var kill_ts = {}
 	for type in Global.hit_cause_list:
 		kill_ts[Global.hit_cause_names[int(type)]] = get_kills_of_type(pls,type, wo_self)

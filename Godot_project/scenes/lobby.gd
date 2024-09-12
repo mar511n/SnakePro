@@ -56,7 +56,7 @@ func _ready()->void:
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
 		TopGui.set_rtt(enetpacketpeer.get_statistic(ENetPacketPeer.PEER_ROUND_TRIP_TIME)/1000.0)
 	else:

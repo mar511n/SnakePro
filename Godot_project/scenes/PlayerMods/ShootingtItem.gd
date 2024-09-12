@@ -24,7 +24,7 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	ItemShootingRange = Global.get_property(Global.config_player_mod_props_sec, "ItemShootingRange", ItemShootingRange)
 	ItemShootingSurvLen = Global.get_property(Global.config_player_mod_props_sec, "ItemShootingSurvLen", ItemShootingSurvLen)
 
-func on_player_physics_process(_delta:float):
+func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and Input.is_action_just_pressed("use_item"):
 		pl.ShootingSound.play()
 		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
@@ -38,5 +38,4 @@ func on_player_physics_process(_delta:float):
 		pl.IG.start_module.rpc("bullet.gd", [pl.get_head_tile(),dir,ItemShootingSpeed,ItemShootingRange,pl.peer_id,ItemShootingSurvLen], "Bullet_"+str(pl.peer_id)+"_"+str(bullet_num))
 		bullet_num += 1
 		mark_for_removal()
-	if is_marked_for_removal:
-		remove_item()
+	super(delta)

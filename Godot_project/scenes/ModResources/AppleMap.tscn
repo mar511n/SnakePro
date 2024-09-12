@@ -20,8 +20,10 @@ sources/0 = SubResource("TileSetAtlasSource_v1yrh")
 sources/1 = SubResource("TileSetAtlasSource_nty8d")
 
 [node name="AppleMap" type="TileMap" groups=["VariableGraphical"]]
+y_sort_enabled = true
 tile_set = SubResource("TileSet_d25at")
 format = 2
 layer_0/name = "Apples"
-layer_0/z_index = -1
+layer_0/y_sort_enabled = true
+layer_0/y_sort_origin = 11
 script = ExtResource("3_m6hsi")

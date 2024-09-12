@@ -1,11 +1,19 @@
-[gd_scene load_steps=12 format=3 uid="uid://btrdu3mw4p7px"]
+[gd_scene load_steps=20 format=3 uid="uid://btrdu3mw4p7px"]
 
+[ext_resource type="Script" path="res://scenes/visual_test.gd" id="1_dw40l"]
 [ext_resource type="Environment" uid="uid://cso3v2rbcamxu" path="res://assets/environment.tres" id="1_incyf"]
 [ext_resource type="Texture2D" uid="uid://dq6cged7oywrw" path="res://assets/Images/images.svg" id="1_x27si"]
 [ext_resource type="PackedScene" uid="uid://di32gc16xjasi" path="res://scenes/ModResources/fart_sprite.tscn" id="3_ov76l"]
 [ext_resource type="Shader" path="res://assets/Shader/CircleWave.gdshader" id="5_bw00d"]
 [ext_resource type="PackedScene" uid="uid://c6eo7v5456hg" path="res://scenes/wobbly_texture.tscn" id="5_rrsa3"]
 [ext_resource type="Texture2D" uid="uid://bv4l3n5nbvt26" path="res://icon.svg" id="6_4sj7t"]
+[ext_resource type="PackedScene" uid="uid://k7pw2mc1u8i1" path="res://scenes/Maps/grassland.tscn" id="7_g8fbs"]
+[ext_resource type="PackedScene" uid="uid://bs45lflxfyy3i" path="res://scenes/snake_drawer.tscn" id="8_x58o2"]
+[ext_resource type="PackedScene" uid="uid://dm1r81ssa71pj" path="res://scenes/ModResources/AppleMap.tscn" id="9_bgp5g"]
+[ext_resource type="PackedScene" uid="uid://ipjyhv4lr561" path="res://scenes/ModResources/bot_drawer.tscn" id="10_xwdoc"]
+[ext_resource type="PackedScene" uid="uid://bdn6nrh5ruecs" path="res://scenes/ModResources/BulletDrawer.tscn" id="11_j5k76"]
+[ext_resource type="PackedScene" uid="uid://bvdig8r72r0p4" path="res://scenes/ModResources/FartDrawer.tscn" id="12_k5sg6"]
+[ext_resource type="PackedScene" uid="uid://clmjl7t6s7xrt" path="res://scenes/ModResources/item_map.tscn" id="14_uauga"]
 
 [sub_resource type="Curve" id="Curve_xqigb"]
 _data = [Vector2(0, 0.75), 0.0, 0.0, 0, 0, Vector2(0.125, 1), 0.0, 0.0, 0, 0, Vector2(0.25, 0.75), 0.0, 0.0, 0, 0, Vector2(0.375, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0.75), 0.0, 0.0, 0, 0, Vector2(0.625, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.75), 0.0, 0.0, 0, 0, Vector2(0.875, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), 0.0, 0.0, 0, 0]
@@ -40,11 +48,13 @@ shader_parameter/cols = SubResource("GradientTexture1D_vyik3")
 shader_parameter/base_offset = SubResource("CurveTexture_fvf5r")
 
 [node name="VisualTest" type="Node2D"]
+script = ExtResource("1_dw40l")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_incyf")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(3147, 2049)
 
 [node name="Drawing" type="Sprite2D" parent="."]
 position = Vector2(1.52588e-05, 3.05176e-05)
@@ -70,5 +80,38 @@ offset_top = -108.0
 offset_right = 933.0
 offset_bottom = 492.0
 texture = ExtResource("6_4sj7t")
+
+[node name="ysorter" type="Node2D" parent="."]
+y_sort_enabled = true
+position = Vector2(2093, 1185)
+
+[node name="FartPos" type="Marker2D" parent="ysorter"]
+position = Vector2(1032, 550)
+
+[node name="Grassland" parent="ysorter" instance=ExtResource("7_g8fbs")]
+
+[node name="SnakeDrawer" parent="ysorter" instance=ExtResource("8_x58o2")]
+layer_0/tile_data = PackedInt32Array(655371, 393218, 0, 655372, 393218, 0, 655373, 393218, 0, 655374, 393218, 0, 655375, 393218, 0, 655376, 393218, 0, 655377, 393218, 0, 655378, 393218, 0, 655379, 393218, 0, 655380, 393218, 0, 655381, 393218, 0, 655382, 786434, 0, 720918, 393218, 131072, 786454, 393218, 131072, 851990, 393218, 131072, 917526, 393218, 131072, 983062, 786434, 196608, 983063, 393218, 0, 983064, 393218, 0, 983065, 393218, 0, 983066, 393218, 0, 983067, 786434, 131072, 917531, 393218, 196608, 851995, 393218, 196608, 786459, 393218, 196608, 720923, 786434, 458752, 720924, 393218, 0, 720925, 393218, 0, 720926, 786434, 131080, 655370, 2, 0)
+
+[node name="AppleMap" parent="ysorter" instance=ExtResource("9_bgp5g")]
+scale = Vector2(0.8, 0.8)
+layer_0/tile_data = PackedInt32Array(458782, 0, 0, 589854, 0, 0, 458784, 0, 0, 589856, 0, 0, 458786, 0, 0, 589858, 0, 0, 458788, 0, 0, 589860, 0, 0, 458790, 0, 0, 589862, 0, 0, 458792, 0, 0, 589864, 0, 0, 524318, 0, 0, 458783, 0, 0, 524319, 0, 0, 589855, 0, 0, 524320, 0, 0, 458785, 0, 0, 524321, 0, 0, 589857, 0, 0, 524322, 0, 0, 524323, 0, 0, 458787, 0, 0, 589859, 0, 0, 589861, 0, 0, 524324, 0, 0, 458789, 0, 0, 524326, 0, 0, 524325, 0, 0, 524327, 0, 0, 458791, 0, 0, 524328, 0, 0, 589863, 0, 0)
+
+[node name="BotDrawer" parent="ysorter" instance=ExtResource("10_xwdoc")]
+layer_0/tile_data = PackedInt32Array(917536, 6, 65536, 983072, 393222, 131072, 1048608, 393222, 131072, 1114144, 393222, 131072, 1179680, 786438, 196608, 1179681, 393222, 65536, 1179682, 393222, 65536, 1179683, 786438, 131072, 1114147, 393222, 131072, 1048611, 393222, 131072, 983075, 786438, 65536, 983076, 393222, 0, 983077, 393222, 0, 983078, 786438, 131080)
+
+[node name="BulletDrawer" parent="ysorter" instance=ExtResource("11_j5k76")]
+position = Vector2(-2093, -1185)
+scale = Vector2(0.8, 0.8)
+layer_0/tile_data = PackedInt32Array(2228280, 0, 0, 2293816, 1, 0, 2359352, 1, 0, 2424888, 1, 0, 2490424, 1, 0, 2555960, 1, 0, 2228282, 1, 65536, 2293818, 1, 65536, 2359354, 1, 65536, 2424890, 1, 65536, 2490426, 1, 65536, 2555962, 0, 65536, 2359356, 0, 131072, 2359357, 1, 131072, 2359358, 1, 131072, 2359359, 1, 131072, 2359360, 1, 131072, 2359361, 1, 131072, 2359362, 1, 131072, 2359363, 1, 131072, 2490435, 0, 196608, 2490434, 1, 196608, 2490433, 1, 196608, 2490432, 1, 196608, 2490431, 1, 196608, 2490430, 1, 196608, 2490429, 1, 196608, 2490428, 1, 196608)
+
+[node name="FartDrawer" parent="ysorter" instance=ExtResource("12_k5sg6")]
+
+[node name="FartSprite" parent="ysorter/FartDrawer" instance=ExtResource("3_ov76l")]
+position = Vector2(1032, 550)
+
+[node name="ItemMap" parent="ysorter" instance=ExtResource("14_uauga")]
+scale = Vector2(0.8, 0.8)
+layer_0/tile_data = PackedInt32Array(1114116, 2, 0, 1114117, 2, 0, 1114118, 2, 0, 1114119, 2, 0, 1114120, 2, 0, 1114121, 2, 0, 1114122, 2, 0, 1114123, 2, 0, 1114124, 2, 0, 1114125, 2, 0, 1114126, 2, 0, 1114127, 2, 0, 1179663, 2, 0, 1179662, 2, 0, 1179661, 2, 0, 1179660, 2, 0, 1179659, 2, 0, 1179658, 2, 0, 1179657, 2, 0, 1179656, 2, 0, 1179655, 2, 0, 1179654, 2, 0, 1179653, 2, 0, 1179652, 2, 0, 1310724, 4, 0, 1310725, 4, 0, 1310726, 4, 0, 1310727, 4, 0, 1310728, 4, 0, 1310729, 4, 0, 1310730, 4, 0, 1310731, 4, 0, 1310732, 4, 0, 1310733, 4, 0, 1310734, 4, 0, 1310735, 4, 0, 1376271, 4, 0, 1376270, 4, 0, 1376269, 4, 0, 1376268, 4, 0, 1376267, 4, 0, 1376266, 4, 0, 1376265, 4, 0, 1376264, 4, 0, 1376263, 4, 0, 1376262, 4, 0, 1376261, 4, 0, 1376260, 4, 0, 1114130, 6, 0, 1114131, 6, 0, 1114132, 6, 0, 1114133, 6, 0, 1114134, 6, 0, 1114135, 6, 0, 1114136, 6, 0, 1114137, 6, 0, 1114138, 6, 0, 1114139, 6, 0, 1179675, 6, 0, 1179674, 6, 0, 1179673, 6, 0, 1179672, 6, 0, 1179671, 6, 0, 1179670, 6, 0, 1179669, 6, 0, 1179668, 6, 0, 1179667, 6, 0, 1179666, 6, 0, 1310738, 7, 0, 1310739, 7, 0, 1310740, 7, 0, 1310741, 7, 0, 1310742, 7, 0, 1310743, 7, 0, 1310744, 7, 0, 1310745, 7, 0, 1310746, 7, 0, 1310747, 7, 0, 1376282, 7, 0, 1376281, 7, 0, 1376280, 7, 0, 1376279, 7, 0, 1376278, 7, 0, 1376277, 7, 0, 1376276, 7, 0, 1376275, 7, 0, 1376274, 7, 0, 1376283, 7, 0, 1507332, 8, 0, 1507333, 8, 0, 1507334, 8, 0, 1507335, 8, 0, 1507336, 8, 0, 1507337, 8, 0, 1507338, 8, 0, 1507339, 8, 0, 1507340, 8, 0, 1507341, 8, 0, 1507342, 8, 0, 1507343, 8, 0, 1572879, 8, 0, 1572878, 8, 0, 1572877, 8, 0, 1572876, 8, 0, 1572875, 8, 0, 1572874, 8, 0, 1572873, 8, 0, 1572872, 8, 0, 1572871, 8, 0, 1572870, 8, 0, 1572869, 8, 0, 1572868, 8, 0, 1507346, 10, 0, 1507347, 10, 0, 1507348, 10, 0, 1507349, 10, 0, 1507350, 10, 0, 1507351, 10, 0, 1507352, 10, 0, 1507353, 10, 0, 1507354, 10, 0, 1507355, 10, 0, 1572891, 10, 0, 1572890, 10, 0, 1572889, 10, 0, 1572888, 10, 0, 1572887, 10, 0, 1572886, 10, 0, 1572885, 10, 0, 1572884, 10, 0, 1572883, 10, 0, 1572882, 10, 0)
 
 [editable path="FartSprite"]

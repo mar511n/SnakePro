@@ -19,9 +19,9 @@ func draw_snake(snake_idx:int, layer:int, pos:Array)->void:
 		lpi = cpi - 1
 		npi = cpi + 1
 		if lpi == -1:
-			place_tile(tile_type.TAIL, pos[cpi], Vector2i.ZERO, pos[npi],snake_idx,layer)
+			place_tile(tile_type.TAIL, pos[cpi], pos[cpi], pos[npi],snake_idx,layer)
 		elif npi >= len(pos):
-			place_tile(tile_type.HEAD, pos[cpi], pos[lpi], Vector2i.ZERO,snake_idx,layer)
+			place_tile(tile_type.HEAD, pos[cpi], pos[lpi], pos[cpi],snake_idx,layer)
 		else:
 			place_tile(tile_type.BODY, pos[cpi], pos[lpi], pos[npi],snake_idx,layer)
 
@@ -31,6 +31,22 @@ func place_tile(tile:tile_type, pos:Vector2i, lpos:Vector2i, npos:Vector2i, sn_i
 	var tacai:int = 0
 	var diri:Vector2i = pos-lpos
 	var diro:Vector2i = npos-pos
+	if diri.length_squared() > 1:
+		#print("diri=%s"%diri)
+		if tile != tile_type.HEAD:
+			#print("setting diri to diro=%s"%diro)
+			diri = diro
+		else:
+			diri[diri.abs().min_axis_index()] = 0
+			#print("setting diri to %s"%diri)
+	elif diro.length_squared() > 1:
+		#print("diro=%s"%diro)
+		if tile != tile_type.TAIL:
+			#print("setting diro to diri=%s"%diri)
+			diro = diri
+		else:
+			diro[diro.abs().min_axis_index()] = 0
+			#print("setting diro to %s"%diro)
 	if tile == tile_type.HEAD:
 		tac = 0
 		if diri.x > 0:
@@ -79,6 +95,8 @@ func reset(layers:int=1,layer_prop:Array=[])->void:
 		remove_layer(0)
 	for layer_idx:int in range(layers):
 		add_layer(-1)
+		set_layer_y_sort_enabled(layer_idx,true)
+		set_layer_y_sort_origin(layer_idx,48.0)
 		#set_layer_y_sort_enabled(layer_idx, true)
 		if len(layer_prop) > layer_idx:
 			if layer_prop[layer_idx].has("name"):
@@ -92,6 +110,8 @@ func reset(layers:int=1,layer_prop:Array=[])->void:
 
 func _ready() -> void:
 	pass
+	#reset(1)
+	#draw_snake(1,0,[Vector2i(9,10),Vector2i(10,10),Vector2i(10,1),Vector2i(10,2)])
 	#make_tileset()
 
 const expected_image_width:int = 800

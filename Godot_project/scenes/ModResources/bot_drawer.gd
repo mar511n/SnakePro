@@ -19,6 +19,8 @@ func add_bot()->int:
 		clear_layer(li)
 		return li
 	add_layer(-1)
+	set_layer_y_sort_enabled(get_layers_count()-1,true)
+	set_layer_y_sort_origin(get_layers_count()-1,48.0)
 	layers_used.append(true)
 	return get_layers_count()-1
 

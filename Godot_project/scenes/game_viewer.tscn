@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://cy00omyrhd770" path="res://assets/MatIcons/file_open_24dp_000000_FILL0_wght700_GRAD200_opsz24.svg" id="9_y8eug"]
 
 [node name="GameViewer" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_anmje")
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -80,8 +81,10 @@ focus_mode = 1
 environment = ExtResource("2_8ur7l")
 
 [node name="Static" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="Variable" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)

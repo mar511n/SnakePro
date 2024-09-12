@@ -167,7 +167,8 @@ func rotate_direction(dir:Vector2i, clockwise:bool)->Vector2i:
 
 func Print(v:Variant, prio:int=25)->void:
 	if prio >= min_prio_debug_print:
-		print("%s, %s: %s" % [Time.get_time_string_from_system(), prio, str(v)])
+		var ticks = Time.get_ticks_msec()
+		print("%s.%3d, %s: %s" % [Time.get_time_string_from_unix_time(ticks/1000), ticks%1000, prio, str(v)])
 	if prio >= min_prio_toast:
 		ToastParty.show({
 			"text": str(v),                     # Text (emojis can be used)

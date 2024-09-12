@@ -33,10 +33,10 @@ func on_player_pre_ready(player:SnakePlayer, enabled_mods=[]):
 	ItemBotUseAstar = Global.get_property(Global.config_player_mod_props_sec, "ItemBotUseAstar", ItemBotUseAstar)
 	ItemBotDurMul = Global.get_property(Global.config_player_mod_props_sec, "ItemBotDurMul", ItemBotDurMul)
 
-func on_player_physics_process(_delta:float):
+func on_player_physics_process(delta:float):
 	if !is_marked_for_removal and !is_used and Input.is_action_just_pressed("use_item"):
 		is_used = true
-		local_player_gui.set_item_ready(local_player_gui_id,false)
+		local_player_gui.set_item_ready(local_player_gui_id,false, item_code)
 		#pl.ShootingSound.play()
 		Global.Print("Player %s used item %s (ghost=%s)" % [pl.peer_id, item_name, is_ghost], 35)
 		var dur = ItemBotDuration
@@ -44,6 +44,5 @@ func on_player_physics_process(_delta:float):
 			dur *= ItemBotDurMul
 		pl.IG.start_module.rpc("bot.gd", [pl.peer_id,is_ghost,ItemBotSpeed,ItemBotLength,ItemBotUseAstar,dur,local_player_gui_id], "Bot_"+str(pl.peer_id)+"_"+str(bot_num))
 		bot_num += 1
-		mark_for_removal()
-	if is_marked_for_removal:
-		remove_item(is_used)
+		mark_for_removal(true)
+	super(delta)

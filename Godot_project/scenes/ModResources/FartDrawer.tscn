@@ -4,6 +4,5 @@
 [ext_resource type="PackedScene" uid="uid://di32gc16xjasi" path="res://scenes/ModResources/fart_sprite.tscn" id="2_duhdv"]
 
 [node name="FartDrawer" type="Node2D" groups=["VariableGraphical"]]
-z_index = -2
 script = ExtResource("1_hqd2w")
 fartSpriteScene = ExtResource("2_duhdv")

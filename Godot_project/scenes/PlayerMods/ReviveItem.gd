@@ -22,14 +22,15 @@ func on_collected_by_player(player:SnakePlayer)->bool:
 		mark_for_removal()
 	return true
 
-func on_player_physics_process(_delta:float):
+func on_player_physics_process(delta:float):
+	super(delta)
 	#if !is_marked_for_removal and !is_used and Input.is_action_just_pressed("use_item"):
 	#	pl.ReviveSound.play()
 	#	is_used = true
 	#	pl.reset_snake_tiles()
 	#	mark_for_removal()
-	if is_marked_for_removal:
-		remove_item()
+	#if is_marked_for_removal:
+	#	remove_item()
 
 func on_player_reset_snake_tiles():
 	if !is_used and !pl.module_vars["PlayerIsAlive"]:
@@ -38,4 +39,4 @@ func on_player_reset_snake_tiles():
 		Global.Print("dont let player %s die and mark ReviveItem for removal" % pl.peer_id, 40)
 		if pl.module_vars.has("PlayerSetDeadFunc"):
 			pl.module_vars["PlayerSetDeadFunc"].rpc(false)
-		mark_for_removal()
+		mark_for_removal(true)

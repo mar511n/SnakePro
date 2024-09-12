@@ -24,13 +24,15 @@ func _init(ghost=false):
 func on_collected_by_player(player:SnakePlayer)->bool:
 	return player.module_vars["PlayerIsAlive"]
 
-func mark_for_removal():
+func mark_for_removal(keep_ui=false):
 	is_marked_for_removal = true
+	if local_player_gui != null and not keep_ui:
+		local_player_gui.remove_item(local_player_gui_id, item_code)
 
 func remove_item(keep_ui=false):
 	Global.Print("Removing item %s from player %s" % [item_name, pl.peer_id], 40)
 	if local_player_gui != null and not keep_ui:
-		local_player_gui.remove_item(local_player_gui_id)
+		local_player_gui.remove_item(local_player_gui_id, "")
 	pl.module_node.remove_child(self)
 	var idx = pl.modules.find(self)
 	if idx >= 0:
@@ -39,7 +41,7 @@ func remove_item(keep_ui=false):
 
 func on_player_physics_process(_delta:float):
 	if is_marked_for_removal:
-		remove_item()
+		remove_item(true)
 
 func on_player_ready():
 	super()

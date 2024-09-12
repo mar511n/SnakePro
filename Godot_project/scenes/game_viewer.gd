@@ -13,7 +13,7 @@ var next_gsi = 0
 var paused = false
 
 const CamSpeed = 500
-const CamZoom = 0.2
+const CamZoom = 0.05
 
 func _ready() -> void:
 	timer = 0
@@ -40,10 +40,10 @@ func _process(delta: float) -> void:
 		cam_move_dir += Vector2.LEFT
 	elif Input.is_action_pressed("abs_right"):
 		cam_move_dir += Vector2.RIGHT
-	if Input.is_action_just_pressed("ui_page_down"):
-		cam.zoom += Vector2.ONE*CamZoom
-	elif Input.is_action_just_pressed("ui_page_up"):
-		cam.zoom -= Vector2.ONE*CamZoom
+	if Input.is_action_just_pressed("zoom_in"):
+		cam.zoom = clamp(cam.zoom+Vector2.ONE*CamZoom, CamZoom*Vector2.ONE, 10.0*Vector2.ONE)
+	elif Input.is_action_just_pressed("zoom_out"):
+		cam.zoom = clamp(cam.zoom-Vector2.ONE*CamZoom, CamZoom*Vector2.ONE, 10.0*Vector2.ONE)
 	cam.global_position += cam_move_dir.normalized()*CamSpeed*delta
 	if not paused or update_needed:
 		timer += delta

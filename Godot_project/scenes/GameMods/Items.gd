@@ -64,8 +64,8 @@ func on_game_post_ready():
 			spawn_item()
 
 @rpc("any_peer","call_remote","reliable")
-func set_ui_player_item(peer_id:int, item_code:String):
-	lp_ui.set_player_item(peer_id,item_code)
+func set_ui_player_item(peer_id:int, item_code:String,spl_rm=false):
+	lp_ui.set_player_item(peer_id,item_code,spl_rm)
 
 @rpc("any_peer", "call_local", "reliable")
 func spawn_item():

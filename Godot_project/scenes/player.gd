@@ -10,6 +10,8 @@ enum input_dir {
 	NONE
 }
 
+const multiplayercam_border_tiles = 4
+
 var trace_length = 10
 
 # static stuff
@@ -84,11 +86,23 @@ func _process(delta):
 			global_position = snake_path.sample_baked(path_pos)
 			#global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
 		if is_main_mul_screen:
-			var mean_pos = Vector2.ZERO
+			var minpos = Vector2.INF
+			var maxpos = -Vector2.INF
 			for pid in IG.playerlist:
-				mean_pos += IG.playerlist[pid].global_position
-			mean_pos /= float(len(IG.playerlist))
-			cam_node.global_position = mean_pos
+				minpos = minpos.min(IG.playerlist[pid].global_position)
+				maxpos = maxpos.max(IG.playerlist[pid].global_position)
+			var middle = (minpos+maxpos)/2.0
+			minpos -= multiplayercam_border_tiles*Vector2.ONE*IG.tile_size_px
+			maxpos += multiplayercam_border_tiles*Vector2.ONE*IG.tile_size_px
+			var rel = (maxpos-minpos)/(get_viewport_rect().size)
+			var rel_size = clampf(rel[rel.max_axis_index()],1,10)
+			cam_node.zoom = Vector2.ONE/rel_size
+			cam_node.global_position = middle
+			#var mean_pos = Vector2.ZERO
+			#for pid in IG.playerlist:
+			#	mean_pos += IG.playerlist[pid].global_position
+			#mean_pos /= float(len(IG.playerlist))
+			#cam_node.global_position = mean_pos
 	for mod in module_node.get_children():
 		mod.on_player_process(delta)
 
@@ -227,7 +241,7 @@ func redraw_snake():
 	sn_drawer.draw_snake(Lobby.players[peer_id].get("snake_tile_idx", pl_idx+1),pl_idx,tiles)
 	
 	if last_drawn_tiles.size() != 2 or (last_drawn_tiles[-1] != tiles[-1]):
-		if last_drawn_tiles.size() == 2 and last_drawn_tiles[-1].distance_squared_to(tiles[-1]) > 4:
+		if last_drawn_tiles.size() == 2 and last_drawn_tiles[-1].distance_squared_to(tiles[-1]) > 2:
 			snake_path.clear_points()
 		else:
 			snake_path.add_point(sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1])))
@@ -247,18 +261,24 @@ func redraw_snake():
 			TraceLine.add_point(snake_path.get_point_position(idx))
 
 # on server/client (mostly used for the active player (tiles are then synced to other peers)):
-# moves the snake by one tile in dir, tracking the path if is active player
+# moves the snake by one tile in dir
 func move_in_dir(dir:Vector2i):
 	tiles.append(tiles[-1]+dir)
 	if fett > 0:
 		fett -= 1
 	else:
 		tiles.remove_at(0)
+	if IG.teleporters.has(tiles[-1]):
+		tiles.append(IG.teleporters[tiles[-1]][0])
+		tiles.append(tiles[-1]+dir)
+		tiles.remove_at(0)
+		tiles.remove_at(0)
+		global_position = sn_drawer.to_global(sn_drawer.map_to_local(tiles[-1]))
 
 # on server/client:
 # -> called before _ready
 # --> set start params
-func pre_ready(marker:Marker2D, enabled_mods=[]):
+func pre_ready(spawn:Array, enabled_mods=[]):
 	var gparams = Lobby.game_settings.get(Global.config_game_params_sec, Global.default_game_params.duplicate())
 	if gparams.has("startSnakeLength"):
 		fett = gparams["startSnakeLength"]-1
@@ -267,9 +287,11 @@ func pre_ready(marker:Marker2D, enabled_mods=[]):
 	if gparams.has("snakeTraceLength"):
 		trace_length = gparams["snakeTraceLength"]
 	
-	startPos = marker.global_position
+	sn_drawer = IG.get_node(sn_drawer_path)
+	
+	startPos = sn_drawer.to_global(sn_drawer.map_to_local(spawn[0]))
 	startDir = Vector2i.RIGHT
-	var rot = fmod(marker.rotation_degrees + 360, 360)
+	var rot = fmod(spawn[1] + 360, 360)
 	if rot >= 45 and rot < 135:
 		startDir = Vector2i.DOWN
 	elif rot >= 135 and rot < 225:
@@ -307,7 +329,7 @@ func _ready():
 	if !Global.debugging_on:
 		remove_child($Sprite2D)
 		remove_child($Line2D)
-	sn_drawer = get_node(sn_drawer_path)
+	
 	cam_node.enabled = is_owner
 	gui_node.visible = cam_node.enabled
 	cam_node.limit_left = camLT_lim.x
@@ -321,8 +343,11 @@ func _ready():
 	reset_snake_tiles()
 	is_main_mul_screen = Lobby.player_info.get("mainMultiplayerScreen", false)
 	if is_main_mul_screen:
-		cam_node.set_as_top_level(true)
-		#gui_node.visible = false
+		#cam_node.set_as_top_level(true)
+		cam_node.limit_left = -10000000
+		cam_node.limit_top = -10000000
+		cam_node.limit_right = 10000000
+		cam_node.limit_bottom = 10000000
 	if cam_node.enabled:
 		cam_node.position_smoothing_speed = 6
 		cam_node.position_smoothing_enabled = Global.config.get_value(Global.config_user_settings_sec,"smoothCam", true)

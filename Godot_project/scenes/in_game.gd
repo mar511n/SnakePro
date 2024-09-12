@@ -13,7 +13,9 @@ var capture_replay_on = true
 
 var coll_map : CollisionMap
 var playerlist:Dictionary = {} # peer_id -> player node
-var tmap : TileMap
+var tmap : SaveableTileMap
+var pl_spawns : Dictionary
+var teleporters : Dictionary
 
 var module_scripts : Dictionary
 @export var module_vars:Dictionary = {}
@@ -220,6 +222,8 @@ func load_map(path:String):
 	for child in $Map.get_children():
 		$Map.remove_child(child)
 	$Map.add_child(tmap)
+	pl_spawns = tmap.get_spawns(sn_drawer)
+	teleporters = tmap.get_tps(sn_drawer)
 
 # on server: (is only called here)
 # unpause all gameobj and start the game
@@ -252,14 +256,18 @@ func spawn_player(data) -> Node:
 	pl.on_movement.connect(self._on_player_movement)
 	
 	# call pre_read() with spawnpoint
-	var spawn_found = false
-	for spawn in get_tree().get_nodes_in_group("PlayerSpawnPoint"):
-		if spawn.name == str(index):
-			pl.pre_ready(spawn,Global.get_enabled_mod_paths(Global.config_player_mods_sec))
-			spawn_found = true
-			break
-	if !spawn_found:
+	var spawn_found = pl_spawns.has(index)
+	if spawn_found:
+		pl.pre_ready(pl_spawns[index],Global.get_enabled_mod_paths(Global.config_player_mods_sec))
+	else:
 		Global.Print("ERROR: no spawnpoint found for player %s with id %s" % [index, peer_id], 95)
+	#for spawn in get_tree().get_nodes_in_group("PlayerSpawnPoint"):
+	#	if spawn.name == str(index):
+	#		pl.pre_ready(spawn,Global.get_enabled_mod_paths(Global.config_player_mods_sec))
+	#		spawn_found = true
+	#		break
+	#if !spawn_found:
+	#	Global.Print("ERROR: no spawnpoint found for player %s with id %s" % [index, peer_id], 95)
 	
 	# set camera bounds
 	for node in tmap.get_children():
