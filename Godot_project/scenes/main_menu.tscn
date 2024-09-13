@@ -164,33 +164,40 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 
-[node name="Chat" type="Panel" parent="TabContainer/Main"]
-layout_mode = 0
-offset_left = 1551.0
-offset_top = 532.0
-offset_right = 1897.0
-offset_bottom = 918.0
+[node name="Chat" type="Window" parent="TabContainer/Main"]
+disable_3d = true
+transparent_bg = true
+title = "Chat"
+position = Vector2i(20, 700)
+size = Vector2i(480, 360)
+min_size = Vector2i(100, 100)
+theme_override_font_sizes/title_font_size = 20
 
 [node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Main/Chat"]
-layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.863
-offset_bottom = -0.118011
+anchor_bottom = 1.0
+offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
 scroll_following = true
 shortcut_keys_enabled = false
 
 [node name="LineEdit" type="LineEdit" parent="TabContainer/Main/Chat"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.863
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -0.118011
+offset_top = -36.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_font_sizes/font_size = 20
 selecting_enabled = false
 drag_and_drop_selection_enabled = false
 
@@ -448,7 +455,9 @@ offset_bottom = 578.0
 grow_horizontal = 1
 grow_vertical = 1
 
+[connection signal="visibility_changed" from="TabContainer/Main" to="." method="_on_main_visibility_changed"]
 [connection signal="pressed" from="TabContainer/Main/StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="close_requested" from="TabContainer/Main/Chat" to="." method="_on_chat_close_requested"]
 [connection signal="text_submitted" from="TabContainer/Main/Chat/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="on_settings_changed" from="TabContainer/User Settings/UserSettings" to="." method="_on_user_settings_on_settings_changed"]
 [connection signal="on_settings_changed" from="TabContainer/Game Settings/GameSettings" to="." method="_on_game_settings_on_settings_changed"]

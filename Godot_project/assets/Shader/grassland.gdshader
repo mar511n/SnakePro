@@ -29,7 +29,7 @@ float getWind(vec2 uv, float time){
 void vertex() {
 	vert = (VERTEX-lefttop)/size;
 	noise = texture(windnoise, vert).r;
-    float time = TIME * speed + noise*10.0;
+    float time = TIME * speed + noise*5.0 + vert.x*10.0;
     VERTEX.x += getWind(UV, time);
 }
 /*

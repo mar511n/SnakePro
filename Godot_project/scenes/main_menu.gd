@@ -407,18 +407,81 @@ func _on_stats_pressed() -> void:
 
 @onready var chat_rtl = $TabContainer/Main/Chat/RichTextLabel
 @onready var chat_line = $TabContainer/Main/Chat/LineEdit
+@onready var chat_window = $TabContainer/Main/Chat
 func _on_line_edit_text_submitted(new_text: String) -> void:
 	chat_line.text = ""
 	if multiplayer.has_multiplayer_peer():
-		add_text_to_chat.rpc(Lobby.player_info.get("name","unknown")+": "+new_text)
+		if new_text.begins_with("/"):
+			chat_command.rpc_id(1, new_text.trim_prefix("/"))
+		else:
+			add_text_to_chat.rpc(Lobby.player_info.get("name","unknown")+": "+new_text)
+
+@rpc("any_peer","call_remote","reliable")
+func chat_command(text:String):
+	if multiplayer.is_server():
+		var sid = multiplayer.get_remote_sender_id()
+		var has_privs = Lobby.privileges_granted_to == sid
+		Global.Print("new command (privs=%s) from player %s:\n/%s"%[has_privs, sid, text], 35)
+		var args = text.split(" ", false)
+		var msg = "[color=%s]%s[/color] -> " % [Color.BLUE.to_html(), text]
+		if args[0] == "version":
+			msg += ProjectSettings.get_setting("application/config/version")
+		elif args[0] == "player_ids":
+			for pl_id in Lobby.players:
+				msg += "\n%s : %s" % [Lobby.players[pl_id].get("name","unknown"), pl_id]
+		elif args[0] == "kick" and len(args) >= 2:
+			if has_privs:
+				var pid = -1
+				for pl_id in Lobby.players:
+					if pl_id == int(args[1]) or Lobby.players[pl_id].get("name","unknown") == args[1]:
+						pid = pl_id
+						break
+				if pid != -1:
+					multiplayer.multiplayer_peer.disconnect_peer(pid)
+					msg += "player %s kicked" % [pid]
+				else:
+					msg += "player %s not found" % [args[1]]
+			else:
+				msg += "no permission"
+		elif args[0] == "tree":
+			msg += "\n"+get_tree().root.get_tree_string_pretty()
+		elif args[0] == "pvar" and len(args) >= 3:
+			if has_node(args[1]):
+				var v = get_node(args[1]).get(args[2])
+				if v != null:
+					msg += str(v)
+				else:
+					msg += "property %s not found"%[args[2]]
+			else:
+				msg += "node %s not found"%[args[1]]
+		else:
+			msg += "unknown command. The following commands are availiable:\n"
+			msg += "/version\n"
+			msg += "/player_ids\n"
+			msg += "/kick [peer_id]\n"
+			msg += "/tree\n"
+			msg += "/pvar [node] [var]"
+		add_text_to_chat.rpc_id(sid, msg, true)
 
 @rpc("any_peer","call_local","reliable")
-func add_text_to_chat(text:String):
+func add_text_to_chat(text:String, bbcode=false):
 	Global.Print("new chat entry: "+text,35)
-	chat_rtl.add_text(text+"\n")
+	if not bbcode:
+		chat_rtl.add_text(text+"\n")
+	else:
+		chat_rtl.append_text(text+"\n")
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("ui_focus_next") or event.is_action("ui_focus_prev"):
 		if event.is_pressed():
 			homeBtn.grab_focus()
+
+func _on_chat_close_requested() -> void:
+	chat_window.size = chat_window.min_size
+	chat_window.position.x = 20.0
+	chat_window.position.y = size.y-float(chat_window.size.y)-20.0
+
+
+func _on_main_visibility_changed() -> void:
+	chat_window.visible = $TabContainer/Main.visible
