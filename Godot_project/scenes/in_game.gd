@@ -16,6 +16,7 @@ var playerlist:Dictionary = {} # peer_id -> player node
 var tmap : SaveableTileMap
 var pl_spawns : Dictionary
 var teleporters : Dictionary
+var ingame_time : float = 0.0
 
 var module_scripts : Dictionary
 @export var module_vars:Dictionary = {}
@@ -39,6 +40,7 @@ func _physics_process(delta:float)->void:
 	if ready_phase == 2 and finished_loading_players and waitframes <= 0:
 		post_ready()
 	if ready_phase == 3:
+		ingame_time += delta
 		if check_collisions:
 			if multiplayer.is_server():
 				check_snake_collisions()
@@ -49,7 +51,7 @@ func _physics_process(delta:float)->void:
 		for mod:Node in module_node.get_children():
 			mod.on_game_physics_process(delta)
 		if capture_replay_on:
-			Global.save_variable_gamestate_if_needed()
+			Global.save_variable_gamestate_if_needed(ingame_time)
 		TopGui.set_fps(Engine.get_frames_per_second())
 
 # on server:
@@ -185,6 +187,7 @@ func post_ready()->void:
 		mod.on_game_post_ready()
 	ready_phase = 3
 	if capture_replay_on:
+		ingame_time = 0.0
 		Global.start_game_state_capture()
 
 func format_module_list()->void:

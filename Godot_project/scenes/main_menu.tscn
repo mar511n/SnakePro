@@ -457,6 +457,7 @@ grow_vertical = 1
 
 [connection signal="visibility_changed" from="TabContainer/Main" to="." method="_on_main_visibility_changed"]
 [connection signal="pressed" from="TabContainer/Main/StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="visibility_changed" from="TabContainer/Main/StartGame" to="." method="_on_start_game_visibility_changed"]
 [connection signal="close_requested" from="TabContainer/Main/Chat" to="." method="_on_chat_close_requested"]
 [connection signal="text_submitted" from="TabContainer/Main/Chat/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="on_settings_changed" from="TabContainer/User Settings/UserSettings" to="." method="_on_user_settings_on_settings_changed"]

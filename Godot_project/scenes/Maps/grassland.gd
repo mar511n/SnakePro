@@ -2,7 +2,7 @@ extends SaveableTileMap
 
 @export var wind_offset : Texture2D
 
-@onready var windshader = $TileMapLayer.tile_set.get_source(0).get_tile_data(Vector2i(1,3),0).material
+@onready var windshader : ShaderMaterial = preload("res://scenes/Maps/grassland_wind.tres")
 
 @onready var tps_curve:Curve2D = $tps.curve
 var map_size = Vector2i(49,49)
@@ -15,7 +15,10 @@ func _ready() -> void:
 		remove_child($GPUParticles2D2)
 		remove_child($GPUParticles2D3)
 		remove_child($GPUParticles2D4)
-	if not Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
+	if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
+		for x in range(1,28):
+			$TileMapLayer.tile_set.get_source(0).get_tile_data(Vector2i(x,3),0).material = windshader
+	else:
 		for x in range(1,28):
 			$TileMapLayer.tile_set.get_source(0).get_tile_data(Vector2i(x,3),0).material = CanvasItemMaterial.new()
 

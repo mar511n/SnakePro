@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bdp7gcjvqtbib"]
+
+[ext_resource type="Shader" path="res://assets/Shader/grassland.gdshader" id="1_axje6"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qjihi"]
+frequency = 0.0091
+offset = Vector3(50.85, 0, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2lleu"]
+width = 102
+height = 102
+noise = SubResource("FastNoiseLite_qjihi")
+
+[resource]
+shader = ExtResource("1_axje6")
+shader_parameter/lefttop = Vector2(48, 48)
+shader_parameter/size = Vector2(2448, 2448)
+shader_parameter/speed = 1.2
+shader_parameter/minStrength = 0.15
+shader_parameter/maxStrength = 0.3
+shader_parameter/strengthScale = 200.0
+shader_parameter/interval = 3.5
+shader_parameter/detail = 2.0
+shader_parameter/heightOffset = null
+shader_parameter/minHeight = null
+shader_parameter/windnoise = SubResource("NoiseTexture2D_2lleu")

@@ -227,20 +227,21 @@ func save_resource(from:String, to:String) -> void:
 # the static gamestate at the start
 var static_gamestate:Array
 # capture start time
-var capture_start_time:float
+#var capture_start_time:float
 # [time in seconds since start, gamestate]
 var variable_gamestates:Array
 
 func start_game_state_capture():
 	static_gamestate = save_game_state(static_graphic_group)
 	variable_gamestates = []
-	capture_start_time = Time.get_unix_time_from_system()
-	save_variable_gamestate_if_needed()
+	#capture_start_time = Time.get_unix_time_from_system()
+	save_variable_gamestate_if_needed(0.0)
 
-func save_variable_gamestate_if_needed():
+func save_variable_gamestate_if_needed(ingame_time:float):
 	var vgs = save_game_state(variable_graphic_group)
 	if len(variable_gamestates) == 0 or not compare_gamestates(vgs, variable_gamestates[-1][1]):
-		variable_gamestates.append([Time.get_unix_time_from_system()-capture_start_time, vgs])
+		#variable_gamestates.append([Time.get_unix_time_from_system()-capture_start_time, vgs])
+		variable_gamestates.append([ingame_time, vgs])
 
 func compare_gamestates(gs1:Array,gs2:Array)->bool:
 	if len(gs1) != len(gs2):

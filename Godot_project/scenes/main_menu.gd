@@ -136,12 +136,11 @@ func show_hide_buttons_and_popups(is_hosting:bool, disconnected:bool=false)->voi
 		GameSet_b.disabled = not Global.has_server_privileges
 		#GameSetPopup.visible = false
 		ConnStat.set_connected_to_server()
+	set_WobblyTextureRectVisibility()
 	if StartG_b.disabled:
 		StartG_b.modulate = Color(0.5,0.5,0.5,0.5)
-		StartG_b.get_node("WobblyTextureRect").visible = false
 	else:
 		StartG_b.modulate = Color.WHITE
-		StartG_b.get_node("WobblyTextureRect").visible = true
 
 func _on_disconnect_pressed()->void:
 	network_reset()
@@ -416,7 +415,7 @@ func _on_line_edit_text_submitted(new_text: String) -> void:
 		else:
 			add_text_to_chat.rpc(Lobby.player_info.get("name","unknown")+": "+new_text)
 
-@rpc("any_peer","call_remote","reliable")
+@rpc("any_peer","call_local","reliable")
 func chat_command(text:String):
 	if multiplayer.is_server():
 		var sid = multiplayer.get_remote_sender_id()
@@ -444,7 +443,7 @@ func chat_command(text:String):
 			else:
 				msg += "no permission"
 		elif args[0] == "tree":
-			msg += "\n"+get_tree().root.get_tree_string_pretty()
+			msg += "\n"+get_tree().root.get_tree_string()
 		elif args[0] == "pvar" and len(args) >= 3:
 			if has_node(args[1]):
 				var v = get_node(args[1]).get(args[2])
@@ -484,4 +483,16 @@ func _on_chat_close_requested() -> void:
 
 
 func _on_main_visibility_changed() -> void:
-	chat_window.visible = $TabContainer/Main.visible
+	if is_instance_valid($TabContainer/Main) and is_instance_valid(chat_window):
+		chat_window.visible = $TabContainer/Main.visible
+		chat_window.position = Vector2(20,700)
+		chat_window.size = Vector2(480,360)
+
+
+func _on_start_game_visibility_changed() -> void:
+	set_WobblyTextureRectVisibility()
+
+
+func set_WobblyTextureRectVisibility():
+	if is_instance_valid(StartG_b):
+		StartG_b.get_node("WobblyTextureRect").visible = (not StartG_b.disabled) and Global.config.get_value(Global.config_user_settings_sec,"useShader", true)

@@ -85,17 +85,20 @@ func add_new_item(item_code:String, is_ready=true)->int:
 	txr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if item_code_to_texture.has(item_code):
 		txr.texture = item_code_to_texture[item_code]
-		if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
-			if is_ready:
+		if is_ready:
+			if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
 				txr.material = shader_ready
-			else:
+		else:
+			if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
 				txr.material = shader_processing
+			else:
+				txr.self_modulate = Color(1,1,1,0.3)
 	txr.name = "ItemUI_element"+str(item_counter)
 	hbox.add_child(txr)
 	return item_counter
 
 func set_item_ready(id:int, is_ready=false, item_code=""):
-	var txr = hbox.get_node("ItemUI_element"+str(id))
+	var txr:TextureRect = hbox.get_node("ItemUI_element"+str(id))
 	if is_instance_valid(txr):
 		if is_ready:
 			if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
@@ -105,8 +108,11 @@ func set_item_ready(id:int, is_ready=false, item_code=""):
 				itm_class.set_ui_player_item.rpc_id(pid,local_peer_id,item_code,true)
 			if is_in_splitscreen_mode:
 				set_player_item(local_peer_id,item_code,true)
-			elif Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
-				txr.material = shader_processing
+			else:
+				if Global.config.get_value(Global.config_user_settings_sec,"useShader", true):
+					txr.material = shader_processing
+				else:
+					txr.self_modulate = Color(1,1,1,0.3)
 
 
 func remove_item(id:int, item_code=""):
