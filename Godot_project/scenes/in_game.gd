@@ -192,7 +192,6 @@ func post_ready()->void:
 
 func format_module_list()->void:
 	#print(str(Lobby.game_settings))
-	
 	module_list.clear()
 	module_list.append_text("[b]"+Global.config_game_params_sec+"[/b]\n")
 	var gparams:Dictionary = Lobby.game_settings.get(Global.config_game_params_sec,{})
@@ -208,6 +207,7 @@ func format_module_list()->void:
 		var setts:Dictionary = Lobby.game_settings.get(sec[1], {})
 		for sett:String in setts:
 			module_list.append_text(sett+" : "+str(setts[sett]) +"\n")
+	
 
 # on server&client:
 # load the specified tilemap (path must be valid on all clients)

@@ -90,6 +90,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 bbcode_enabled = true
+text = "test"
 autowrap_mode = 1
 
 [node name="SnakeDrawer" parent="." instance=ExtResource("4_s1yiu")]

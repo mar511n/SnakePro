@@ -50,24 +50,24 @@ Fart=["FartItem.gd", true]
 
 ItemReviveProbability=0.5
 ItemShootingProbability=1.0
-ItemShootingSpeed=20.0
-ItemShootingRange=10.0
+ItemShootingSpeed=18.0
+ItemShootingRange=12.0
+ItemShootingSurvLen=10.0
 ItemSpeedProbability=1.0
 ItemSpeedNewSpeed=14.0
-ItemSpeedDuration=1.5
+ItemSpeedDuration=2.0
+ItemSpeedRandNum=1.0
+ItemSpeedRandDiff=0.95
 ItemBotProbability=1.0
 ItemBotSpeed=7.0
 ItemBotLength=6.0
-ItemBotDuration=10.0
+ItemBotDuration=9.0
 ItemBotDurMul=3.0
 ItemBotUseAstar=true
 ItemFartProbability=1.0
 ItemFartDuration=8.0
 ItemFartRadius=4.5
 ItemFartDamage=5.0
-ItemShootingSurvLen=10.0
-ItemSpeedRandNum=1.0
-ItemSpeedRandDiff=0.95
 MaxTimeBeforeGameover=2.0
 
 [conn]
